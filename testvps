@@ -1,0 +1,88 @@
+#!/bin/bash
+
+MYVERSION=0.1
+DBG=
+
+# Lines starting with "#" are ignored
+
+# to remove. now requires an input file
+SERVERS="
+# VirMach
+VirMach Frankfurt, Germany | https://ffm.lg.virmach.com/100mb.zip
+VirMach Amsterdam, Netherlands | https://ams.lg.virmach.com/100mb.zip
+VirMach Secaucus (NYC) | https://nyc.lg.virmach.com/100mb.zip
+"
+
+printhelp() {
+    echo "
+VPS Speed Tester v$MYVERSION
+usage: $0 -c|-i configfile [-o outputfile ]
+
+options:
+    -c|-i <configfile>	read server list from <configfile>
+    -o <outputfile>	print results to <outputfile>
+
+config file line format: <Description> | <URL>
+lines starting with # are ignored (comments)
+"
+
+}
+
+while getopts c:i::o::h opt
+do
+#    echo "testing: ${opt}"
+    case "${opt}" in
+	c) CONFFILE=${OPTARG} ;;
+	i) CONFFILE=${OPTARG} ;;
+	o) OUTFILE=${OPTARG} ;;
+	h) printhelp; exit 0 ;;
+	\?) echo "invalid option: ${OPTARG}"  ;;
+    esac
+done
+
+[ $DBG ] && {
+    echo "CONFFILE: $CONFFILE"
+    echo "OUTFILE: $OUTFILE"
+    echo "options: $opt"
+}
+
+[ -r "$CONFFILE" ] && SERVERS=`cat $CONFFILE` || { echo "configfile not set or unreadable!"; exit 1; }
+#echo "continuing..."
+
+SUMMARY=""
+TOTAL_SERVERS=`echo "$SERVERS" | grep -v \^\# | grep "|" | wc -l`
+CURRENT_SERVER=0
+
+echo "$SERVERS" | {
+    while read line
+    do
+	[[ -n "$line" && ${line::1} != "#" ]] && {
+	    desc=`echo $line | awk -F "|" '{ print $1 }'`
+	    url=`echo $line | awk -F "|" '{ gsub(/ /,""); print $2 }'`
+	    let "CURRENT_SERVER=CURRENT_SERVER+1"
+#	    printf "[%3s of %3s] %s (%s)\n" $CURRENT_SERVER $TOTAL_SERVERS "$desc" "$url"
+	    printf "[%s/%s] %s (%s)\n" $CURRENT_SERVER $TOTAL_SERVERS "$desc" "$url"
+	    TMPFILE=`mktemp`
+	    cmd="curl -k -o /dev/null $url 2> >(tee -a $TMPFILE >&2)"
+#	    echo $cmd
+	    curl -k -o /dev/null $url 2> >(tee -a $TMPFILE >&2)
+	    speed=`tail -1 $TMPFILE | awk '{ print $(NF-5) }'`
+	    
+	    SUMMARY="$SUMMARY"`printf "%-39s: %7s   %s\n" "$desc" "$speed" "$url"`"\n"
+	} || {
+#	    [[ ${line::1} == "#" ]] && { echo "Comment: $line"; SUMMARY="$SUMMARY\n$line\n"; }
+	    [[ ${line::1} == "#" ]] && { echo "Comment: $line"; }
+	}
+    done
+
+    rm -f $TMPFILE
+#    rm -f $TMPFILE 2>&1 > /dev/null
+#
+
+    echo -e "\nSummary:"
+    echo "----------------------------------------"
+# https://stackoverflow.com/questions/55926142/how-to-use-a-unix-sort-command-to-sort-by-human-readable-numeric-file-size-in-a
+    OUTPUT=`echo -e "$SUMMARY" | sed 's/[0-9][mgt]/\U&/g' | sort -r -t ":" -k2h | tac`
+    echo "$OUTPUT"
+    [ "$OUTFILE" ] && echo "$OUTPUT" > $OUTFILE
+}
