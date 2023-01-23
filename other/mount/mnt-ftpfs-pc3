@@ -1,0 +1,14 @@
+#!/bin/sh
+
+FTP_SERVER=pc3
+FTP_USER=root
+FTP_PASS=radu
+FTP_PATH=/
+MNT_POINT=/mnt/ftpfs
+
+if ! [ -d $MNT_POINT ]; then mkdir $MNT_POINT; fi
+
+lufsmount -q "ftpfs://$FTP_USER:$FTP_PASS@$FTP_SERVER" $MNT_POINT
+
+#lufsmount "ftpfs://ktmpyah:dapktmp@ftp.dap.ro" /mnt/ftpfs
+#lufsmount "ftpfs://$FTP_USER:$FTP_PASS@ftp.dap.ro" /mnt/ftpfs

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# generate SMTP auth string
+
+if [ -z $2 ]; then
+HLP="
+usage: $0 <user> <pass>
+generate SMTP auth string
+"
+echo "$HLP"
+    exit 1
+fi
+
+echo "user: $1"
+echo "pass: $2"
+authstring="$1\0$1\0$2"
+
+printf "$1\0$1\0$2" | mimencode 
+#perl -MMIME::Base64 -e "print encode_base64('$authstring');"

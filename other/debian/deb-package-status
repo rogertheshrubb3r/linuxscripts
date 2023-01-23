@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# grep in package cache
+
+if [ -z $1 ]; then
+    echo "usage: $0 <package>"
+    echo
+    echo "show relase status (policy) for Debian package (stable/testing/unstable)"
+    echo ""
+    exit 1
+fi
+
+EXCLUDE=EXCLUDE_NONE
+
+apt-cache policy $@ 

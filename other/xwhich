@@ -1,0 +1,14 @@
+#!/bin/sh
+
+FILENAME=`which $@`
+if [ "$FILENAME" == "" ]; then
+    echo "$@: not found (could be an alias or an internal command?)"
+#    alias $@
+    exit 1
+fi
+#echo ""
+ls --color -il $FILENAME
+#echo ""
+file -L $FILENAME
+echo -n "(dpkg info) "
+dpkg -S $FILENAME

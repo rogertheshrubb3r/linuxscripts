@@ -1,0 +1,24 @@
+#!/bin/bash
+
+INPUT="$@"
+FULLNAME=`which $@`
+
+shopt -s expand_aliases
+. ~/.bashrc
+
+
+IS_ALIAS=`alias $INPUT 2>/dev/null`
+[ "$IS_ALIAS" != "" ] && { echo -e "$INPUT is an alias: $IS_ALIAS"; }
+
+if [ "$FULLNAME" == "" ]
+then
+    echo "$@: not found (could be an alias or an internal command?)"
+#    alias $@
+    exit 1
+fi
+#echo ""
+ls --color -il $FULLNAME
+#echo ""
+file -L -z $FULLNAME
+echo -n "(dpkg info) "
+dpkg -S $FULLNAME

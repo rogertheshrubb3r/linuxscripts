@@ -1,0 +1,25 @@
+#!/bin/sh
+
+sqluser=root
+sqlpass=l00py.db
+
+usage() {
+HLP="
+usage: $0 [ -d database] <file>
+
+imports sql file
+"; echo $HLP; exit $@
+}
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -D|-d ) db=$2; shift 2;;
+   * ) f=$1; shift;;
+  esac
+done
+
+[ $f ] || usage 1
+
+OPTS="-u$sqluser -p$sqlpass"
+[ $db ] && OPTS="$OPTS -D $db"
+
+mysql $OPTS <$f

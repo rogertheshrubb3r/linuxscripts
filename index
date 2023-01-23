@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#OPTS="-v 4"
+
+#OPTS="-l"
+
+CNFFILE="swish++.conf"
+CNF=
+
+if [ -f ~/$CNFFILE ]; then
+    CNF=~/$CNFFILE
+elif [ -f /etc/local/$CNFFILE ]; then
+    CNF=/etc/$CNFFILE
+elif [ -f /etc/$CNFFILE ]; then
+    CNF=/etc/$CNFFILE
+fi
+
+echo using config: $CNF
+
+index++ $OPTS -c $CNF $@

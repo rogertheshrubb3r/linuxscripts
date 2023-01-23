@@ -1,0 +1,23 @@
+#!/bin/sh
+
+logfile=~/systemlog
+
+EDITORS="
+vi
+pico
+e3ne
+e3
+nano
+mcedit
+"
+
+for i in $EDITORS; do
+  [ `which $i` ] && E=$i
+done
+
+msg=`date "+%d.%m.%Y %H:%M"`" ["`whoami`"]"
+echo >> $logfile
+echo $msg >> $logfile
+echo >> $logfile
+
+$E $logfile

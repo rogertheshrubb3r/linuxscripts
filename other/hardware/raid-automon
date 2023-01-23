@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# try to remount failed drives on raid array
+# for debian sarge
+# kidd, Sun Nov 27 19:31:15 2005
+
+CFGFILE=/etc/mdadm/mdadm.conf
+
+cat $CFGFILE | while read line; do
+    if [ $DBG ]; then echo "line: $line"; fi
+    if [ `echo $line|grep ARRAY|wc -l` -gt 0 ]; then
+	array=`echo $line|awk '{print $2}'`
+	read line
+	disks=`echo $line|awk -F= '{print $2}'|awk -F, '{x=1; while (x<=NF) {printf "%s ", $x; x++}}'`
+#	disks=`echo $line|awk -F= '{print $2}'|awk -F, '{print "fields: "NF}'`
+#	echo "array: $array; disks: $disks"
+	for disk in $disks; do
+	    state=`mdadm --detail $array|grep $disk|awk '{print $5}'`
+	    echo "[$array] $disk: $state"
+
+# add disk if failed
+	    if ! [ "$state" == "active" ]; then
+		echo "[$array] adding non-active disk: $disk"
+		mdadm $array -a $disk
+	    fi
+	done
+	echo "--"
+    fi
+done
+
+exit 0
+
+arrays=`cat $CFGFILE|grep ARRAY|awk '{print $2}'`
+
+echo "arrays: 
+$arrays"

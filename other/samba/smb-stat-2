@@ -1,0 +1,125 @@
+#!/bin/sh
+DBG=
+CONFFILE=/etc/local/smb-shares
+SEP=" *** "
+
+EXCL="
+printer
+deskjet
+Canon
+"
+
+
+### PARSE OPTIONS
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h*  ) HELP=1 ; shift ;;
+    -m | --fmask ) FMASK=$2; shift 2 ;;
+   * ) PCS="$PCS$1"; shift ;;
+#   * ) echo "Invalid option: $1" ; HELP=yes; break ;;
+  esac
+done
+
+
+
+### MAIN
+TMPFILE=`mktemp -t smb-stat.XXXXXX`  || TMPFILE=/tmp/smb-stat.tmp
+TMPFILE2=`mktemp -t smb-stat2.XXXXXX` || TMPFILE2=/tmp/smb-stat2.tmp
+
+TMPTREE=TMPTREE
+#PCS=PCS
+#TMPTREE=`mktemp -t smbtree.XXXXXX` || TMPTREE=/tmp/smbtree.tmp
+#PCS=`mktemp -t smbtree.XXXXXX` || TMPLIST=/tmp/pcs.tmp
+
+
+# read PCs from tree
+smbtree -N>$TMPTREE
+# build list of exclusions (printers)
+G_EX_B="\(\\\$\|"
+for i in $EXCL; do
+    if [ $G_EX ]; then G_EX="$G_EX\|"; fi
+    G_EX="$G_EX$i"
+done
+G_EX="$G_EX_B$G_EX\)"
+if [ $DBG ]; then echo "G_EX=$G_EX"; fi
+
+# find PCs
+getpcs() {
+cat $TMPTREE|cut -b4-|awk -F\\ '{print $1}' >> $TMPFILE
+# strip workgroup name
+keeplines=`cat $TMPFILE|wc -l|cut -f1`
+keeplines=`expr $keeplines - 1`
+echo `cat $TMPFILE|tail -n$keeplines|sort -u|awk '{print $1}'`
+}
+
+ALLPCS=`getpcs`
+
+for i in $ALLPCS; do
+    SHARES[$i]=`cat $TMPTREE|cut -b5-|grep "^$i"|grep -v "$G_EX"|cut -d\\\ -f2-|cut -f1`
+    echo -n "-- $i: |"
+#    cat $TMPTREE|grep $i|grep -v "$G_EX"
+
+#    echo "${SHARES[$i]}"|awk '{print "  "$NL}'
+    for j in ${SHARES[$i]}; do echo -n "$j|"; done
+    echo ""
+done
+
+exit
+
+
+
+## old
+#if [ -f $TMPFILE2 ]; then rm -f $TMPFILE2>/dev/null; fi
+
+# get PIDs
+smbstatus -S>$TMPFILE
+
+while read LINE; do
+    MACHINE=`echo $LINE|awk '{print $3}'`
+    case $MACHINE in
+    "192.168.1.10" ) MACHINE="SERVER  ($MACHINE)" ;;
+    "192.168.1.21" | pc1 ) MACHINE="OCTAVIA ($MACHINE)" ;;
+    "192.168.1.22" | pc2 ) MACHINE="VALI    ($MACHINE)" ;;
+    "192.168.1.23" | pc3 ) MACHINE="BOGDAN  ($MACHINE)" ;;
+    "192.168.1.24" | pc4 ) MACHINE="MIRELA  ($MACHINE)" ;;
+    "192.168.1.25" | pc5 ) MACHINE="CATALIN ($MACHINE)" ;;
+    "192.168.1.26" | pc6 ) MACHINE="GABI    ($MACHINE)" ;;
+    esac
+    
+    PID=`echo $LINE|awk '{print $2}'`
+    if [ "$PID" != "" ]; then
+	printf "%-5s $SEP %s\n" $PID $MACHINE >>$TMPFILE2
+    fi
+done < $TMPFILE
+
+# translate PIDs
+smbstatus -L | awk '{gsub ("/home/fserver/", ""); 
+gsub("RDWR", "RW");
+gsub("WRONLY", "W");
+gsub("RDONLY", "R");
+gsub("DENY_WRITE", "DEN_W");
+gsub("DENY_READ",  "DEN_R");
+gsub("EXCLUSIVE", "EX");
+gsub("BATCH", "BA");
+gsub("LEVEL_", "L_");
+
+gsub("Mon ", " [Lu ");
+gsub("Tue ", " [Ma ");
+gsub("Wed ", " [Mi ");
+gsub("Thu ", " [Jo ");
+gsub("Fri ", " [Vi ");
+gsub("Sat ", " [Sa ");
+gsub("Sun ", " [Du ");
+gsub(" 200.", "]");
+
+print $1" "$2" "$4" "$5" "$6" "$7" "$8" "$9" "$10" "$11" "$12" "$13" "$14" "$15}
+'>>$TMPFILE2
+#smbstatus -L >>$TMPFILE2
+sort $TMPFILE2 | grep -v "DenyMode"|grep -v "$SEP machine"|grep -v "Locked files"|grep -v "files:">$TMPFILE
+
+cat $TMPFILE | awk '
+gsub("/[*]/", "");
+{printf "%-5s %-5s %-2s %s %s %s %s %s %s %s %s %s %s %s\n", $2,$4,$3,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15}
+'
+
+rm -f $TMPFILE $TMPFILE2>/dev/null

@@ -1,0 +1,59 @@
+#!/bin/bash
+
+#kidd
+# NOT very tested
+# NOT very secure
+#listformat="%p %c %a"
+
+DBG=no
+
+#if [ ! $@ ] || [ "$1" == "-h" ]; then
+if [ ! "$@" ]; then
+HLP="
+usage: $0 <process_name_mask> [..]
+kills process(es) by match (grep)
+match can be in process name, arguments, user etc.
+"
+    echo "$HLP"
+    exit 1
+fi
+
+#else
+PSINF=`ps axuw | grep -v "\(PID %CPU %MEM|ps axuw\)" | grep -i "$@" | grep -v "\(grep -i $@\|$0\)"`
+
+cnt=`echo "$PSINF" | grep -v "$0" | wc -l`
+
+if [ "$PSINF" == "" ]; then
+   cnt=0; echo "No matching processes."; exit 1
+fi # if PSINF is empty, match count is 0
+
+#echo ""
+
+#echo ""
+#echo -n "found $cnt process"
+#[ $cnt -gt 1 ] && echo -n "es"
+#echo "."
+
+echo "$cnt matching process(es): *$@*"
+echo "$PSINF"
+
+if [ "$DBG" == "yes" ]; then
+    echo "--- debug:"
+    echo -e "PSINF=\n$PSINF"
+    echo ""
+    echo "cnt=$cnt"
+    echo "Press [Enter] to continue"
+    read a
+fi
+
+echo ""
+echo "WARNING: about to kill all processes matching: *$@*"
+echo "THIS CAN BE VERY DANGEROUS!"
+echo -n "Do you REALLY want to KILL $cnt process(es) (yes/[no])?"
+read answer; [ -z $answer ] && answer="no"
+if [ "$answer" == "yes" ]; then 
+kill -9 `echo "$PSINF" | awk '{print $2}'`
+else
+echo "Aborted."
+exit 2
+fi

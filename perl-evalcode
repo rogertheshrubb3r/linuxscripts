@@ -1,0 +1,9 @@
+#!/bin/sh
+
+DBG=1
+
+s="'""$*""; print \"\n\""";'"
+
+[ $DBG ] && echo "s=$s"
+
+perl -e $s

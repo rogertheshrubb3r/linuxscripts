@@ -1,0 +1,24 @@
+#!/bin/sh
+
+HLP="usage: $0 [options] <package_mask> [options]
+
+list package status/info
+options:
+  -i	installed packages (default)
+  -u	uninsalled/other packages
+  -a	all packages
+"
+
+GPAT="^i" # list installed by default
+
+if [ -z $@ ]; then echo "$HLP"; exit 1; fi
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -i | --installed ) GPAT="^i"; shift ;;
+   -u | --uninstalled ) GPAT="^u"; shift ;;
+   -a | --all ) GPAT=""; shift ;;
+   * ) MASK="*$1*"; shift ;;
+  esac
+done
+
+dpkg -l "$MASK" | grep "$GPAT"

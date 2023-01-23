@@ -1,0 +1,12 @@
+***************
+*** 5
+- line 3 (modified)
+--- 5,7 -----
++ line 3 (modified again)
++ a new line 4
++ a line 4.5
+***************
+*** 8
+- end line (deleted line 4)
+--- 10 -----
++ end line

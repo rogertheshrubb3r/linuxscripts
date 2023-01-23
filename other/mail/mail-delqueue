@@ -1,0 +1,32 @@
+#!/bin/sh
+# !!! to make script !!! /check/debug
+# delete from mail queue
+
+#DBG=1
+
+if [ -z $1 ]; then
+HLP="
+usage: $0 <user@foo.bar>
+"
+echo "$HLP"; exit 1
+fi
+
+ADDR="$@"
+
+#ADDR="webmaster@hr\.ro"
+#ADDR=`echo $ADDR|sed 's/\./\\./'` # replace "." with "\." (for awk)
+
+awkscript="BEGIN { RS = \"\" } /$ADDR\$/ { print \$1 }"
+
+if [ $DBG ]; then
+    echo "ADDR: $ADDR"
+    echo "awkscript: $awkscript"
+fi
+
+mailq | tail +2 | awk "$awkscript" | tr -d '*!' | postsuper -d -
+
+# original
+
+#mailq | tail +2 | awk  'BEGIN { RS = "" } \
+#                  / webmaster@hr\.ro$/ { print $1 } \
+#              ' | tr -d '*!' | postsuper -d -

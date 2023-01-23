@@ -1,0 +1,17 @@
+#!/bin/sh
+
+u=teste
+p=teste
+h=localhost
+
+[ $1 ] && u=$1
+[ $2 ] && h=$2
+
+echo "using user: $u"
+
+if [ $p ]; then 
+    echo $p|sieveshell --user=$u --authname=$u $h
+else
+    sieveshell --user=$u --authname=$u $h
+fi
+

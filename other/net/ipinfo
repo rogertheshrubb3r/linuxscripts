@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -z $@ ]; then
+
+HLP="
+usage: $0 <ip address>
+"
+echo "$HLP"
+
+exit 1
+fi
+
+whois -h whois.completewhois.com $@

@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# show FILTERered apache log
+# in work
+
+DBG=no
+
+LOGDIR=/var/log/apache2
+
+EXCLUDED="82.76.11.20\|192.168.1.\|127.0.0.1"
+
+NLINES=100
+
+HLP="
+usage: $0 <site_name> [options*] [filter]
+    -x <string>    exclude <string>
+"
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+#   -o ) OUT=$2 ; shift 2 ;;
+#   -n ) nflag=1 ; shift ;;
+#   -l | -v ) vlevel=$(( vlevel+1 )) ; shift ;;
+#   -ver* ) echo "Version $version"  ; exit 1 ;;
+    -x ) EXCLUDED="$EXCLUDED\|$2"; shift 2 ;;
+   * ) 
+    if [ -z $SITENAME ]; then SITENAME="$1"
+    elif [ -z $FILTER ]; then FILTER="$1"
+    fi
+    shift ;;
+  esac
+done
+
+if [ -z $SITENAME ]; then echo "$HLP"; exit 1; fi
+
+
+FMASK=$LOGDIR/$SITENAME.access.log
+
+if [ ! -f $FMASK ]; then echo "no logs for site $SITENAME"; exit 1; fi
+
+
+for i in `ls -1 $FMASK*gz` ; do
+    zcat $i | grep -v "$EXCLUDED" | grep -i "$FILTER" | tail -n $NLINES
+done
+for i in `ls -1 $FMASK* | grep -v ".gz"` ; do
+     cat $i | grep -v "$EXCLUDED" | grep -i "$FILTER" | tail -n $NLINES
+done
+
+
+if [ "$DBG" == "yes" ]; then
+    echo "FILTERer: $FILTER"
+    echo "NLINES: $NLINES"
+    echo "SITENAME: $SITENAME"
+
+fi

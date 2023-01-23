@@ -1,0 +1,76 @@
+WORKGROUP
+	\\SERVER         		
+		\\SERVER\lp             	Generic dot-matrix printer entry
+		\\SERVER\ADMIN$         	IPC Service ()
+		\\SERVER\IPC$           	IPC Service ()
+		\\SERVER\proiecte       	Proiecte
+		\\SERVER\print$         	Printer Drivers
+	\\POPEEA         		popeea
+		\\POPEEA\C              	
+		\\POPEEA\SharedDocs     	
+		\\POPEEA\IPC$           	Remote IPC
+	\\PC6            		Gabi
+		\\PC6\D              	
+		\\PC6\print$         	Printer Drivers
+		\\PC6\IPC$           	Remote IPC
+	\\PC5            		Cata
+		\\PC5\C$             	Default share
+		\\PC5\ADMIN$         	Remote Admin
+		\\PC5\9300 hp        	hp deskjet 9300 series
+		\\PC5\D              	
+		\\PC5\print$         	Printer Drivers
+		\\PC5\D$             	Default share
+		\\PC5\IPC$           	Remote IPC
+	\\PC4            		cos
+		\\PC4\C$             	Default share
+		\\PC4\ADMIN$         	Remote Admin
+		\\PC4\CanonMF3       	Canon MF3110
+		\\PC4\D              	
+		\\PC4\print$         	Printer Drivers
+		\\PC4\D$             	Default share
+		\\PC4\IPC$           	Remote IPC
+	\\PC3            		beti
+		\\PC3\utils          	
+		\\PC3\htdocs         	
+		\\PC3\Far            	
+		\\PC3\utils32        	
+		\\PC3\D              	
+		\\PC3\utilswin       	
+		\\PC3\SharedDocs     	
+		\\PC3\print$         	Printer Drivers
+		\\PC3\IPC$           	Remote IPC
+	\\PC2            		Vali
+		\\PC2\C$             	Default share
+		\\PC2\ADMIN$         	Remote Admin
+		\\PC2\D              	
+		\\PC2\D$             	Default share
+		\\PC2\IPC$           	Remote IPC
+	\\OVIDIU         		
+		\\OVIDIU\C$             	Default share
+		\\OVIDIU\ADMIN$         	Remote Admin
+		\\OVIDIU\Transfer       	
+		\\OVIDIU\hpoffice       	hp officejet 4200 series
+		\\OVIDIU\print$         	Printer Drivers
+		\\OVIDIU\SharedDocs     	
+		\\OVIDIU\D$             	Default share
+		\\OVIDIU\IPC$           	Remote IPC
+	\\OFFICE         		
+		\\OFFICE\LexmarkX       	Lexmark X1100 Series
+		\\OFFICE\C$             	Default share
+		\\OFFICE\ADMIN$         	Remote Admin
+		\\OFFICE\Printer2       	CAPTURE FAX BVRP
+		\\OFFICE\D              	
+		\\OFFICE\SharedDocs     	
+		\\OFFICE\print$         	Printer Drivers
+		\\OFFICE\IPC$           	Remote IPC
+	\\OCTAVIA-PC1    		
+		\\OCTAVIA-PC1\D              	
+		\\OCTAVIA-PC1\IPC$           	Remote IPC
+	\\LETITIA        		Toshiba
+		\\LETITIA\C$             	Default share
+		\\LETITIA\ADMIN$         	Remote Admin
+		\\LETITIA\F              	
+		\\LETITIA\work           	
+		\\LETITIA\SharedDocs     	
+		\\LETITIA\IPC$           	Remote IPC
+		\\LETITIA\E$             	Default share

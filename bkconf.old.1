@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# backup configs
+
+DIRLIST="
+/etc
+/root
+/usr/share/mc
+/usr/local/bin
+"
+
+# DO NOT WRAP IN QUOTES OR realpath/readlink doesn't work!!!
+EXCLUDE="~/.pcloud ~/backups"
+
+#BKDIR=~
+BKDIR=.
+
+MAXSIZE=5M
+
+homedir=`realpath ~`
+
+for i in $EXCLUDE; do
+    echo "i: $i"
+#    rpath="$(cd -- "$(dirname "$i")" > /dev/null 2>&1 ; pwd -P)"
+    [ "$i" ] && {
+	i=`echo $i | sed -e "s#^~#$homedir#"`
+	rpath=`realpath $i`
+	[ $DBG ] && echo "real path: $rpath"
+	[ "$tarexcludes" ] && tarexcludes="$tarexcludes --exclude='$rpath'" || tarexcludes="--exclude='$rpath'"
+	[ "$excl" ] && excl="$excl $rpath" || excl="$rpath"
+    }
+done
+
+echo "tarexcludes: $tarexcludes"
+echo "excl: $excl"
+read -p "Press any key"
+
+
+for i in $DIRLIST; do
+    echo "Creating archive for: $i"
+    PREFIX=`uname -n`-`date +%Y-%m-%d`
+    ARCNAME="$PREFIX-`echo "$i" | sed 's/^\///' | sed 's/\//_/g'`"
+    echo "Backup directory: $BKDIR"
+    echo "Archive name: $ARCNAME"
+    echo "Excludes: $excl"
+#    tar $tarexcludes -czvf "$BKDIR/$ARCNAME.tgz" "$i"
+    # see https://unix.stackexchange.com/questions/32845/tar-exclude-doesnt-exclude-why
+    # we're doing configurations only, exclude files larger than MAXSIZE
+    tar -X<(for i in ${excl}; do echo $i; done) --exclude-from <(find $i -size +$MAXSIZE) -czf "$BKDIR/$ARCNAME.tgz" "$i"
+done
+
+apt list --installed | gzip >"$BKDIR/$PREFIX-debian-packages.txt.gz"

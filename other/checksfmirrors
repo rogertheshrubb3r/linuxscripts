@@ -1,0 +1,4 @@
+#!/bin/sh
+
+netselect -vvv $@ `cat /etc/local/sf_mirrors| grep -v "^#"|awk '{print $1".dl.sf.net"}'`
+ 

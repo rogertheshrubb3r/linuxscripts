@@ -1,0 +1,14 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 <host>
+
+(runs smbclient)
+"; echo $HLP; exit $@
+}
+
+[ $1 == -h ] && usage
+
+HOSTIP=`host $@|awk '{print $4}'`
+smbclient -NL $HOSTIP

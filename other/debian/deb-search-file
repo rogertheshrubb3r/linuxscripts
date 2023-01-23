@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# WIP!!!
+
+# TODO: search exact files; see
+# https://packages.debian.org/search?arch=i386&searchon=contents&keywords=%2Fusr%2Fbin%2Fdpkg-deb
+# Thu 19 Jan 2023 07:18:20 AM EST
+
+# google search
+#browser=w3m
+#browser=lynx
+browser=links
+
+
+DBG=
+
+usage() {
+HLP="
+usage: $0 [search keyword(s) ..]
+options:
+  -h		this help
+  -d		debug info
+
+search via search engine (google)
+"
+    echo "$HLP"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -h|--help ) usage ; exit 0 ;;
+   -d ) DBG=1; shift ;;
+   * ) s="$s+$1"; shift ;;
+  esac
+done
+
+MYNAME=`echo $0|awk -F/ '{print $NF}'`
+
+# create url
+url="http://packages.debian.org/cgi-bin/search_contents.pl?word=$s&searchmode=searchfiles&case=insensitive&version=stable&arch=i386"
+#https://packages.debian.org/search?arch=i386&searchon=contents&keywords=%2Fusr%2Fbin%2Fdpkg-deb
+cl="$browser $url"
+
+if [ "$DBG" == "yes" ]; then
+    echo "string to search: $s"
+    echo "command line: $cl"
+    read dummy
+fi
+$cl

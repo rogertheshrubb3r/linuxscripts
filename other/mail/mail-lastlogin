@@ -1,0 +1,78 @@
+#!/bin/sh
+
+# predefined vars
+SERVICE=imap
+WHAT=login
+USER=""
+NUM=10
+
+#DBG=1
+
+UNIQUE=1
+
+usage() {
+HLP="
+usage: $0 [options] <user> [user...]
+options:
+  -s service	service (pop3/imap)
+  -x user	exclude <user> (cumulative)
+  -u		unique logins [default]
+  -a		all logins (inverse of -u)
+  -n num	show last <num> entries
+
+shows last mail login
+"
+echo "$HLP"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h* ) usage; exit 0 ;;
+    -s) [ -z $2 ] && echo "option -s requires a parameter" && exit 1; SERVICE=$2; shift 2 ;;
+    -n) [ -z $2 ] && echo "option -n requires a parameter" && exit 1; NUM=$2; shift 2 ;;
+    -x) [ -z $2 ] && echo "option -x requires a parameter" && exit 1; EXCLUDED="$EXCLUDED $2"; shift 2 ;;
+    -d) DBG=1; shift ;;
+    -u) UNIQUE=1; shift ;;
+    -a) UNIQUE=; shift ;;
+    *)	USER="$USER $1"; shift ;;
+  esac
+done
+
+#if [ "$1" == "-h" ]; then usage; exit 0; fi
+
+# get service (imap/pop3)
+if [ "$EXCLUDED" ]; then
+    for i in $EXCLUDED; do
+	[ $GEX ] && GEX="$GEX\|"
+	GEX="$GEX$i"
+    done
+    GEX="\($GEX\)"
+
+else
+    GEX="^$"
+fi
+
+# debug
+[ $DBG ] && echo "USER: $USER; SERVICE: $SERVICE; WHAT: $WHAT; EXCLUDED: $EXCLUDED"
+[ $DBG ] && echo "GEX: $GEX"
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+
+out=`cat $LOGFILES | grep $WHAT | grep -v "$GEX"`
+for i in $USER; do 
+    [ $GUSER ] && GUSER="$GUSER\|"
+    GUSER="$GUSER$i"
+done; GUSER="\($GUSER\)"
+
+for i in $SERVICE; do 
+    [ $GSERVICE ] && GSERVICE="$GSERVICE\|"
+    GSERVICE="$GSERVICE$i"
+done; GSERVICE="\($GSERVICE\)"
+
+
+[ "$USER" ]    && out=`echo "$out" | grep $GUSER`
+[ "$SERVICE" ] && out=`echo "$out" | grep $GSERVICE`
+#[ $UNIQUE ]  && out=`echo "$out" | uniq -f8 -W1`
+
+out=`echo "$out"|tail -n$NUM`
+
+echo "$out"

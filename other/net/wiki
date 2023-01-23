@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# google search
+browser=w3m
+browser=lynx
+browser=links
+url="en.wikipedia.org/wiki/"
+
+DBG=no
+
+usage() {
+HLP="
+usage: $0 [search keyword(s) ..]
+options:
+  -h		this help
+  -n		search news*
+  -l		lucky (tm)
+  --DBG	DBG
+
+search wikipedia.
+"
+    echo "$HLP"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -h|--help ) usage ; exit 0 ;;
+   -n|--news ) shift ;; #***
+   -l|--lucky ) LUCKY=yes; shift ;;
+   --DBG ) DBG=yes; shift ;;
+   * ) [ $s ] && s="$s+$1" || s="$1"; shift ;;
+  esac
+done
+
+MYNAME=`echo $0|awk -F/ '{print $NF}'`
+
+#case "$MYNAME" in
+#    gl ) LUCKY=yes ;;
+#esac
+
+# create url
+url="$url$s"
+#if [ "$LUCKY" == "yes" ]; then
+#    url="$url&btnI="
+#fi
+
+#c="$browser http://www.google.com/search?q=$@"
+cl="$browser $url"
+
+if [ "$DBG" == "yes" ]; then
+    echo "string to search: $s"
+    echo "command line: $cl"
+    read dummy
+fi
+$cl

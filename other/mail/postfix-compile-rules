@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# kidd -- compile custom rules
+echo "compiling postfix rules tables:"
+for i in `ls *_rules`; do
+    echo "$i"; postmap "$i"
+done

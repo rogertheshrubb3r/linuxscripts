@@ -1,0 +1,10 @@
+5c5,7
+< line 3 (modified)
+---
+> line 3 (modified again)
+> a new line 4
+> a line 4.5
+8c10
+< end line (deleted line 4)
+---
+> end line

@@ -1,0 +1,5 @@
+#!/bin/sh
+BR=links2
+
+$BR /usr/share/doc/debian/FAQ/index.html
+

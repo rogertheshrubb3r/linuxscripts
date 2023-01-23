@@ -1,0 +1,25 @@
+#!/bin/sh
+
+usage() {
+    echo "usage: $0 <start|stop>"
+    echo ""
+    exit 0
+}
+
+if [ -z $1 ]; then
+    usage
+fi
+
+case $1 in
+
+esac
+
+privoxy /etc/privoxy/alt-config
+
+exit 0
+
+	echo -n "Starting $DESC: "
+	start-stop-daemon --oknodo --start --quiet --pidfile $PIDFILE \
+	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE \
+	    2>> /var/log/privoxy/errorfile
+ 	echo "$NAME."

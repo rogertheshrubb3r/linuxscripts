@@ -1,0 +1,370 @@
+#!/usr/bin/perl -w
+##    -*-perl-*-
+##
+## whatpix - Reports, deletes, or moves duplicate files.
+##
+## DESCRIPTION
+##
+##   This program looks through a directory and does checksums
+##   of the files.  Equal checksums are thought to be similar files,
+##   and are either reported, deleted, or moved to a "discard" directory.
+##
+## LICENSE
+## 
+##   versions 0.00-0.41  Copyright (C) 1999, 2000 codex@bogus.net
+##   versions 1.0-...    Copyright (C) 2001  3Jane Tessier-Ashpool
+##                                           jane3ta@yahoo.com
+##
+##    This program is free software; you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation; either version 2 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program; if not, write to the Free Software
+##    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+##
+## REVISION HISTORY
+##
+##   version 0.00 (c) 28/7/1999 codex@bogus.net - initial release
+##   version 0.10 (c) 23/9/1999 codex@bogus.net - feature enhancements
+##     | uses Getopt (http://www.cpan.org/modules/by-module/Getopt/)
+##     | added -md5 (choose optional path to md5sum binary)
+##     | added -e (erase files if found in database)
+##     + only displays new duplicate files
+##   version 0.20 (c) 25/10/1999 codex@bogus.net - feature enhancement
+##     + subdirectory traversal added by Fedor Zuev <fedor@earth.crust.irk.ru>
+##   version 0.30 (c) 22/11/1999 codex@bogus.net - feature enhancement
+##     | restructured the code a little
+##     | removed some erroneous help (-r is not recursive directory!!)
+##     | there is still very little error checking with regards to failed
+##     | system() calls, etc. maybe next version!
+##     | added -r (rename instead of delete)
+##     + added -rdir (change rename directory)
+##   version 0.31 (c) 22/11/1999 codex@bogus.net - small update
+##     + added "total renamed" and "total deleted" counter.
+##   version 0.40 (c) 05/05/2000 codex@bogus.net - update
+##     | added SHA1 algoritm
+##     + changed from using external MD5 binary to Digest::MD5
+##   version 0.41 (c) 08/05/2000 codex@bogus.net - bugfix
+##     + fixed file test (-f && -r)
+##   version 1.0 (c) 02/23/2001 jane3ta@yahoo.com - rewrite
+##     | Radical re-write, using -w and use strict, no more global variables.
+##     | Correctly handles more than one duplicate per checksum.
+##     | Cleans up the db file when done.
+##     | Now can process arbitrarily large input files.
+##     + -s not working?  So check size via stat call instead.
+##   version 1.1 (c) 02/26/2001 jane3ta@yahoo.com - debugging
+##     + Miscellaneous debugging modifications.
+##   version 1.1 (c) 07/04/2001 jane3ta@yahoo.com - maintenance
+##     + Retains the file name with the shortest name.
+
+use strict;
+
+use Getopt::Long;
+use Digest::MD5;
+use Digest::SHA1;
+use File::Copy qw(move);
+
+my $version = "1.2";
+
+
+sub welcome() {
+    print "------------------------------------------------------------------------------\n";
+    print "whatpix ", $version, ", (C) 2001 3Jane Tessier-Ashpool jane3ta\@yahoo.com\n";
+    print "This software comes with ABSOLUTELY NO WARRANTY; ";
+    print "for details use -w.\n";
+    print "This is free software, and you are welcome to redistribute\n";
+    print "it under certain conditions; see the file LICENSE for details.\n";
+    print "------------------------------------------------------------------------------\n";
+}
+
+sub print_warranty 
+{
+    print << "EOW";
+------------------------------------------------------------------------------
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+REPAIR OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES.
+EOW
+}
+
+sub print_usage
+{
+    print << "EOU";
+usage: whatpix [-h] [-v] [-v] [-e] [-m] [-r ] [-rdir <renamedir>] [-dbm <dbmfile>] -dir <directory>
+    -h : this information
+    -v : version string
+    -w : warranty information
+    -e : remove duplicate file
+    -r : rename (overrides -e)
+ -rdir : change rename directory (default: .renamed)
+  -dir : directory where to look for binaries (MANDATORY)
+  -dbm : database file (default: whatpix)
+    -m : use MD5 algorithm rather than the default SHA1
+EOU
+}
+
+
+sub process_options
+{
+    my %args = @_;
+
+    my $opt_h;
+    my $opt_v;
+    my $opt_w;
+    my $opt_e;
+    my $opt_r;
+    my $opt_m;
+    my $opt_dir;
+    my $opt_rdir;
+    my $opt_dbm;
+    GetOptions(
+               "h" => \$opt_h,
+               "v" => \$opt_v,
+               "w" => \$opt_w,
+               "e" => \$opt_e,
+               "r" => \$opt_r,
+               "dir=s"  => \$opt_dir,
+               "rdir:s" => \$opt_rdir,
+               "dbm=s"  => \$opt_dbm,
+               "m" => \$opt_m
+               );
+
+    if ($opt_h) {
+        print_usage;
+        exit(0);
+    }
+
+    if ($opt_v) {
+        print "whatpix version $version\n";
+        exit(0);
+    }
+
+    if ($opt_w) {
+        print_warranty;
+        exit(0);
+    }
+
+    if (!$opt_e) {
+        ${$args{remove}} = 0;
+    } 
+    else {
+        ${$args{remove}} = 1;
+        print "Info: removing duplicate files when found.\n";
+    }
+
+
+    if (!$opt_rdir) {
+        ${$args{renamedir}} = ".renamed";
+    }
+    else {
+        ${$args{renamedir}} = $opt_rdir;
+    }
+
+    if (!$opt_r) {
+        ${$args{rename}} = 0;
+    } 
+    else {
+        if ($opt_e) {
+            print "Error: can't both remove and rename.\n";
+            exit(1);
+        }
+        ${$args{rename}} = 1;
+        my $renamedir = ${$args{renamedir}};
+        if (!-d $renamedir) {
+            mkdir($renamedir, 0777) or die "Error: could not create directory $renamedir\n";
+        }
+        print "Info: moving dupicate filenames to ";
+        print $renamedir, " when found.\n";
+    }
+
+    if (!$opt_dir) {
+        print "Error: -dir required, use 'whatpix -h' for details\n";
+        exit(1);
+    }
+    else {
+        ${$args{dir}} = $opt_dir;
+    }
+
+    if (!$opt_dbm) {
+        ${$args{dbm}} = "whatpix";
+        print "Info: using \"whatpix\" as database file.\n";
+    }
+    else {
+        ${$args{dbm}} = $opt_dbm;
+    }
+
+    if (!$opt_m) {
+        ${$args{usemd5}} = 0;
+    }
+    else {
+        ${$args{usemd5}} = 1;
+    }
+}
+
+
+sub do_checksum
+{
+    my $checksums = shift;
+    my $usemd5    = shift;
+    my $dir       = shift;
+
+    my $num = 0;
+
+    print "    ", $dir, "\n";
+
+    # Get list of subdirectories.
+    opendir(DIR, $dir) or die "Error: opendir() failed on $dir\n";
+    my @dirs  = grep  { -d "$dir/$_" } readdir(DIR);
+    closedir(DIR);
+
+    foreach my $subdir (@dirs) {
+        next if (($subdir =~ /\.\.?$/) || ($subdir eq ".xvpics"));
+        $num += do_checksum($checksums, $usemd5, "$dir/$subdir");
+    }
+
+    # Now do the files in this directory.
+    opendir(DIR, $dir) || die "Error: failed to open $dir:  $!";
+    my @files = grep  { -r "$dir/$_" && -s "$dir/$_" } readdir(DIR);
+    closedir(DIR);
+    my $digester  = $usemd5 ? Digest::MD5->new() : Digest::SHA1->new();
+    foreach my $file (@files) {
+        next if ($file =~ /\.\.?$/);
+        my $filename = $dir."/".$file;
+        my @vars = stat($filename) or die "Error: could not stat $filename\n";
+        my $size = $vars[7];
+        if ($size) {
+            open(FILE, $filename) or die "Error: could not open $filename\n";
+            binmode(FILE);
+            $digester->reset;
+            $digester->addfile(*FILE);
+            close(FILE);
+            my $chksum = $digester->hexdigest;
+
+            # Add this file to the list of files
+            # that have this checksum.
+            if (!defined $$checksums{$chksum}) {
+                $$checksums{$chksum} = $filename;
+            } 
+            else {
+                $$checksums{$chksum} .= '|'.$filename;
+            }
+            $num++;
+        }
+    }	
+    return $num;
+}
+
+sub clean_up($)
+{
+    my $dbm = shift;
+    unlink $dbm.".db";
+    unlink $dbm.".dir";
+    unlink $dbm.".pag";
+}
+
+sub main
+{
+    welcome();
+
+    $| = 1;
+
+    my $remove;
+    my $rename;
+    my $renamedir;
+    my $dir;
+    my $dbm;
+    my $usemd5;
+    
+    process_options(remove    => \$remove,
+                    rename    => \$rename,
+                    renamedir => \$renamedir,
+                    dir       => \$dir,
+                    dbm       => \$dbm,
+                    usemd5    => \$usemd5);
+
+    # First, get rid of any previous files.
+    clean_up($dbm);
+
+    # Store the checksums for all the files in a tied hash.
+    my %checksums;
+    dbmopen(%checksums, $dbm, 0666);
+
+    my $num = do_checksum(\%checksums, $usemd5, $dir);
+    print "Found $num files.\n";
+
+    my $duplicates = 0;
+    while (my ($key, $value) = each %checksums) {
+        my @files = split('\|', $value);
+        if (@files > 1) { 
+            
+            # At least two files have this checksum.
+            # Keep the one with the shortest name.
+            my $keepfile = $files[0];
+            foreach my $file (@files) {
+                if (length($file) < length($keepfile)) {
+                    $keepfile = $file;
+                }
+            }
+
+            print "Duplicates of $keepfile:\n";
+            foreach my $file (@files) {
+                next if ($file eq $keepfile);
+                $duplicates++;
+                print "    ", $file;
+                if ($remove) {
+                    unlink $file;
+                    print " (removed)\n";
+                } 
+                elsif ($rename) {
+                    move $file, $renamedir;
+                    print " (moved $file to $renamedir)\n";
+                } else {
+                    print "\n";
+                }
+            }
+        }
+    }
+
+    dbmclose(%checksums);
+
+    if ($rename) {
+        print "Moved $duplicates duplicates of $num files.\n";
+    }
+    elsif ($remove) {
+        print "Removed $duplicates duplicates of $num files.\n";
+    }
+    else {
+        print "Found $duplicates duplicates among $num files.\n";
+    }
+
+    clean_up($dbm);
+    exit(0);
+}
+
+
+main;
+
+

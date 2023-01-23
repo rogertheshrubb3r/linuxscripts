@@ -1,0 +1,130 @@
+; Necromancer's Dos Navigator Extension configuration file ³
+; ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+; Syntax: {} Enter, () Shift-Enter, [] Alt-Enter
+;         asm,pas or asm;pas possible as filter
+;         you can comment the whole block by commenting the filter
+;         comments only work at the first position
+;         ~!.!~/~!.ext Insert SFN (LFN default)
+;
+;        the keywords EDITOR or VIEWER (case insensitive) inside {}, []
+;        or () open the file in the internal viewer/editor, like [F3].
+;        Examples: asm{editor}   or   *{Viewer}
+;
+;Detailed help on the !.! expansion macros is available in the online help
+;under the topic USER MENU -> MENU MACROS
+; ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Assembler ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+; > Programming  Languages <
+
+cpp;c {
+     gcc -Wall -o ! !.! && ./!
+     read -s -p "Hit ENTER to continue..."
+}
+
+pas[    >1 ~B~orland Pascal
+	bpc ~!.!~
+	>1 ~V~irtual Pascal
+	##!!/bin/bash
+
+	function chkerrorlevel() {
+		if [ $$? !!= 0 ] ; then
+		   echo "--- error detected!! aborting... ---"
+		   exit 1
+		fi
+	}
+
+	VPPATH="/media/hda10/vp/bin.lnx"
+	$$VPPATH/vpc -b -CL:lnx:LINUX -V$$VPPATH/vp.vpo -E. !.!
+	chkerrorlevel
+	$$VPPATH/pe2elf !
+	chkerrorlevel
+   ]
+
+tcl {
+     tclsh !.!
+     read -s -p "Hit ENTER to continue..."
+}
+
+; > Latex <
+tex,dtx[    >1 ~L~atex File
+		latex !.!
+	>1 ~T~ex file
+		tex !.!
+	>1 ~E~dit file in vi
+		vi !.!
+	>1 ~B~ibtex file
+		bibtex !
+	>1 ~M~akeindex for *.tex file
+		makeindex -c !.idx
+	>1 Dosto~U~nix Conversion
+		dos2unix !.!
+	>1 Unixto~D~os Conversion
+		unix2dos !.!
+
+	>1
+   ]
+
+tex,dtx( pdflatex !.!)
+tex,dtx{ latex !.!}
+
+;> Text Files <
+txt[
+
+	>1 Dosto~U~nix Conversion
+		dos2unix !.!
+	>1 Unixto~D~os Conversion
+		unix2dos !.!
+	>1 Edit with vi
+		vi !.!
+   ]
+
+;< html >
+html{
+      >1 View with L~y~nx
+	      lynx !.!
+      >1 View with ~L~inks
+	      links !.!
+      }
+
+htm{
+      >1 View with L~y~nx
+	      lynx !.!
+      >1 View with ~L~inks
+	      links !.!
+      }
+
+; ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ FoxPro ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+mpr{    foxprol !.!}
+spr{    foxprol !.!}
+pjx{    foxprol !.!}
+prg{    foxprol !.!}
+fxp{    foxprol !.!}
+
+; ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Misc ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+;stm{    ..\StMod ! F}
+bak{    rm !.!}
+BAK{    rm !.!}
+sc {    paradox !.!}
+pcx{    pcxview !.! }
+$$${    rm !.!}
+pkt{    pktview !.!}
+sch{    cap !.! }
+pcb{    cad !.! }
+
+; ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ All files ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+; This menu starts up by Alt-Enter for all files
+*  [   >1 Convert !:!\~!.!~ ~t~o UUE
+       < Enter number of lines
+       <=200
+       uuencode -s$$3 !.!
+       >1 Convert !:!\!.! ~f~rom UUE
+       uudecode !.!
+       >1 DostoUnix Conversion
+		dos2unix !.!
+       >1 UnixtoDos Conversion
+		unix2dos !.!
+       >1
+   ]
+
+*{ "!:!\!.!" }

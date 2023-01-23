@@ -1,0 +1,10 @@
+5,6c5
+< line 3
+< line 4
+---
+> line 3 (modified)
+9c8,9
+< end line
+---
+> end line (deleted line 4)
+> 

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 [options]
+options:
+  -stop		stop
+  -start	start
+  -h		this help
+start/stop/restart proxy system
+"
+echo "$HLP"
+
+}
+
+SERVICES="
+postfix
+amavis
+spamassassin
+clamav-daemon
+cyrus22
+"
+
+# stop all
+stop_all() {
+echo -- STOPPING ALL --
+/etc/init.d/privoxy stop
+/etc/init.d/squid stop
+}
+
+# start all
+start_all() {
+echo -- STARTING ALL --
+/etc/init.d/squid start
+/etc/init.d/privoxy start
+}
+
+case "$1" in
+    -h) usage ;;
+    -start|--start) start_all ;;
+    -stop|--stop) stop_all ;;
+    *) stop_all; start_all ;;    
+esac
+

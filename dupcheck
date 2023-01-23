@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ ]; then
+HLP="
+usage: $0 <dir(s)>
+finds duplicate files
+"; echo "$HLP"; exit 1
+fi
+
+fdupes -r -n -S -q -1 $@

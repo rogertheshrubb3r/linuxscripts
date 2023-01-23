@@ -1,0 +1,16 @@
+             365.12  18256.03 kent.dl.sf.net
+             367.08  18353.85 puzzle.dl.sf.net
+             575.36  28768.06 umn.dl.sf.net
+             626.55  31327.49 easynews.dl.sf.net
+             927.01  46350.30 nchc.dl.sf.net
+            1010.98  50548.78 optusnet.dl.sf.net
+            3331.67 166583.62 surfnet.dl.sf.net
+            3337.70 166884.96 switch.dl.sf.net
+            3363.21 168160.54 heanet.dl.sf.net
+302 *        347.12  17356.23 mesh.dl.sf.net
+302 *        357.35  17867.73 ovh.dl.sf.net
+302 *        424.46  21223.19 peterhost.dl.sf.net
+302 *        536.40  26819.91 internap.dl.sf.net
+302 *       1067.68  53384.22 keihanna.dl.sf.net
+404 ****     365.79  18289.73 citkit.dl.sf.net
+404 ****     878.51  43925.45 jaist.dl.sf.net

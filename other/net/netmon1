@@ -1,0 +1,54 @@
+#!/bin/sh
+
+HOSTS="
+pc1
+pc3
+www.home.ro
+www.google.com
+www.yahoo.com
+"
+
+
+#DBG=1
+#LOGFILE=/dev/tty
+LOGFILE=/var/log/netmon.log
+
+while [ 1 ]; do
+  for i in $HOSTS; do
+#    [ $DBG ] && echo "checking $i:"
+#    pc=`echo $i|sed 's/\./_/'`
+    pc=`echo $i|awk '{gsub ("\\\.", "_"); print $NL}'`
+    a=`fping $i 2>&1`
+    isalive=`echo $a | grep "is alive"`
+#    [ $DBG ] && echo "result for $i: "
+#    [ "$isalive" ] && isalive=ALIVE || isalive=DOWN
+    isdown=$(eval echo "\$$pc"_isdown)
+
+    # if pc is NOT  alive and was NOT previously down, log as 'went DOWN' event
+    if [ $DBG ]; then
+	echo "pc: $pc is $isalive (was previously: $isdown)"
+    fi
+
+    if ! [ "$isalive" ] && ! [ "$isdown" ]; then
+	echo `date "+%Y-%m-%d %H:%M -%a %d %b-"`" $pc went DOWN" >> $LOGFILE
+	export `echo "$pc"_isdown`=down
+    # if is alive and was previously down, log as 'went UP' event
+    elif [ "$isalive" ] && [ "$isdown" ]; then
+	echo `date "+%Y-%m-%d %H:%M -%a %d %b-"`" $i went UP" >> $LOGFILE
+	unset $(eval echo "\$$pc"_isdown)
+    fi
+
+    if [ $DBG ]; then
+	echo "--"
+	echo "results for $i:"
+	echo "pc=$pc"
+	echo "isalive=$isalive"
+	echo "isdown=$isdown"
+	echo "$pc"_isdown=$(eval echo "\$$pc"_isdown)
+	
+    fi
+
+  done
+done
+
+# i=pc1; export `echo "$i"_isdown`=down; echo $(eval echo "\$$i"_isdown); unset $(eval echo "\$$i"_isdown)

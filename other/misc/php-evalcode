@@ -1,0 +1,21 @@
+#!/bin/sh
+
+#[ $@ ] || { echo "usage: $0 <php code>"; exit 1; }
+TMPFILE=/tmp/php-testcode.tmp
+
+case "$1" in
+    -d|--debug) DBG=1; echo "[DEBUG ENABLED]" ;;
+    -ne|--no-echo) NOECHO=1;;
+esac
+
+while read l; do
+    ecode="$l; echo \"\n\";"
+    [ $NOECHO ] || ecode="echo $ecode";
+
+    [ $DBG ] && echo "executing: $ecode"
+    php -r "$ecode"
+done
+
+[ -f $TMPFILE ] && rm $TMPFILE
+
+#php -r "echo $@\n;"

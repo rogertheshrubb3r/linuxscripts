@@ -1,0 +1,117 @@
+###########################################
+
+#!/bin/sh
+
+# sort_mirrors_by_speed     by A.Mennucci Nov 97
+#
+# this program is subject to the
+#  GNU general public license
+
+#
+# this program will scan the file in $1 using
+#  grep "\.[a-zA-Z]*:" $1 | awk '{print $1}'
+#  to find mirror site host names.
+#
+#  the string before the  :  character is considered
+to be a
+#   mirror site host name
+#
+#  Mirror sites are pinged and statistics  are
+collected and sorted #
+
+
+if [ "$1" = "-h" -o "$1" = "--help" ] ; then
+ echo Usage: $0 mirrorfile
+ echo " Argument must be the file README.mirrors "
+ echo "      containing a list of debian mirrors."
+ echo " This program will ping all mirrors with 4
+packets"
+ echo "  to test their speed and reliability, and then
+will "  echo "  sort the result, put it in file
+mirrors_by_speed and show the 
+best."
+ exit 0
+fi
+
+
+tmpdir=~/tmp
+
+# warning: using the directory /tmp and running this
+script
+# as root is a potential security problem
+
+if ! [ -w  $tmpdir ] ; then
+ echo $0 ERROR dir $tmpdir is not writable
+ echo please create it if it does not exist
+ exit 1
+fi
+
+
+if [ ! -r "$1" -o "$1" = "" ] ; then
+ echo $0 ERROR Give as argument the file
+README.mirrors
+ echo "      containing a list of debian mirrors"
+ exit 1
+fi
+if [ -r mirrors_by_speed ] ; then
+  echo $0 ERROR the file  mirrors_by_speed already
+exists
+  exit 1
+fi
+
+#touch $tmpdir/mirrors_by_speed 
+
+n=0
+
+echo -n "Testing "
+grep "[a-zA-Z]" $1 | awk '{print $1}' | wc --lines |
+tr "\n" " " echo " debian mirror sites for speed and
+reliability." echo -n "Tests done : "
+
+#for i in ` grep "[a-zA-Z]*:" $1 | awk '{print $1}' `
+;
+for i in `grep "[a-z]*" $1 | cut -d"/" -f 1 | awk
+'{print $1}' ` ;  do
+  n=`expr $n + 1 `
+   (
+   h=$n
+   #echo TEST $h for  $i
+   #if ping -c 6 `echo "$i" | cut -d: -f 1` >
+$tmpdir/ping$$_$h;
+    if ping -c 6 `echo "$i"` > $tmpdir/ping$$_$h;
+    then grep "rtt" $tmpdir/ping$$_$h | cut -d"/" -f 5
+| tr "\n" " " > 
+$tmpdir/mirrors_by_speed_$h
+    echo -n " ms AVERAGE ," >>
+$tmpdir/mirrors_by_speed_$h
+    grep "received" $tmpdir/ping$$_$h | cut -d"," -f 3
+| tr "\n" "," >> 
+$tmpdir/mirrors_by_speed_$h
+    echo " SITE $i" >> $tmpdir/mirrors_by_speed_$h
+    #cat $tmpdir/mirrors_by_speed_$h
+    cat $tmpdir/mirrors_by_speed_$h >>
+mirrors_by_speed
+    rm $tmpdir/mirrors_by_speed_$h
+   fi
+   rm $tmpdir/ping$$_$h
+   echo -n "$h "
+   ) &
+   # we do not want to flood the net; we test 30 sites
+at a time
+   # then we wait 8 seconds so that most of the pings
+will be done
+   if [ `expr $n % 30 ` = 0 ] ; then sleep 8 ; fi
+  
+ done
+wait
+ echo "."
+ echo "Fastest mirrors are: "
+ mv mirrors_by_speed mirrors_by_speed~
+ sort -n mirrors_by_speed~ > mirrors_by_speed
+ head  mirrors_by_speed
+
+# end of scriptd~
+ sort -n mirrors_by_speed~ > mirrors_by_speed
+ head  mirrors_by_speed
+
+# end of scriptript

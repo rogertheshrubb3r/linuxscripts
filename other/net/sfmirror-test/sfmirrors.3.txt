@@ -1,0 +1,81 @@
+using file: /sevenzip/7za427.zip
+[ 0] puzzle.dl.sf.net            36.429s 309339b 
+[ 0] mesh.dl.sf.net              27.040s 309347b 
+[ 0] switch.dl.sf.net            21.577s 309350b 
+[ 0] surfnet.dl.sf.net           19.166s 309350b 
+[ 0] easynews.dl.sf.net          17.079s 309322b 
+[ 0] heanet.dl.sf.net            18.978s 309346b 
+[ 0] kent.dl.sf.net              35.077s 309349b 
+[ 0] ovh.dl.sf.net                0.612s 591b [302 (HTTP/1.1 302 Found)]
+[ 0] keihanna.dl.sf.net          53.172s 309346b 
+[ 0] citkit.dl.sf.net             0.000s 0b [ERR (ERROR - [110]: Connection timed o)]
+[ 0] optusnet.dl.sf.net          19.562s 309340b 
+[ 0] umn.dl.sf.net               16.461s 309340b 
+[ 0] internap.dl.sf.net           0.760s 678b [302 (HTTP/1.1 302 Found)]
+[ 0] peterhost.dl.sf.net         17.933s 309306b 
+[ 0] jaist.dl.sf.net              0.832s 494b [404 (HTTP/1.1 404 Not Found)]
+[ 0] nchc.dl.sf.net              20.148s 309351b 
+[ 1] puzzle.dl.sf.net            16.069s 309339b 
+[ 1] mesh.dl.sf.net              16.189s 309347b 
+[ 1] switch.dl.sf.net            19.175s 309350b 
+[ 1] surfnet.dl.sf.net           19.150s 309350b 
+[ 1] easynews.dl.sf.net          17.503s 309322b 
+[ 1] heanet.dl.sf.net            19.196s 309346b 
+[ 1] kent.dl.sf.net              15.868s 309349b 
+[ 1] ovh.dl.sf.net                0.338s 591b [302 (HTTP/1.1 302 Found)]
+[ 1] keihanna.dl.sf.net          21.068s 309346b 
+[ 1] citkit.dl.sf.net             0.462s 410b [404 (HTTP/1.1 404 Not Found)]
+[ 1] optusnet.dl.sf.net          22.080s 309340b 
+[ 1] umn.dl.sf.net               16.448s 309340b 
+[ 1] internap.dl.sf.net           0.515s 678b [302 (HTTP/1.1 302 Found)]
+[ 1] peterhost.dl.sf.net         17.034s 309306b 
+[ 1] jaist.dl.sf.net              0.844s 494b [404 (HTTP/1.1 404 Not Found)]
+[ 1] nchc.dl.sf.net              21.620s 309351b 
+[ 2] puzzle.dl.sf.net            16.728s 309339b 
+[ 2] mesh.dl.sf.net              16.165s 309347b 
+[ 2] switch.dl.sf.net            18.892s 309350b 
+[ 2] surfnet.dl.sf.net           19.077s 309350b 
+[ 2] easynews.dl.sf.net          16.439s 309322b 
+[ 2] heanet.dl.sf.net            19.018s 309346b 
+[ 2] kent.dl.sf.net              15.996s 309349b 
+[ 2] ovh.dl.sf.net                0.310s 591b [302 (HTTP/1.1 302 Found)]
+[ 2] keihanna.dl.sf.net          22.711s 309346b 
+[ 2] citkit.dl.sf.net             0.000s 0b [ERR (ERROR - [110]: Connection timed o)]
+[ 2] optusnet.dl.sf.net          21.163s 309340b 
+[ 2] umn.dl.sf.net               16.243s 309340b 
+[ 2] internap.dl.sf.net           0.520s 678b [302 (HTTP/1.1 302 Found)]
+[ 2] peterhost.dl.sf.net         16.955s 309306b 
+[ 2] jaist.dl.sf.net              0.825s 494b [404 (HTTP/1.1 404 Not Found)]
+[ 2] nchc.dl.sf.net              20.071s 309351b 
+[ 3] puzzle.dl.sf.net            16.030s 309339b 
+[ 3] mesh.dl.sf.net              16.262s 309347b 
+[ 3] switch.dl.sf.net            19.093s 309350b 
+[ 3] surfnet.dl.sf.net           19.015s 309350b 
+[ 3] easynews.dl.sf.net          16.445s 309322b 
+[ 3] heanet.dl.sf.net            19.195s 309346b 
+[ 3] kent.dl.sf.net              16.489s 309349b 
+[ 3] ovh.dl.sf.net                0.316s 591b [302 (HTTP/1.1 302 Found)]
+[ 3] keihanna.dl.sf.net          19.301s 309346b 
+[ 3] citkit.dl.sf.net             0.000s 0b [ERR (ERROR - [110]: Connection timed o)]
+[ 3] optusnet.dl.sf.net          20.893s 309340b 
+[ 3] umn.dl.sf.net               16.205s 309340b 
+[ 3] internap.dl.sf.net           0.511s 678b [302 (HTTP/1.1 302 Found)]
+[ 3] peterhost.dl.sf.net         17.414s 309306b 
+[ 3] jaist.dl.sf.net              0.833s 494b [404 (HTTP/1.1 404 Not Found)]
+[ 3] nchc.dl.sf.net              22.520s 309351b 
+[ 4] puzzle.dl.sf.net            15.958s 309339b 
+[ 4] mesh.dl.sf.net              15.977s 309347b 
+[ 4] switch.dl.sf.net            18.996s 309350b 
+[ 4] surfnet.dl.sf.net           19.101s 309350b 
+[ 4] easynews.dl.sf.net          17.014s 309322b 
+[ 4] heanet.dl.sf.net            19.028s 309346b 
+[ 4] kent.dl.sf.net              16.729s 309349b 
+[ 4] ovh.dl.sf.net                0.310s 591b [302 (HTTP/1.1 302 Found)]
+[ 4] keihanna.dl.sf.net          19.052s 309346b 
+[ 4] citkit.dl.sf.net             0.000s 0b [ERR (ERROR - [110]: Connection timed o)]
+[ 4] optusnet.dl.sf.net          20.160s 309340b 
+[ 4] umn.dl.sf.net               25.038s 309340b 
+[ 4] internap.dl.sf.net           0.629s 678b [302 (HTTP/1.1 302 Found)]
+[ 4] peterhost.dl.sf.net         37.103s 309306b 
+[ 4] jaist.dl.sf.net              0.848s 494b [404 (HTTP/1.1 404 Not Found)]
+[ 4] nchc.dl.sf.net              43.674s 309351b 

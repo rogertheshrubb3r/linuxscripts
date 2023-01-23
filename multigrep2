@@ -1,0 +1,59 @@
+#!/bin/sh
+
+
+
+EXECCMD="/bin/ls -l | grep a | grep b"
+/bin/sh -c "${EXECCMD}"
+
+exit 0
+
+TMPFILE=`mktemp -t multigrep.XXXXXX` || TMPFILE=/tmp/multigrep.tmp
+
+debug () {
+    echo "FILES     = $FILES"
+    echo "FILTERCMD = $FILTERCMD"
+    echo "EXECCMD       = $EXECCMD"
+}
+
+usage () {
+    echo "usage: $0 <args> (see script)"
+}
+
+parseArgs () { 
+#    echo $#
+    for i in "$@"; do
+	if [ -z $FILES ]; then
+	    FILES="$i"
+#	    FILTERCMD="grep '$i'"
+#	elif [ -z "$FILTERCMD" ]; then
+#	    FILTERCMD="grep $i"
+	else
+	    echo $i>>$TMPFILE
+	fi
+#        echo "($i)";
+    done;
+#    for i in $*; do
+#        echo "(($i))";
+#    done
+}
+
+parseArgs "$@"
+
+
+
+if [ ! -r $TMPFILE ]; then
+    usage
+    exit 1
+fi
+
+#EXECCMD="cat $FILES | $FILTERCMD"
+#EXECCMD="ls | grep a"
+echo ""
+
+#$EXECCMD
+cat $FILES | grep -f $TMPFILE
+rm $TMPFILE
+
+debug
+
+# line with multigrep

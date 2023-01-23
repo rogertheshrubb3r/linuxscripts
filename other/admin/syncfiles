@@ -1,0 +1,17 @@
+#!/bin/sh
+
+www="
+ls.php
+sql.php
+"
+
+www_site[1]="ftp://kidd:mtzz3f@82.76.11.20/c/wwwroot"
+www_site[2]="scp://www:l00py.www@oopyarhitectura.ro/var/www"
+www_site[3]="scp://kidd:spmtzz3f@spunge.org/~/public_html"
+www_site[4]="ftp://ktmpyah@3dmega.com/html"
+
+bin_site[1]="scp://kidd:spmtzz3f@spunge.org/~/bin/"
+
+#ktmpyah.uv.ro
+
+

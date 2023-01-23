@@ -1,0 +1,120 @@
+#!/bin/bash
+
+#SHELL=/bin/sh
+
+CNT=-c5
+TTL=-t32
+
+TMPFILE1=`mktemp -t mspeed1.XXXXXX` || TMPFILE1=/tmp/mspeed1.tmp
+TMPFILE2=`mktemp -t mspeed2.XXXXXX` || TMPFILE2=/tmp/mspeed2.tmp
+
+debug () {
+    echo CNT: $CNT
+#    echo EXECCMD: $EXECCMD
+}
+
+usage () {
+    echo "usage: $0 [options] <host> [host...]"
+    echo ""
+    echo "options:"
+    echo "  -f    load hosts to ping from file"
+    echo "  -cn   send 'n' pings to each host"
+    echo "  -tn   ttl 'n' (time to live) *apparently not working*"
+#    echo "  -x    add extra filter (e.g. -xTLS, -xSep) "
+#    echo "  -r    raw log output"
+}
+
+parseArgs () { 
+#    echo $#
+    for i in "$@"; do
+	case $i in
+	-h|-H)
+	    usage
+	    exit 1
+	;;
+	-f)
+#	    echo ISFILE!!
+	    ISFILE=yes
+	;;
+	-t) # not working :(
+	    TTL=$i
+	;;
+#	-x|-X)
+#	    EXTRAFILTER="$EXTRAFILTER $i"
+#	;;
+	-c*)
+	    CNT=$i
+	;;
+	*)
+	    HOSTS="$HOSTS $i"
+	;;
+	esac
+    done;
+#    for i in $*; do
+#        echo "(($i))";
+#    done
+}
+parseArgs "$@"
+
+if [ "$ISFILE" == "yes" ]; then
+    HOSTS=`cat $HOSTS`
+fi
+
+if [ -z "$HOSTS" ]; then usage; exit 1; fi
+
+if [ -f "$TMPFILE2" ]; then rm $TMPFILE2 ; fi
+
+for i in  $HOSTS; do
+# test each host
+    echo "testing $i..."
+    ping $CNT $TTL $i >& $TMPFILE1
+    p_trns=`grep 'packets transmitted' $TMPFILE1|awk '{print $1}'`
+    p_rcvd=`grep 'packets transmitted' $TMPFILE1|awk '{print $4}'`
+
+    grep ' errors' $TMPFILE1 > /dev/null
+    if [ "$?" == "0" ]; then # found ping errors ?
+        p_loss=`grep 'packets transmitted' $TMPFILE1|awk '{print $8}'`
+        p_time=`grep 'packets transmitted' $TMPFILE1|awk '{print $12}'`
+    else # no ping errors
+        p_loss=`grep 'packets transmitted' $TMPFILE1|awk '{print $6}'`
+        p_time=`grep 'packets transmitted' $TMPFILE1|awk '{print $10}'`
+    fi
+    
+    grep 'rtt min/' $TMPFILE1 > /dev/null
+    if [ "$?" == "0" ]; then # ping successful
+	p_mint=`tail -n1 $TMPFILE1|awk -F/ '{print $4}'|awk '{print $3}'`
+	p_avgt=`tail -n1 $TMPFILE1|awk -F/ '{print $5}'`
+	p_maxt=`tail -n1 $TMPFILE1|awk -F/ '{print $4}'|awk '{print $3}'`
+    else
+	p_mint="-"; p_avgt="-"; p_maxt="-";
+    fi
+
+#    response=`ping $CNT $i| tail -n1| awk -F/ '{print $5}'`
+    grep 'unknown host' $TMPFILE1 > /dev/null
+    if [ "$?" == "0" ]; then
+	echo "$i: host not found" >> $TMPFILE2
+    else
+#	ip=`grep PING $TMPFILE1 | awk '{print $3}'`
+	ip=`grep PING $TMPFILE1 | awk -F '(' '{print $2}'`
+	ip=`echo $ip|awk -F ')' '{print $1}'`
+	if [ "$p_loss" == "0%" ]; then p_loss="-"; fi
+	host="$i ($ip)"
+#	printf "%4s %8s %16s %-25s (%s/%s; %s/%s; %s)\n" $p_loss $p_avgt $ip $i $p_rcvd $p_trns $p_mint $p_maxt $p_time>>$TMPFILE2
+	printf "%4s %8s %-32s (%s/%s; %s/%s; %s)\n" $p_loss $p_avgt "$host" $p_rcvd $p_trns $p_mint $p_maxt $p_time>>$TMPFILE2
+    fi
+
+done
+echo ""
+echo "ping speed results:"
+echo ""
+#echo "---"
+printf "LOSS AVG.PING HOST (IP)                        DETAILS (rcv/trn; min/max; total)\n"
+sort -n $TMPFILE2 | grep -v "host not found"
+echo ""
+grep "host not found" $TMPFILE2
+echo ""
+
+#rm $TMPFILE1 $TMPFILE2 > /dev/null
+
+#echo ""
+#$SHELL -c "${EXECCMD}"

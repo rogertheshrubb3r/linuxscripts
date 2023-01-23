@@ -1,0 +1,59 @@
+#!/bin/sh
+
+#DBG=1
+
+# editor to use
+ED="mcedit -x"
+#ED=vi
+
+usage() {
+HLP="usage: $0 <script>
+automatically finds and edit script (with mcedit)
+options:
+  -h		this help
+  -d*		debug info
+"; echo "$HLP"; exit $1
+}
+
+if [ "$1" == "-h" ] || [ -z "$@" ]; then usage; exit 0; fi
+[ "$1" == "-d" ] && DBG=1
+
+pname=`echo "$@"| awk '{print $(NF-1)}'`
+prog=`which $pname`
+if ! [ $prog ]; then 
+    echo "$@: not found"
+    exit 1
+fi
+type=`file -L $prog|awk -F: '{print $2}'`
+isgood=`echo $type|grep -i script`
+
+if [ $DBG ]; then
+    echo -e "pname: $pname\nprog:$prog\ntype:$type\nisgood:$isgood\n"
+fi
+
+if [ "$isgood" != "" ]; then
+    EDFOUND=`which $ED`
+    if [ "$EDFOUND" != "" ]; then
+	$ED $prog
+	exit 0
+    else
+	echo "editor not found: $ED"
+	if [ "$EDITOR" != "" ]; then
+	    EDFOUND=`which $ED`
+    	    echo "trying default editor: $EDITOR"
+	    if [ "$EDFOUND" != "" ]; then
+		$EDITOR $prog
+		exit 0
+	    else
+	        echo "editor not found: $EDITOR"
+	        exit 1
+	    fi
+	else
+	    echo "Editor is invalid and no default editor set!"
+	    exit 1
+	fi
+	exit 1
+    fi
+else echo -e "$prog: wrong file type!\n$type"
+fi
+

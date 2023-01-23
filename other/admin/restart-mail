@@ -1,0 +1,52 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 [options]
+options:
+  -stop		stop
+  -start	start
+  -h		this help
+start/stop/restart mail system [postfix/cyrus/amavis/clamav etc.]
+"
+echo "$HLP"
+
+}
+
+SERVICES="
+postfix
+amavis
+spamassassin
+clamav-daemon
+cyrus22
+"
+
+# stop all
+stop_all() {
+echo -- STOPPING ALL --
+/etc/init.d/postfix stop
+/etc/init.d/amavis stop
+/etc/init.d/clamav-daemon stop
+#/etc/init.d/clamav-freshclam stop
+#/etc/init.d/spamassassin stop
+/etc/init.d/cyrus22 stop
+}
+
+# start all
+start_all() {
+echo -- STARTING ALL --
+/etc/init.d/cyrus22 start
+#/etc/init.d/spamassassin start
+/etc/init.d/clamav-daemon start
+#/etc/init.d/clamav-freshclam start
+/etc/init.d/amavis start
+/etc/init.d/postfix start
+}
+
+case "$1" in
+    -h) usage ;;
+    -start|--start) start_all ;;
+    -stop|--stop) stop_all ;;
+    *) stop_all; start_all ;;    
+esac
+

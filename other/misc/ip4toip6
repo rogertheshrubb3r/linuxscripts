@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# http://changelog.complete.org/plugin/freetag/Debian
+
+printf "2002:%x%02x:%x%02x::\n" `echo $1 | sed 's/\./ /g'`
+

@@ -1,0 +1,148 @@
+#!/bin/bash
+
+# netmon -- simple server monitoring with fping
+
+#DBG=1
+CFGFILE=~/.netmon
+#LOGFILE=/dev/tty
+RUNDIR=/var/run/netmon
+LOGFILE=/var/log/netmon.log
+STATFILE=/var/run/netmon/netmon.stat
+INTERVAL=30 # 30 secs. default sleep interval
+
+ERR_FATAL=5 # returned code for fatal errors
+
+myname="${0##*/}"; myname="${myname%$2}"
+
+usage() {
+HLP="
+usage: $0 [options]
+simple host availability monitor using fping
+
+options:
+  -d, --debug		enable debugging
+  -c, --config <file> 	use alternate config file (default: $CFGFILE)
+  -i, --interval n	use n seconds as check interval (default: $INTERVAL)
+  -k, --kill, --stop	stop (kills all $0 processes)
+  -s, --status		show last status
+  -sd			show last status, hosts that are DOWN
+  -su			show last status, hosts that are UP
+"; echo "$HLP"; exit $@
+}
+
+abort() {
+[ $2 ] && ERRC=$2 || ERRC=1
+[ "$2" == "$ERR_FATAL" ] && echo -n "FATAL "
+echo "ERROR: $1"
+exit $ERRC
+}
+
+killme() {
+    echo "killing netmon... bye-bye."
+
+    # first, dump last state in logfile
+    echo "======================================================================" >> $LOGFILE
+    echo `date "+%Y-%m-%d [%a %d %b] %H:%M:%S "`": netmon was stopped" >> $LOGFILE
+    echo "======================================================================" >> $LOGFILE
+
+    [ -f "$STATFILE" ] && rm $STATFILE
+    [ -f "$STATFILE.tmp" ] && rm $STATFILE.tmp
+    mypid=$$
+    mypids=`ps axuw|grep $myname|grep -v "(grep|$$)"|awk '{print $2}'`
+    [ $DBG ] && echo "force killing netmon: "$mypids
+    gx="\("; for i in $mypids; do [ "$gxe" ] && gxe="$gxe\|"; gxe="$gxe $i "; done
+    gx="$gx$gxe\)"
+    [ $DBG ] && echo "running processes:" && ps axuw|grep "$gx"
+    kill -9 $mypids
+#    killall $myname
+    exit 0
+}
+
+showstat() {
+    [ -f "$STATFILE" ] || abort "status file not found (is the program running?)"
+    echo -n " -- dumping last status "
+    case "$1" in
+	up ) echo "(up hosts)"; grep " UP" $STATFILE ;;
+	down ) echo "(down hosts)"; grep " DOWN" $STATFILE ;;
+	* ) echo "(all hosts)"; grep " UP" $STATFILE; echo "--"; grep " DOWN" $STATFILE ;;
+    esac
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -d | --debug ) DBG=1; shift ;;
+   -c | --config ) 
+   if [ $2 ]; then CFGFILE=$2; shift 2; 
+   else abort "option $1 requires a parameter"; fi ;;
+#   -a | --all ) GPAT=""; shift ;;
+   -i | --interval )
+    if [ $2 ]; then INTERVAL=$2; shift 2; 
+    else abort "option $1 requires a parameter"; fi ;;
+   -k | kill | --kill | stop | --stop ) killme ;;
+   -h | --help ) usage 0 ;;
+   -s | --status ) showstat; exit 0 ;;
+   -sd ) showstat down; exit 0 ;;
+   -su ) showstat up; exit 0 ;;
+   * ) abort "$1: unknown option, run $0 --help for usage" ;;
+  esac
+done
+
+
+### MAIN
+
+[ $DBG ] && echo debugging enabled
+
+[ -f "$CFGFILE" ] || abort "$CFGFILE: config file does not exist!" $ERR_FATAL
+[ `which fping` ] || abort "fping not found!" $ERR_FATAL
+
+HOSTS=`cat $CFGFILE | grep -v "^#" | awk '{print $1}'`
+
+CHECKS=0
+
+# make run dir
+[ -d "$RUNDIR" ] || mkdir $RUNDIR
+
+# clear statfile at start
+[ -f "$STATFILE" ] && rm $STATFILE 
+[ -f "$STATFILE.tmp" ] && rm $STATFILE.tmp
+
+echo "======================================================================" >> $LOGFILE
+echo `date "+%Y-%m-%d [%a %d %b] %H:%M:%S "`": netmon was started" >> $LOGFILE
+echo "======================================================================" >> $LOGFILE
+
+while [ 1 ]; do
+  for pc in $HOSTS; do
+
+    [ $DBG ] && echo -n "checking $pc: "
+    reply=`fping $pc 2>&1`
+    isalive=`echo $reply | grep " is alive"`
+    [ "$isalive" ] && stat=UP || stat=DOWN
+    [ $DBG ] && echo "$stat"
+    echo "$pc $stat" >> $STATFILE.tmp
+    [ -f "$STATFILE" ] && prevstat=`cat $STATFILE | grep "^$pc " | awk '{print $2}'`
+    [ $prevstat ] || prevstat=UNKNOWN
+
+    [ "$CHECKS" == "0" ] && verb=is || verb=went
+
+    if [ "$stat" != "$prevstat" ]; then
+	# log state change
+	[ $DBG ] && echo "logging state change for: $pc (is $stat, was $prevstat)"
+	if [ "$prevstat" != "UNKNOWN" ] && [ "$CHECKS" != "0" ]; then xinfo=" (was $prevstat)"; else xinfo=; fi
+#	echo `date "+%Y-%m-%d [%a %d %b] %H:%M:%S "`": $pc $verb $stat (was: $prevstat)" >> $LOGFILE
+	echo `date "+%Y-%m-%d [%a %d %b] %H:%M:%S "`": $pc $verb $stat$xinfo" >> $LOGFILE
+    fi
+  done # end for
+
+  if [ "$CHECKS" == "0" ]; then
+    echo "----------------------------------------------------------------------" >> $LOGFILE  
+  fi
+  let CHECKS=$CHECKS+1
+  [ $DBG ] && echo "all hosts checked ( checks so far: $CHECKS)"
+  # after all hosts are checked, replace STATFILE with new status
+  touch $LOGFILE
+  mv $STATFILE.tmp $STATFILE
+  [ $DBG ] && echo "sleeping $INTERVAL seconds."
+
+  sleep $INTERVAL
+done # end while
+

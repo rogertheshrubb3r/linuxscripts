@@ -1,0 +1,65 @@
+#!/bin/sh
+
+VER=0.1
+
+TAIL=3
+
+usage() {
+HLP="
+usage: $0 [process_mask] [options]
+prints cpu/memory load
+options:
+  -a		list all
+  -t|n|x [n]	top load [n] processes (n=3 by default)
+  -s		print only load (no status)
+  -h		this help
+"
+echo "$HLP"; exit 1
+}
+
+FIND=.
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a ) ALL=1; shift ;;
+    -t | -n | -x ) EXTINFO=1; HEAD=1; if ! [ -z $2 ]; then TAIL=$2; shift; fi; shift ;;
+#    -n | --named ) LSOF= ; SORT=-k8; shift ;;
+#    -u ) SORT=-k3; shift ;;
+    -s )
+	SHORT=1;
+#	AWK='{printf"%-9s %-9s %5s %s\n", $1,$3,$5,$8}' 
+#	hdr="COMMAND   USER       TYPE INTERFACE/PORT"
+	shift ;;
+#    -p ) SORT=-k1; shift ;;
+    -h* | --help ) usage; exit 1; shift ;;
+    -* ) echo -e "\nInvalid option: $1" ; usage; exit 1; break ;;
+    * ) FIND=$1; shift ;;
+  esac
+done
+
+# USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+
+if [ $EXTINFO ] || [ "$FIND" != "." ]; then
+    if [ "$FIND" != "." ]; then echo -n "[$FIND] : "; fi
+    pslist=`ps axu|grep -v "\($0\|grep $FIND\|ps axu\)"| grep "$FIND"`
+    if [ "$pslist" != "" ]; then
+	cpuload=`echo "$pslist"|awk '{a+=$3} END {print a}'`
+        memload=`echo "$pslist"|awk '{a+=$4} END {print a}'`
+	echo "$cpuload% cpu, $memload% mem"
+#	if [ "$FIND" != "." ]; then echo ""; fi
+#       printf "cpu: %4s%%\n" $cpuload
+#       printf "mem: %4s%%\n" $memload
+	if [ $ALL ]; then HEAD=99999; TAIL=99999; else HEAD=`expr $TAIL + 1`; fi
+	if [ -z $SHORT ]; then
+    	echo  "  CPU%   USER PROCESS"
+        echo "$pslist"|sort -r -k3|head -n$HEAD|tail -n$TAIL|awk '{printf ("%4s%% %7s %s", $3,$1,$11); printf (" %s %s %s %s\n", $12,$13,$14,$15)}'
+    	echo  "  MEM%   USER PROCESS"
+        echo "$pslist"|sort -r -k4|head -n$HEAD|tail -n$TAIL|awk '{printf ("%4s%% %7s %s", $4,$1,$11); printf (" %s %s %s %s\n", $12,$13,$14,$15)}'
+	fi
+    else echo "no matches."
+    fi
+    exit 0
+fi
+
+printf "cpu: %4s%%\n" `ps -eao "pcpu" | awk '{a+=$1} END {print a}'`
+printf "mem: %4s%%\n" `ps -eao "pmem" | awk '{a+=$1} END {print a}'`

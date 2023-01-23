@@ -1,0 +1,57 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 [options] host
+gets extended info about host 
+
+options:
+  -h		this help
+
+uses /usr/bin/host from bind9-host package (debian)
+"
+echo "$HLP"; exit $@
+}
+
+[ "$1" == "-h" ] || [ -z $@ ] && usage
+
+H=$1
+HI=`host $H`
+
+FOUND=`echo "$HI"|grep "not found"`
+
+if [ -n "$FOUND" ]; then
+    echo "$H: not found"
+    exit 0
+fi
+
+HA=`echo "$HI"|grep alias`
+echo "host: $H"
+
+NP=`echo "$HI"|grep pointer`
+if [ "$NP" ]; then
+echo "$H -> "`echo "$HI"|awk '{print $5}'`
+fi
+
+if [ "$HA" ]; then
+echo -- aliases
+echo "$HA"
+fi
+
+HIP=`echo "$HI"|grep address|awk '{print $4}'`
+
+#echo "host: $H has ip(s):"
+#echo "$HIP"
+
+
+
+for i in $HIP; do
+    HN=`host $i|grep pointer|awk '{print $5}'`
+    [ -z $HN ] && HN="not found"
+    HRI="$HRI"`printf "%15s : %s\n" "$i" "$HN"`"\n"
+done
+
+if [ "$HRI" ]; then
+    echo "--- reverse info"
+    echo -e "$HRI"
+fi

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+DBG=1
+
+# not great :(
+# some directory reading errors?
+
+#HOST=localhost
+HOST=woopy
+PORT=22
+# read/write
+USERNAME=root
+PASS=""
+
+MNT_PATH="/"
+MNT_POINT=/mnt/woopy
+
+FMASK=444
+DMASK=555
+
+OPTS=
+
+usage() {
+HLP="
+usage: $0 <host>
+"
+echo "$HLP"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a | --all ) FIND=.; shift ;;
+    -u | --user ) FIND=$2 ; shift 2 ;;
+    -c | -p | --command | --process ) FIND=$2 ; shift 2 ;;
+    -h* | --h*  ) usage; exit 0 ;;
+#   * ) FIND=":.*$1"; shift ;; # "fuzzy"
+#   * ) FIND=":$1 ("; shift ;;
+   *) if [ -z $hp ]; then hp=$1; elif [ -z $m ]; then $m=$1; fi; break ;;
+  esac
+done
+
+
+if ! [ -z $hp ]; then
+# user/host
+    n=`echo $hp|awk -F@ '{print NF}'` # get num fields
+    if [ $n -gt 1 ]; then
+	u=`echo "$hp"|awk -F@ '{print $1}'`
+	h=`echo "$hp"|awk -F@ '{print $2}'`
+    else
+	u=`whoami`
+	h=$@
+    fi
+
+# mount point
+    if [ -z $m ]; then m=$h; fi
+USERNAME=$u
+HOST=$h
+MNT_POINT=/mnt/sshfs-$m
+fi
+
+if ! [ -d $MNT_POINT ]; then mkdir $MNT_POINT; fi
+
+#OPTS="-C" # compression
+[ $DBG ] && echo "mounting .. [shfsmount "$USERNAME@$HOST:$MNT_PATH" $MNT_POINT -P $PORT $OPTS]"
+shfsmount "$USERNAME@$HOST:$MNT_PATH" $MNT_POINT -P $PORT $OPTS
+
+#/usr/bin/lufsd none $MNT_POINT -o fs=sshfs,host=$HOST,USERNAMEname=$USER,password=$PASS,port=$PORT,root=$MNT_PATH,fmask=$FMASK,dmask=$DMASK,quiet
+
+#lufsd none %s -o fs=%s,host=,USERNAMEname=,password=,port=,root=/,uid=,gid=,fmask=,dmask=,channels=,,own_fs,quiet
+#lufsmount -q "sshfs://$USERNAME:$PASS@$SERVER" $MNT_POINT
+#lufsmount -q "sshfs://$USERNAME:$PASS@$SERVER" $MNT_POINT --fmask=$FMASK --dmask=$DMASK

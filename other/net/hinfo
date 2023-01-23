@@ -1,0 +1,12 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 host
+gets extended host information
+"; echo "$HLP"; exit $@
+}
+
+[ -z $@ ] && usage
+
+nslookup -query=HINFO $@

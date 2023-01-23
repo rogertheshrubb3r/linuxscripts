@@ -1,0 +1,36 @@
+#!/bin/sh
+
+NUMLINES=25
+USER=":"
+DBG="yes"
+
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+
+TMPFILE=/tmp/mail-lastin.tmp
+
+usage () {
+HLP="
+usage: $0 <user>
+
+prints last mails received by <user>
+"
+echo "$HLP"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h* )
+	usage; exit 0 ;;
+    -x ) 
+	EXCLUDED="$EXCLUDED $2"; shift 2 ;;
+   * ) 
+	USER="$1"; shift ;;
+  esac
+done
+
+echo "USER: $USER"
+echo "EXCLUDED: $EXCLUDED"
+
+cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10}'| tail -$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10 " " $12}'| tail -$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | tail -$NUMLINES

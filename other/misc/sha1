@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -z "$@" ]; then
+HLP="
+uasge: $0 <string>
+generates sha1 sum of string.
+"
+echo "$HLP"
+exit 1
+fi
+
+php -r "echo sha1('$@');"; echo ""

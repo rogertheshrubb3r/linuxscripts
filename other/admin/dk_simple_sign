@@ -1,0 +1,23 @@
+  #! /bin/sh
+
+  file=$1
+  domain=$2
+  selector=$3
+
+  if [ ! -r "$file" -o ! "$domain" -o ! "$selector" ]; then
+      echo >&2 Usage: dk_simple_sign filename domain selector
+      exit 1
+  fi
+
+  echo "DomainKey-Signature: a=rsa-sha1; q=dns; c=simple;"
+  echo "  s=$selector; d=$domain;"
+
+  dk_simple_canonical <$file |
+      openssl dgst -sign rsa.private -sha1 |
+      perl -MMIME::Base64 -0777 -ne 'print encode_base64($_)'   |
+      sed -e '1s/^/b=/' -e 's/^/ /'
+
+
+  cat <$file
+
+  exit 0

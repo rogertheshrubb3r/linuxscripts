@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export CVSROOT=":pserver:radu@server:/home/cvs"
+cvs -q checkout -P project

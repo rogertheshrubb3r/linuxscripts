@@ -1,0 +1,16 @@
+#!/bin/sh
+
+b=1024m
+
+usage() {
+HLP="
+usage: $0 [-b size[k|m] file
+"; echo $HLP
+exit $1
+}
+
+[ "$1" == "-h" ] && usage
+[ "$1" == "-b" ] && b=$2 shift 2
+
+
+split -d -b $b "$@" "$@."

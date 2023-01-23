@@ -1,0 +1,10 @@
+#!/bin/sh
+
+HELPTXT="usage: $0 <package_name>\n\n
+lists information about a Debian package.\n
+"
+
+if [ -z $@ ]; then echo -e $HELPTXT; exit 1; fi
+
+#dpkg status
+dpkg -s $@

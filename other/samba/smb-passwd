@@ -1,0 +1,3 @@
+#!/bin/sh
+
+smbpasswd -c /etc/samba/smb.conf $@

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# grep in package cache
+
+if [ -z $1 ]; then
+    echo "usage: $0 <package>"
+    echo
+    echo "show information for debian package"
+    echo ""
+    exit 1
+fi
+
+EXCLUDE_NONE="^^\$\$"
+EXCLUDE_BARE="Installed-Size:\|MD5sum"
+EXCLUDE_EXTRA="Filename:\|Size:"
+EXCLUDE_ALL="\($EXCLUDE_BARE\|$EXCLUDE_EXTRA\)"
+
+EXCLUDE=EXCLUDE_NONE
+
+apt-cache show -a $@ | grep -v "$EXCLUDE"

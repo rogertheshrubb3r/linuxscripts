@@ -1,0 +1,19 @@
+#!/bin/sh
+
+#[ $@ ] || { echo "usage: $0 <php code>"; exit 1; }
+TMPFILE=/tmp/php-testcode.tmp
+
+echo "<?php" > $TMPFILE
+
+cat >> $TMPFILE
+
+echo '; ?>' >> $TMPFILE
+
+echo "-- executing php code --"
+
+php -f $TMPFILE
+echo "-- end --"
+
+[ -f $TMPFILE ] && rm $TMPFILE
+
+#php -r "echo $@\n;"

@@ -1,0 +1,71 @@
+#!/bin/sh 
+##!/bin/sh -e
+
+SFMIRROR_FILE=~/.sf_mirror
+
+# kidd: NOT working -- cannot export to parent environment
+
+#SYSCONFDIR='/etc/apache2'
+SFMIRROR_LIST='/etc/local/sf_mirrors'
+
+if [ -z $1 ]; then
+	echo "current mirror: "
+	cat $SFMIRROR_FILE|grep -v "^#"|tail -n1
+	echo "Which mirror would you like to enable?"
+	echo "Your choices are: "
+#	printf "%s: %s\n" `cat $SFMIRROR_LIST|awk '{print $2 $1}'` #|xargs echo
+	cat $SFMIRROR_LIST|grep -v "^#"|awk '{print $1"\t\t# "$3 $4 $5}' #|xargs echo
+#	ls /etc/apache2/mods-available/*.load | \
+#	sed -e "s,$SYSCONFDIR/mods-available/,,g" | sed -e 's/\.load$//g;' #| xargs echo
+	echo -n "Mirror name? "
+	read SFMIRROR
+else
+	SFMIRROR=$1
+fi
+
+#figure out if we're on a prefork or threaded mpm
+#if [ -x /usr/sbin/apache2 ]; then
+#	PREFORK=`/usr/sbin/apache2 -l | grep prefork || true`
+#fi
+
+#if [ $MODNAME = "cgi" ] && [ -z $PREFORK ]; then
+#	MODNAME="cgid"
+#fi
+
+#if [ -e $SYSCONFDIR/mods-enabled/$MODNAME.load ]; then
+#	echo "This module is already enabled!"
+#	exit 0 
+#fi
+
+#if ! [ -e $SYSCONFDIR/mods-available/$MODNAME.load ]; then
+#	echo "Invalid proxy!"
+#	exit 1
+#fi
+
+
+#for i in conf load; do 
+#        if [ -e $SYSCONFDIR/mods-available/$MODNAME.$i -a ! -e $SYSCONFDIR/mods-enabled/$MODNAME.$i ]; then
+#        ln -sf $SYSCONFDIR/mods-available/$MODNAME.$i $SYSCONFDIR/mods-enabled/$MODNAME.$i;
+
+    if [ "$SFMIRROR" == "" ]; then
+	echo "Invalid mirror"
+	exit 1
+    fi
+
+	HTTP_PROXY=`cat $SFMIRROR_LIST | grep $SFMIRROR | awk '{print $1}'|head -n1`
+#	cat $SFMIRROR_LIST | grep $SFMIRROR | awk '{print $1}' | read HTTP_PROXY
+
+    if [ "$HTTP_PROXY" == "" ]; then
+	echo "Invalid proxy"
+	exit 1
+    fi
+    echo $HTTP_PROXY > $SFMIRROR_FILE
+    echo using mirror: $HTTP_PROXY
+
+#	export HTTP_PROXY
+#        fi
+#done
+
+#echo HTTP_PROXY set to $HTTP_PROXY
+#echo "Module $MODNAME installed; run /etc/init.d/apache2 force-reload to enable."
+#set|grep HTTP

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+FTP_SERVER=hb7
+# read/write
+FTP_USER=root
+FTP_PASS=
+FTP_PATH=/
+MNT_POINT=/mnt/hb7
+
+# mount user (uid), group (gid) -- (not much effect -- only on MNT_POINT, not on subdirs)
+U=0 # root
+G=50 # staff
+
+# mount fmask, dmask
+FMASK=644
+DMASK=755
+
+#OPTS="--fmask=$FMASK --dmask=$DMASK"
+OPTS="-q"
+
+if [ -n $FMASK ]; then OPTS="$OPTS -f $FMASK"; fi
+if [ -n $DMASK ]; then OPTS="$OPTS -d $DMASK"; fi
+
+if ! [ -z $U ]; then OPTS="$OPTS -u $U"; fi
+if ! [ -z $G ]; then OPTS="$OPTS -g $G"; fi
+
+if ! [ -d $MNT_POINT ]; then mkdir $MNT_POINT; fi
+
+lufsmount "ftpfs://$FTP_USER:$FTP_PASS@$FTP_SERVER" $MNT_POINT $OPTS
+
+#lufsmount "ftpfs://ktmpyah:dapktmp@ftp.dap.ro" /mnt/ftpfs
+#lufsmount "ftpfs://$FTP_USER:$FTP_PASS@ftp.dap.ro" /mnt/ftpfs

@@ -1,0 +1,137 @@
+#!/bin/bash
+
+HOSTSFILE=checkhosts
+
+DBG=no
+
+# directories to check for config file -- in order
+DIRSTOCHECK="~ /etc/local /etc"
+
+#DESTS="
+#router
+#ext-router
+#www.home.ro
+#www.google.com
+#pc1
+#pc2
+#pc3
+#pc4
+#pc5
+#"
+
+
+#if [ -f ~/$HOSTSFILE ]; then 
+#    CONFFILE=~/.$HOSTSFILE
+#lif [ -f /etc/local/$HOSTSFILE ]; then
+#   CONFFILE=/etc/local/$HOSTSFILE
+#lif [ -f /etc/$HOSTSFILE ]; then
+#   CONFFILE=/etc/$HOSTSFILE
+#i
+
+for i in $DIRSTOCHECK; do
+    if [ -f $i/$HOSTSFILE ]; then CONFFILE=$i/$HOSTSFILE; break
+    fi
+done
+
+if [ "$DBG" == "yes" ]; then echo "using config: $CONFFILE"; fi
+
+DEF_INTERVAL=300
+INTERVAL=$DEF_INTERVAL
+#if [ -z "$1" ]; then INTERVAL=$DEF_INTERVAL; else INTERVAL=$1; fi
+
+TIMEOUT=50	# default 500 ?
+RETRIES=1	# default 3
+
+#echo "Network status (fping)"
+
+function shortstatus() {
+	if [ "$DBG" == "yes" ]; then echo "printing short stats"; fi
+	TMPFILE="/tmp/checknet.tmp"
+	$EXECCMD | grep -v "Host Unreachable"> $TMPFILE
+	alive=`cat $TMPFILE | grep "is alive" | awk '{print $1}'`
+#	echo out:
+#	echo ""
+	echo "alive:"
+#	echo ""
+	grep "is alive" $TMPFILE| awk '{print "    "$1}'
+	echo ""
+	echo "unreachable:"
+#	echo ""
+	grep "is unreachable" $TMPFILE | awk '{print "    "$1}'
+}
+
+function usage() {
+HLP="
+usage: $0 [option [config-file]]
+
+options:
+  -h	this help
+  -a	show hosts that are alive
+  -d	show hosts that are down
+  -s	short [default]
+  -v	verbose
+  -vv	extra verbose
+"
+echo "$HLP"
+}
+
+if [ $2 ]; then
+    CONFFILE=$2
+fi
+
+if [ -f $CONFFILE ]; then
+    DESTS=`cat $CONFFILE | grep -v "^#"`
+else
+    echo "can't load hosts from file: $CONFFILE"
+    exit 1
+fi
+
+#EXECCMD="fping -e -r $RETRIES -t $TIMEOUT -s $DESTS"
+EXECCMD="fping -r $RETRIES -t $TIMEOUT $DESTS"
+#| grep -v "Host Unreachable"
+
+
+#echo CONFFILE: $CONFFILE
+#echo DESTS   : $DESTS
+
+if [ $1 ]; then
+    case $1 in
+    -a|-A)
+#	FILTER="is alive"
+	$EXECCMD -a 2>&1 | grep -v "Host Unreachable"
+    ;;
+    -d|-D|-u|-U)
+#	FILTER="is unreachable"
+	$EXECCMD -u 2>&1 | grep -v "Host Unreachable"
+    ;;
+    -l|-L)
+	$EXECCMD 2>&1 | grep -v "Host Unreachable"
+    ;;
+    -s|-S)
+	shortstatus
+    ;;
+    -v|-V)
+	$EXECCMD -e 2>&1 | grep -v "Host Unreachable"
+    ;;
+    -vv|-VV)
+	echo "using conf file: $CONFFILE"
+	echo "destinations   : "$DESTS
+	echo ""
+	$EXECCMD -e -s 2>&1 | grep -v "Host Unreachable"
+    ;;
+    -h|-H|--help)
+	usage; exit 0 ;;
+    *)
+	usage; exit 1 ;;
+    esac
+else
+#    $EXECCMD 2>&1
+    shortstatus
+fi
+
+#echo ""
+
+#echo cmd:$EXECCMD
+#fping -r $RETRIES -t $TIMEOUT -s $DESTS
+#fping $DESTS 2>&1
+

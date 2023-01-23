@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# seteaza permisiuni 
+
+fmode=ug+rwX,o+rX-w
+
+if [ -z $1 ]; then
+    echo "usage: $0 <file[s]>"
+    echo "sets read-only file permission/ownership for fileserver (recursively)"
+    echo ""
+    echo "(permissions: u+rw,og+rX; owner:fserver:fserver)"
+    echo ""
+    exit 1
+fi
+
+chmod -R $fmode "$@"
+chown -R nobody:fserver "$@"

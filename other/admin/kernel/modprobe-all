@@ -1,0 +1,10 @@
+#!/bin/sh
+
+allmodules=`modprobe -l |awk -F/ '{ print $NF }'|awk -F. '{print $1}'`
+
+echo "$allmodules">allmodules
+
+for i in $allmodules; do
+echo -n .
+#modprobe $i
+done

@@ -1,0 +1,116 @@
+#!/bin/sh
+##!/bin/sh -e
+
+PROXY_FILE=~/.http_proxy
+
+# kidd: NOT working -- cannot export to parent environment
+
+#SYSCONFDIR='/etc/apache2'
+PROXY_LIST=/etc/local/proxy_list
+
+#
+
+TMPFILE=`mktemp -t setproxy.XXXXXX` || TMPFILE=/tmp/proxy_list.tmp
+
+usage() {
+HLP="
+usage: $0 <proxy_name> | options
+options:
+
+  -a name addr:port     adds proxy 'addr:port' with name 'name'
+  -d name		delete proxy <name>
+  -h, --help            this help  
+"
+    echo "$HLP"
+}
+
+listproxies() {
+    cat $PROXY_LIST|grep -v "^#"|awk '{printf "%-16s: %s\n",$1,$2}' #|xargs echo
+}
+
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a ) ADDPROXY=yes; if [ -z $2 ] || [ -z $3 ]; then usage; exit 1; else PNAME=$2; PADDR=$3; fi; shift 3 ;;
+    -d ) DELPROXY=yes; PNAME=$2; shift 2 ;;
+#   -l ) LIST=yes ; shift ;;
+#   -n ) nflag=1 ; shift ;;
+   -h | --help ) usage; exit 1 ;;
+#   -d ) LISTDATE=$2; WRITE=no; shift 2 ;;
+#   -t ) if [ "$2" != "" ]; then LISTDATE=`expr $TODAY - $2`; WRITE=no; shift 2; else usage; exit 1; fi ;;
+#   -l | -v ) vlevel=$(( vlevel+1 )) ; shift ;;
+#   -ver* ) echo "Version $version"  ; exit 1 ;;
+   * ) PNAME=$1; shift;
+  esac
+done
+
+if [ "$DELPROXY" == "yes" ]; then
+    PADDR=`grep -w "^$PNAME" $PROXY_LIST | awk '{print $2}'|head -n1`
+#    echo $PADDR
+    echo "DELETING proxy: $PNAME ($PADDR)"
+#!!!
+    echo "Press [Enter] to confirm, CTRL-C to abort"
+    read a
+    grep -v -w "^$PNAME" $PROXY_LIST>$TMPFILE
+    mv -f $TMPFILE $PROXY_LIST
+    echo "DELETED proxy: $PNAME ($PADDR)"
+    exit 0
+fi
+
+if [ "$ADDPROXY" == "yes" ]; then
+#echo "Adding proxy: $PNAME [$PADDR]"
+    while [ -z $PNAME ]; do
+	echo "Empty name!"
+	read -p "Proxy name? " PNAME
+    done
+# check if duplicate name
+    isDup=`awk '{print $1}' $PROXY_LIST | grep -w ^$PNAME`
+    while [ "$isDup" == "$PNAME" ]; do
+	echo "$PNAME: duplicate name!"
+	read -p "Proxy name: " PNAME
+        isDup=`awk '{print $1}' $PROXY_LIST | grep -w ^$PNAME`
+    done
+
+# check if duplicate proxy
+    isDup=`awk '{print $2}' $PROXY_LIST | grep -w $PADDR`
+    while [ "$isDup" == "$PADDR" ]; do
+	echo "$PNAME: duplicate address!"
+	read -p "Proxy addr: " PNAME
+        isDup=`awk '{print $2}' $PROXY_LIST | grep -w ^$PNAME`
+    done
+
+    echo $PNAME   $PADDR >>$PROXY_LIST
+    echo "Added proxy: $PNAME [$PADDR]"
+    exit 0
+fi
+	
+if [ -z $PNAME ]; then
+
+#	echo "Which proxy would you like to enable?"
+	echo -e "\nYour choices are: "
+	listproxies
+    #	printf "%s: %s\n" `cat $PROXY_LIST|awk '{print $2 $1}'` #|xargs echo
+
+#	ls /etc/apache2/mods-available/*.load | \
+#	sed -e "s,$SYSCONFDIR/mods-available/,,g" | sed -e 's/\.load$//g;' #| xargs echo
+	echo ""
+	echo "current proxy   : "`cat $PROXY_FILE|grep -v "^#"|tail -n1`
+	read -p "new proxy       : " PNAME
+fi
+
+    if [ "$PNAME" == "" ]; then
+	echo "Invalid proxy"
+	exit 1
+    fi
+
+	PADDR=`grep ^$PNAME $PROXY_LIST| awk '{print $2}'|head -n1`
+	PNAME_FULL=`grep ^$PNAME $PROXY_LIST| awk '{print $1}'|head -n1`
+#	cat $PROXY_LIST | grep $PNAME | awk '{print $1}' | read PADDR
+
+    if [ "$PADDR" == "" ]; then
+	echo "Invalid proxy"
+	exit 1
+    fi
+    echo $PADDR > $PROXY_FILE
+    echo "Using new proxy: $PNAME_FULL [$PADDR]"
+

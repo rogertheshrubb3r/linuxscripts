@@ -1,0 +1,133 @@
+; Necromancer's Dos Navigator menu file... ³
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+;Detailed help on the !.! expansion macros is available in the online help
+;under the topic USER MENU -> MENU MACROS
+
+; This is a UserMenu for Linux: mostly just as a series of examples.
+
+>1            LINUX GLOBAL MENU
+>1
+; The ">1" followed by an empty line makes for a dividing line in the menu
+
+
+; These additional menus are best used for specific directories
+; Here is one as an example:
+
+>1 Additional menu [NDN Style]
+{menufile="ndn.mn2"}
+
+; Some small but helpful OS commands
+>1
+>1 ~M~isc. OS commands
+ >2 Reboot
+    shutdown -r 0
+ >2 Turn Off
+    shutdown -hP 0
+ >2 Load default charset
+    consolechars -d
+ >2 Open a new Virtual Terminal
+    openvt -s
+
+; Some Linux Tools
+>1
+>1 Run ~E~macs
+        emacs
+>1 Run ~v~i on the file under the cursor
+        vi !.!
+>1 View MS~W~ord Doc with Catdoc and Less
+        catdoc "!.!" | less
+; Many MSWord docs have spaces in the names: hence the ""
+>1 ~C~onvert  *.pdf to *.txt with pdftotext
+        pdftotext "!.!"
+>1 CV~S~
+   >2 CVS ~c~ommit
+        cvs commit
+   >2 CVS ~u~pdate
+        cvs update
+   >2 Cvs ~A~dd
+        cvs add !.!
+
+>1 ~B~uild sources in current dir
+ >2 ~C~onfigure, capture output in config.mess.txt
+        ./configure --prefix=/usr/local/ > config.mess.txt 2>&1
+ >2 ~M~ake, capturing output in make.mess.txt
+        make > make.mess.txt 2>&1
+ >2 ~I~nstall built source
+        make install
+>1
+
+
+>1 Run v~i~ on chosen files (enter names) -- you can make 79-chars entries here
+;< Enter the File Name
+;<= This is an example parameter.
+        vi $$3
+>1
+>1 ~T~ail file under cursor
+        tail !.!
+>1 ~F~ormat file under cursor
+        fmt -w72 !.!
+>1
+
+>1 ~P~rint file under cursor (a2ps)
+; Example of sub-menu. Note that NDN has print functions, too.
+>2 ~1~ One page per sheet
+        a2ps -1 !.!
+>2 ~2~ Two pages per sheet
+        a2ps -2 !.!
+>2 ~4~ Four pages per sheet
+        a2ps -4 !.!
+>2
+>1
+; Emailing stuff
+>1 ~E~mail
+>2 Run ~M~utt
+        mutt
+
+>2 Run ~P~ine
+        pine
+>2 ~W~rite an Email
+        mail
+
+>1 ~A~rchives
+; For illustration purposes. All these functions are also native to NDN
+
+    >2 ~T~ar gzip file or directory under cursor
+         tar cvzf !.tgz !.!
+    >2 Unpack tgz file to ~S~ubdirectory
+         mkdir -p ! && tar xvzpf !.! -C !
+         echo
+         echo "Package extracted to: [!]"
+    >2 Unpack tgz file to ~C~urrent directory
+         tar xvzpf !.!
+         echo
+         echo "Package extracted to: [~!]"
+    >2 ~Z~ip file or directory under cursor
+        zip -r !.zip !.!
+; packages are not native to NDN however:
+>2
+    >2 Install ~R~pm package
+        rpm --install !.!
+    >2 ~U~ninstall (Erase) Rpm package
+        rpm -e !.!
+    >2
+>1
+
+; Some simple Latex commands. See also the *.hgl file
+>1 ~L~atex Calls
+        >2 ~L~atex file under cursor
+                latex !.!
+        >2 Convert ~d~vi file under cursor to ps
+                dvips -o !.ps !.!
+        >2 Convert ~p~s file under cursor to pdf
+                ps2pdf !.! !.pdf
+>1
+
+; Some mount functions
+>1 Mount Cdrom
+        mount /dev/cdrom /mnt/cdrom
+>1 Mount Floppy (fd0)
+        mount /dev/fd0 /mnt/fd0
+
+; remove (rm -f)
+>1 Remove (without prompt!!) Backup files: *.bak, *.BAK, *.*~
+        rm -f *.*~ *.bak *.BAK

@@ -1,0 +1,296 @@
+#!/bin/sh
+
+#DBG=1
+VRB=0
+
+SMBUSER=Guest
+SMBPASS=
+FMASK=0644
+
+#root mount point
+MNTROOT=/mnt/smb
+
+EXCLUDED="
+printer
+deskjet
+Canon
+"
+
+usage() {
+HLP="
+show/mount smb shares
+usage: $0 [options]
+options:
+  -a		mount/unmount all
+  -lm		list mounted shares
+  -la		list all
+  -m		mount
+  -ma		mount all
+  -c		check if host is up
+  -u		short status [default]
+  -p		smb password
+  -d		debug info
+  -h		this help
+"
+echo "$HLP"
+exit $@
+}
+
+ACTION=mount
+### PARAMETER PARSING
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a ) WHAT=all; shift ;;
+    -m) ACTION=mount; shift;;
+    -ma) ACTION=mount; WHAT=all; shift ;;
+    -ua) ACTION=unmount; WHAT=all; shift ;;
+    -lm) ACTION=listmounted; shift ;;
+    -la) ACTION=list; WHAT=all; shift ;;
+    -c ) ACTION=check; shift ;;
+    -ca) ACTION=check; WHAT=all shift ;;
+    -d ) DBG=1; shift ;;
+    -h* | --h*  ) usage ; exit 0 ;;
+    -u | --user ) SMBUSER=$2 ; shift 2 ;;
+    -p | --pass* ) SMBPASS=$2 ; shift 2 ;;
+    -m | --fmode ) FMASK=$2; shift 2 ;;
+    -v ) VRB=1; shift ;;
+   * ) PCS="$PCS\n$1"; shift;;
+  esac
+done
+
+[ $DBG ] && echo "*** DEBUG INFO ENABLED ***"
+[ $DBG ] && VRB=1
+
+TMPFILE=`mktemp -t smb-stat.XXXXXX`  || TMPFILE=/tmp/smb-stat.tmp
+TMPFILE2=`mktemp -t smb-stat2.XXXXXX` || TMPFILE2=/tmp/smb-stat2.tmp
+TMPTREE=TMPTREE
+
+getmounted() {
+# get mounted shares
+    local TMPFILE=`mktemp -t smnt-getmounted.XXXXXX`
+    mount|grep smbfs>$TMPFILE
+    MOUNTED=`awk '{print $1}' $TMPFILE`
+    MOUNTEDNUM=`echo $MOUNTED|wc -l`
+    rm $TMPFILE
+    echo $MOUNTED
+}
+
+printmounts() {
+# print mounts
+mount|grep smbfs
+}
+
+
+unmountsmb() {
+# smbunmount [pc [share]]
+# if "pc" is not specified, ALL smb shares for ALL pcs are unmounted
+# if "share" is not specified, ALL smb shares for the "pc" are unmounted
+MOUNTED=`getmounted|grep -i "$1"|grep -i "$2"`
+[ $DBG ] && echo "(unmountsmb) MOUNTED=$MOUNTED"
+if [ "$MOUNTED" ]; then
+    [ $VRB ] && echo "unmounting [$MOUNTED]..."
+    umount $MOUNTED
+fi
+}
+
+unmountall() {
+local TMPFILE=`mktemp -t smnt-umount.XXXXXX`
+mount|grep smbfs>$TMPFILE
+MOUNTED=`awk '{print $1}' $TMPFILE`
+SMOUNTS=`wc -l $TMPFILE|awk '{print $1}'`
+MNTDIRS=`awk '{print $3}' $TMPFILE`
+rm $TMPFILE
+if [ "$SMOUNTS" != "0" ]; then
+    echo "Mounted SMB drives: $SMOUNTS; unmounting..."
+    mount|grep smbfs|awk '{print $1}'
+umount $MOUNTED
+else
+    echo "No SMB drives are currently mounted."
+fi
+}
+
+
+# read PCs from tree
+
+
+getwg() {
+# get workgroup
+head -n1 $TMPTREE
+}
+
+# find PCs
+getpcs() {
+cat $TMPTREE|cut -b4-|awk -F\\ '{print $1}' >> $TMPFILE
+# strip workgroup name
+echo `sort -u $TMPFILE|awk 'NR>2{print $1}'`
+#echo `awk 'NR>2{print $1|"sort"}' $TMPFILE`
+}
+
+getshares() {
+[ $DBG ] && echo "(getshares) G_EX=$G_EX">&2
+echo `cat $TMPTREE|cut -b5-|grep -i "^$1"|grep -v "$G_EX"|cut -d\\\ -f2-|cut -f1`
+[ $DBG ] && echo "(getshares) ">&2
+#cat $TMPTREE|grep -i "^$1"|grep -v "$G_EX"|awk -F\\ 'NF>3{print $4}'|awk '{print $2}'
+#echo `cat $TMPTREE|awk ''`
+#grep "^$1"|grep -v "$G_EX"|cut -d\\\ -f2-|cut -f1`
+}
+
+getip() {
+host $@|grep "has address"|awk '{print $4}'
+}
+
+hostup() {
+    echo "$ALLPCS"|grep -i $@
+}
+
+mountsmb() {
+# mount smb path; usage: mountsmb pc1 d
+S=$1
+P=`echo "$@"|awk -F/ '{print $2}'`
+
+if [ $P ]; then
+    S=`echo "$@"|awk -F/ '{print $1}'`; 
+else
+    P=$2
+fi
+
+SMBPATH="//$S/$P"
+MNTPATH="$MNTROOT/$S-$P"
+if [ $DBG ]; then
+    echo "\$1: $1"
+    echo "\$2: $2"
+    echo "S: $S"
+    echo "P: $P"
+    echo "SMBPATH: $SMBPATH"
+    echo "MNTPATH: $MNTPATH"
+fi
+# does mount path exist?
+ISMOUNTED=`mount|grep "$MNTPATH"`
+if [ "$ISMOUNTED" ]; then
+    echo "Can't mount $SMBPATH: $MNTPATH is already in use."
+#    exit 1
+else
+# create mount path if not exists
+if [ ! -d $MNTPATH ]; then mkdir "$MNTPATH"; fi
+# run command
+MNTCMD="mount -t smbfs -o username=$SMBUSER,password=$SMBPASS,fmask=$FMASK $SMBPATH $MNTPATH"
+[ $DBG ] && echo "running: $MNTCMD"
+$MNTCMD
+EXITCODE=$?
+#echo exitcode: $EXITCODE
+[ "$EXITCODE" != "0" ] && rmdir $MNTPATH
+fi
+}
+
+### MAIN ###
+smbtree -N>$TMPTREE
+
+# build list of excluded shares (ie. printers, adminshares)
+if [ "$EXCLUDED" ] || [ $EXCLUDE_ADMINSHARES ]; then
+#G_EX_B="\(\\\$\|"
+    G_EX_B="\("
+    [ -z $EXCLUDE_ADMINSHARES ] && G_EX="\\\$"
+    for i in $EXCLUDED; do
+        [ $G_EX ] && G_EX="$G_EX\|"
+        G_EX="$G_EX$i"
+    done
+    G_EX="$G_EX_B$G_EX\)"
+fi
+[ $DBG ] && echo "G_EX=$G_EX"
+
+ALLPCS=`getpcs`
+[ $DBG ] && echo "ALLPCS: $ALLPCS"
+[ $PCS ] && PCS=`echo -e $PCS`
+if [ "$WHAT" == "all" ]; then PCS="$ALLPCS"; fi
+
+# build grep expression from PCs
+GX="\("
+for i in $PCS; do
+    [ $GXE ] && GXE="$GXE\|"
+    GXE="$GXE$i"
+done
+GX="$GX$GXE\)"
+
+
+if [ $DBG ]; then
+    echo "GX=$GX"
+    echo "ACTION=$ACTION"
+    echo "PCS=$PCS"
+    echo "WHAT=$WHAT"
+fi
+
+case $ACTION in
+    check)
+	for i in "$PCS"; do
+	    HOSTUP=`echo "$ALLPCS"|grep -i "^$i$"`
+	    echo -n "$i is ";
+	    if [ $HOSTUP ]; then
+		echo "UP"
+		echo "shares for $i: "`getshares $i`
+	    else echo DOWN
+	    fi
+	done
+	exit 0
+    ;;
+    mount)
+	for i in $PCS; do
+	    [ $DBG ] && echo "[action:mount] mounting pc: $i"
+	    SHARES=`echo $i|awk -F/ '{print $2'}` 
+	    if [ -z $SHARES]; then SHARES=`getshares $i`; fi
+	    [ $DBG ] && echo "[action:mount] shares for $i: $SHARES"
+	    for j in "$SHARES";  do
+		[ $VRB ] && echo "mounting: //$i/$j"
+		mountsmb $i $j
+	    done
+	done
+	exit 0
+    ;;
+    unmount)
+	if [ "$WHAT" == "all" ]; then 
+	    [ $VRB ] && echo "unmounting all smb filesystems"
+	    unmountall
+	    exit 0
+	else
+	    for i in "$PCS"; do
+		[ $DBG ] && echo "unmounting: $i"
+		unmountsmb $i
+	    done
+	fi
+	exit 0
+    ;;
+    listmounted)
+	[ $VRB ] && echo "Listing mounted smb filesystems"
+	    MOUNTED=`mount|grep smbfs`
+	    MOUNTEDNUM=`mount|grep smbfs|wc -l`
+	    echo "Mounted smb filesystems: $MOUNTEDNUM"
+	    echo "$MOUNTED"
+	exit 0
+    ;;
+    view)
+	smbclient -NL $SMBPATH
+	exit 0
+    ;;
+    *)
+#	usage; exit 1
+    ;;
+esac
+
+
+
+
+
+echo Workgroup:`getwg`
+
+
+echo -n "PC's: "
+for i in $ALLPCS; do echo -n "$i, "; done
+echo ""
+for i in $ALLPCS; do 
+echo --$i:
+getshares $i
+echo --
+done
+
+exit
+
+rm -f $TMPFILE $TMPTREE

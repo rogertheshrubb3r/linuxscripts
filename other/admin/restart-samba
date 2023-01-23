@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# stop all
+
+/etc/init.d/samba stop
+
+# start all
+/etc/init.d/samba start
+
+
+

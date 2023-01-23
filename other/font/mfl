@@ -1,0 +1,98 @@
+#!/bin/sh
+
+# kidd: make descript.ion list of fonts in current dir.
+
+# bug: can't read spaces in filename
+# verbose, debug
+VRB=1; DBG=
+
+fmode=fontname
+deldesc=1
+
+DESCFILE=descript.ion
+FMASK="*.ttf *.otf *.ttc *.otc *.pfa *.pfb *.fon *.TTF *.OTF *.TTC *.OTC *.PFA *.PFB *.FON"
+
+#ffdir=/root/bin/font/fontforge
+#fforge=/root/bin/fontforge
+fforge=/usr/local/bin/fontforge
+ffscript=/root/bin/font/scripts/fontname.pe
+
+usage() {
+HLP="
+usage: $0 [options]
+makes descript.ion file list with font names in current dir.
+
+options:
+  -f		get font name from 'fullname' field (\$fullname in fontforge)
+  -m		get font name from 'familyname' and 'weight' fields 
+		(\$familyname, \$weight in fontforge)
+  -d,--delete	delete existing descript.ion file (default)
+  -n,-nd	do not delete existing descript.ion file
+  -v,--verbose	verbose output
+  --debug	debug output
+  -q,--quiet	quiet
+  -h,--help	this help
+
+default mode: 'fontname' (\$fontname in fontforge)
+"; echo "$HLP"; [ $1 ] && exit $1
+}
+
+finfo() {
+    cmdl="$fforge -script $ffscript $fmode $@"
+    [ $DBG ] && echo "cmdl: $cmdl"
+    $cmdl 2>/dev/null >> $DESCFILE
+}
+
+#if [ -z $@ ]; then usage; exit 1; fi
+
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h | --help ) usage 0 ;;
+    -f | --fullname )
+	fmode=fullname; shift ;;
+    -m | --familyname )
+	fmode=fmailyname; shift ;;
+    -d | --delete)
+	deldesc=1; shift ;;
+    -nd|--nodel*)
+	delete=; shift ;;
+    -q|--quiet) VRB=; DBG=; shift ;;
+    -v|--verbose) VRB=1; shift ;;
+    -d|--debug) DBG=1; shift ;;
+    -h* | --h*  ) HELP=yes ; shift ;;
+   * ) 
+    args="$args $1"; shift ;;
+#   * ) echo "Invalid option: $1" ; HELP=yes; break ;;
+  esac
+done
+
+[ $DBG ] && VRB=1
+
+fontfiles=`ls -1 $FMASK 2>/dev/null`
+numfonts=0; [ -n "$fontfiles" ] && numfonts=`echo "$fontfiles"|wc -l`
+[ $VRB ] && echo -e " -- fmode: $fmode\n -- fonts found: $numfonts"
+
+if [ $deldesc == 1 ] && [ -f $DESCFILE ]; then 
+    [ $VRB ] && echo " -- removing old file: $DESCFILE"
+    rm -f $DESCFILE;
+fi
+
+for i in $fontfiles; do
+    [ $DBG ] && echo -n "i: "; [ $VRB ] && echo "$i"
+    finfo "$i"
+done
+
+exit 0
+
+#fontlist=`ls $FMASK 2>/dev/null|awk '{print "\""$L"\""}'`
+fontlist=`ls $FMASK 2>/dev/null'`
+
+echo "-- fontlist:"
+echo "$fontlist"
+read a
+
+for i in $fontlist; do
+    echo i: "$i"; read a
+    finfo "$i"
+done

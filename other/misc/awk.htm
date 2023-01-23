@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+
+	<META NAME="VPSiteProject" CONTENT="file:///C|/ddrive/tom/Unix%20Manuals/Project.vpp"><META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<META NAME="keywords" CONTENT="AWK, awk, reference, GNU, gnu, UNIX, unix, help, document, manual, documentation">
+<META NAME="description" CONTENT="A useful reference guide to awk">
+
+	<TITLE>Unix Manuals - AWK Reference</TITLE>
+</HEAD>
+
+<BODY>
+
+<!-- TOP BANNER START -->
+<!-- TOP BANNER END -->
+
+<H1 ALIGN="CENTER"><IMG SRC="../../common/title-big.gif" WIDTH="494" HEIGHT="90" ALIGN="BOTTOM" ALT="Unix Manuals"
+BORDER="0"></H1>
+
+<CENTER>
+<script type="text/javascript"><!--
+google_ad_client = "pub-6088294087708010";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_channel ="2185850667";
+google_color_link = "0000CC";
+google_color_url = "008000";
+google_color_text = "6F6F6F";
+google_color_bg = "ECF8FF";
+google_color_border = "B4D0DC";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</CENTER>
+
+<H1 ALIGN="CENTER"><IMG SRC="title.gif" WIDTH="250" HEIGHT="46" ALIGN="BOTTOM" ALT="awk reference" BORDER="0"></H1>
+<P>This is not a tutorial or full description of awk - it is a quick reference to the most commonly used built
+in functions and variables. We have ignored some less-used routines, such as the mathematical functions. This reference
+is based around the GNU awk implementation, as it is now very widely available.</P>
+<P>
+<CENTER>
+<A HREF="http://www.unix-manuals.com/forum/index.php">NOTICE - New forum for all UNIX learners, users and programmers - click here</A>
+</CENTER>
+<P>
+
+<H2>AWK built-in function reference</H2>
+<P>
+<TABLE BORDER="1" CELLSPACING="1" WIDTH="100%">
+	<TR>
+		<TD WIDTH="20%">break</TD>
+		<TD WIDTH="80%">Leave the current 'while' or 'for' loop.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">close(<I>filename expression</I> or <I>command expression</I>)</TD>
+		<TD WIDTH="80%">Close the file which was opened by the specified expression.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">continue</TD>
+		<TD WIDTH="80%">Start the next iteration of the current 'while' or 'for' loop.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">delete(<I>array</I>[<I>element</I>]</TD>
+		<TD WIDTH="80%">Delete the specified <I>element</I> of the <I>array</I>.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">do <BR>
+			<I>statements</I><BR>
+			while (<I>expressions</I>)</TD>
+		<TD WIDTH="80%">Execute <I>statements</I>, then evaluate <I>expression</I>. Repeat until <I>expression</I> evaluates false.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">exit</TD>
+		<TD WIDTH="80%">Execute the END instructions, then exit the program.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">for (<I>expr1</I>; <I>expr2</I>; <I>expr3</I>)<BR>
+			<I>statements</I></TD>
+		<TD WIDTH="80%"><I>expr1</I> is evaluated - this is usually use to set up the conditions for the loop. If <I>expr2</I> evaluates
+			true, the <I>statements</I> are run. <I>expr3</I> is then run - this is often used to increment a counter. The
+			construct then loops, checking <I>expr2</I> again. When <I>expr2</I> evaluates false, the loop terminates.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">function <I>fname</I>(<I>parameters</I>) {<BR>
+			<I>statements</I><BR>
+			}</TD>
+		<TD WIDTH="80%">Define a function.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">getline [<I>varname</I>] [&lt;<I>filename</I>]</TD>
+		<TD WIDTH="80%">Get a line from the specified file. If <I>varname</I> is not specified, the line is loaded into $0. If <I>varname</I>
+			is specified, the variable is populated instead of $0. See also additional syntax below.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%"><I>statements</I> | getline [<I>varname</I>]</TD>
+		<TD WIDTH="80%">The <I>statements</I> are run, and the output is passed to getline. <I>varname</I> operates as described above.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">gsub (<I>regex</I>, <I>newstring</I>, <I>string</I>)</TD>
+		<TD WIDTH="80%">Replace every match of the <A HREF="../regex/regex.htm">regular expression</A> <I>regex</I> in <I>string</I> with
+			<I>newstring</I>.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">if (<I>condition</I>)<BR>
+			<I>statements</I><BR>
+			[else<BR>
+			<I>statements</I>]</TD>
+		<TD WIDTH="80%">If <I>condition</I> evaluates true, the first block of <I>statements</I>&nbsp;are run. If not, the <I>statements</I>
+			in the optional 'else' section are run.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">index(<I>substring</I>, <I>string</I>)</TD>
+		<TD WIDTH="80%">Returns the index of <I>substring</I> within <I>string</I>, or 0 if not present.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">length([<I>string</I>])</TD>
+		<TD WIDTH="80%">Returns the length of <I>string</I>, or the length of $0 if <I>string</I> not specified.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">match(<I>string</I>, <I>regex</I>)</TD>
+		<TD WIDTH="80%">Returns the position of the first match for the <A HREF="../regex/regex.htm">regular expression</A> <I>regex</I>
+			in <I>string</I>, or 0 if no matches are found. Sets RSTART and RLENGTH variables.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">next</TD>
+		<TD WIDTH="80%">Ignore any further instructions for this record. Read the next record, and process it.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">print [<I>expressions</I>] [&gt;<I>destination</I>]</TD>
+		<TD WIDTH="80%">Print the <I>expressions</I> (or the current line if no expression given) to the specified <I>destination</I> (the
+			standard output, if not specified).</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">printf <I>format</I> <I>expressions</I> [&gt;<I>destination</I>]</TD>
+		<TD WIDTH="80%">Printf the <I>expressions</I> formatted according to <I>format</I> to the specified <I>destination</I>, or standard
+			output if none specified.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">return [<I>expression</I>]</TD>
+		<TD WIDTH="80%">Return from a function, returning the value of <I>expression</I> to the caller.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">split(<I>string</I>, <I>array</I> [,<I>regex</I>]</TD>
+		<TD WIDTH="80%">Split the <I>string</I> into components, populating the <I>array</I> with the results. Use the <A HREF="../regex/regex.htm">regular
+			expression</A> <I>regex</I> to specify the split boundary, or the contents of the variable FS is <I>regex</I> if
+			not specified.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">sprintf <I>formai expressions</I></TD>
+		<TD WIDTH="80%">As printf, except that the formatted string is returned instead of printed.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">sub (<I>regex</I>, <I>newstring</I>, <I>string</I>)</TD>
+		<TD WIDTH="80%">As sub, except only the first match is changed.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">substr(<I>string</I>, <I>start</I> [,<I>length</I>]</TD>
+		<TD WIDTH="80%">Return <I>length</I> characters from the specified <I>string</I>, starting from <I>start</I>. If <I>length</I>
+			is not specified, return rest of record.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">system(<I>command</I>)</TD>
+		<TD WIDTH="80%">Execute the <I>command</I>, and return the exit status.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">tolower(<I>string</I>)</TD>
+		<TD WIDTH="80%">Return the string with all upper case characters replaced with their lower case equivalents.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">toupper(<I>string</I>)</TD>
+		<TD WIDTH="80%">Return the string with all lower case characters replaced with their upper case equivalents.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">while(<I>condition</I>)<BR>
+			<I>statements</I></TD>
+		<TD WIDTH="80%">While the specified <I>condition</I> is true, execute the <I>statements</I>. Re-evaluate the <I>condition</I>&nbsp;before
+			each execution of the <I>statements</I>.</TD>
+	</TR>
+</TABLE>
+</P>
+<H2>AWK built-in variable reference</H2>
+<P>
+<TABLE BORDER="1" CELLSPACING="1" WIDTH="100%">
+	<TR>
+		<TD WIDTH="20%">ARGC</TD>
+		<TD WIDTH="80%">Number of command-line arguments.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">ARGIND</TD>
+		<TD WIDTH="80%">Index (within ARGV) of file currently being processed.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">ARGV</TD>
+		<TD WIDTH="80%">Array of command-line arguments.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">CONVFMT</TD>
+		<TD WIDTH="80%">Conversion format for numbers in 'printf' syntax.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">ENVIRON</TD>
+		<TD WIDTH="80%">Array containing values of current environment.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">ERRNO</TD>
+		<TD WIDTH="80%">String containing text version of most recent error.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">FIELDWIDTHS</TD>
+		<TD WIDTH="80%">List of field widths separated by white spaces. If specified, is used by GNU awk instead of FS to parse records
+			into fields.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">FILENAME</TD>
+		<TD WIDTH="80%">Name of input file.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">FNR</TD>
+		<TD WIDTH="80%">Record number in input file.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">FS</TD>
+		<TD WIDTH="80%">Field separator.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">IGNORECASE</TD>
+		<TD WIDTH="80%">If non-zero, many functions will ignore case when doing comparisons.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">NF</TD>
+		<TD WIDTH="80%">Number of fields in current record.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">NR</TD>
+		<TD WIDTH="80%">Number of records processed.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">OFMT</TD>
+		<TD WIDTH="80%">Output format for numbers in 'printf' syntax.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">OFS</TD>
+		<TD WIDTH="80%">Output field separator.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">ORS</TD>
+		<TD WIDTH="80%">Output record separator.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">RS</TD>
+		<TD WIDTH="80%">Input record separator.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">RT</TD>
+		<TD WIDTH="80%">Record terminator.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">RSTART</TD>
+		<TD WIDTH="80%">Index of first character matched by a successful call to the match() function.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">RLENGTH</TD>
+		<TD WIDTH="80%">Length of string matched by a successful call to the match() function.</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="20%">SUBSET</TD>
+		<TD WIDTH="80%">Character used to separate multiple items in arrays.</TD>
+	</TR>
+</TABLE>
+</P>
+
+<P></P>
+<P ALIGN="CENTER"><A HREF="../../index.htm"><IMG SRC="../../common/home.gif" WIDTH="100" HEIGHT="45" ALIGN="BOTTOM"
+ALT="Home" BORDER="0"></A></P>
+<P>
+<CENTER>
+<P>
+<HR ALIGN="CENTER">
+&copy; Copyright 2000-2001, Tom Reader, All Rights Reserved.<BR>
+UNIX is a registered trademark of The Open Group in the US and other countries.<BR>
+For more information on the use of the UNIX trademark, <A HREF="http://www.opengroup.org/trademarks.htm">click
+here.</A><BR>The contents of this site are not connected with or endorsed by The Open Group in any way.
+</CENTER>
+
+</BODY>
+
+</HTML>

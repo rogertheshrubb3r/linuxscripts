@@ -1,0 +1,55 @@
+#!/bin/sh
+
+DBG=yes
+NLINES=25
+
+STR=$@
+
+TMPFILE=`mktemp -t mail-grep-log.XXXXXX` || TMPFILE=/tmp/mail-grep-log.tmp
+
+LOGFILES=`ls -tr /var/log/mail.log*`
+
+if [ -z $1 ]; then
+HLP="
+usage: $0 <args>
+grep in mail log files
+
+"
+echo "$HLP"; exit 1
+
+fi
+
+if [ "$DBG"=="yes" ]; then
+    echo LOGFILES: $LOGFILES
+fi
+
+    echo>$TMPFILE
+    for i in $LOGFILES; do
+    isGZ=`echo $i | grep '.gz$' | wc -l`
+    if [ "$isGZ" != "0" ]; then
+#	echo "isGZ [$i]: $isGZ"
+        zcat $i	>> $TMPFILE
+    else
+        isBZ=`echo $i | grep '.bz2$' | wc -l`	
+#	echo "isBZ [$i]: $isBZ"
+        if [ "$isBZ" != "0" ]; then
+	    bzcat $i	>> $TMPFILE
+        else
+	    cat $i	>> $TMPFILE
+	fi
+    fi
+
+    done
+
+
+#cl="grep $STR $TMPFILE | tail -$NLINES"
+#if [ "$DBG" == "yes" ]; then
+#    echo "cl: $cl"
+#fi
+
+#$cl
+
+
+grep $STR $TMPFILE | grep -v squatter | tail -$NLINES
+
+rm -f $TMPFILE

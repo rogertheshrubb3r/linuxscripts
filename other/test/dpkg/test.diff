@@ -1,0 +1,10 @@
+167a168
+> e3						install
+329c330
+< libgd2-noxpm					install
+---
+> libgd2-xpm					install
+574a576
+> perl-doc					install
+633a636
+> pinfo						install

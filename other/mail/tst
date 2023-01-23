@@ -1,0 +1,22 @@
+#!/bin/sh
+
+ucat() {
+# cat/zcat/bzcat multiple files
+    for i in "$@"; do
+    isGZ=`echo $i | grep '.gz$' | wc -l`
+    if [ "$isGZ" != "0" ]; then
+        zcat $i
+    else
+        isBZ=`echo $i | grep '.bz2$' | wc -l`	
+        if [ "$isBZ" != "0" ]; then
+	    bzcat $i
+        else
+	    cat $i
+	fi
+    fi
+
+    done;
+
+}
+
+ucat $@ | sort -n

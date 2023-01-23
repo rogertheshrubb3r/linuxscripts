@@ -1,0 +1,30 @@
+#!/bin/sh
+
+SMBPATH=//pc3/e
+MNTPATH=/mnt/smb/radu
+SMBUSER=Guest
+SMBPASS=
+
+if [ -z $1 ]; then
+    case $1 in
+      "-u"|"-U")
+        umount $MNTPATH
+	if [ -d $MNTPATH ]; then rmdir $MNTPATH; fi
+	exit 0
+      ;;
+    esac
+fi
+
+if [ ! -d $MNTPATH ]; then
+    mkdir $MNTPATH
+fi
+
+ismounted=`mount|grep -i "$MNTPATH"|wc -l`
+
+if [ "$ismounted" != "0" ]; then
+    echo $ismounted
+    echo "ERROR: $MNTPATH is already in use."
+    exit 1
+fi
+
+mount -t smbfs -o username=$SMBUSER,password=$SMBPASS $SMBPATH $MNTPATH

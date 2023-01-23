@@ -1,0 +1,177 @@
+#!/bin/bash
+
+# kidd -- convert between font formats with fontforge
+
+DBG=1
+
+ffdir=/usr/local/fontforge
+fforge=$ffdir/fontforge
+ffscript=$ffdir/scripts/af2af.pe
+
+# defaults
+metricsfile=nometrics
+preserveext=dontpreserveext
+overwrite=dontoverwrite
+stamp=stamp
+
+usage() {
+HLP="
+af2af - converts any font format to another font format via fontforge script
+usage: $0 {source_font_file} {destination_format} [options]
+
+   example: $0 font.pfb ttf
+
+source format is autodetected by fontforge (from extension)
+mac postscript fonts must have extension .bin
+
+destination formats: ttf otf pfb pfa bin sfd ... (see fontforge docs)
+
+options:
+   -k  do not merge afm/pfm metrics when converting from pfb/pfa
+   -s  do not add timestamp
+   -p  preserve extension (ex: abc.ttf -} abc.ttf.otf)
+   -r  recurse subdirectories - TO DO***
+"
+echo "$HLP"
+}
+
+function basename() {
+  local name="${1##*/}"
+  echo "${name%$2}"
+}
+
+function dirname() {
+  local dir="${1%${1##*/}}"
+  [ "${dir:=./}" != "/" ] && dir="${dir%?}"
+  echo "$dir"
+}
+
+# Two additional functions:
+# 1) namename prints the basename without extension
+# 2) ext prints extension of a file, including "."
+
+function namename() {
+  local name=${1##*/}
+  local name0="${name%.*}"
+  echo "${name0:-$name}"
+}
+function fileext() {
+  local name=${1##*/}
+  local name0="${name%.*}"
+  local ext=${name0:+${name#$name0}}
+  echo "${ext:-.}"
+}
+
+callff() {
+    cmdl="$fforge -script $ffscript $1 $2 $preserveext $metricsfile $stamp"
+    outfile=`dirname $1``namename $1`"."$2
+    if [ -f $outfile ]; then echo -n "$outfile already exists, "; fi
+    if [ "$overwrite" == "overwrite" ]; then 
+	echo overwriting
+	if [ $DBG == 1 ]; then echo "executing: $cmdl"; fi
+	$cmdl 2>/dev/null
+    else echo skipping
+    fi
+}
+
+if [ ! -f $fforge ]; then 
+echo "FATAL ERROR: cannot find fontforge:"
+echo "$fforge"
+echo "edit me ($0) to correct the path."
+exit 5
+fi
+if [ ! -f $ffscript ]; then
+echo "FATAL ERROR: cannot find script:"
+echo "$script"
+echo "edit me ($0) to correct the path."
+exit 5
+fi
+
+if [ -z $2 ]; then usage; exit 1; fi
+
+# parse params
+
+fullfontname=$1
+fontname=`echo $fullfontname|awk -F. '{print $1}'`
+fonttype=`echo $fullfontname|awk -F. '{print $NF}'`
+
+# metrics file
+if [ -f $fontname.pfm ]; then metricsfile=$fontname.pfm; fi
+if [ -f $fontname.PFM ]; then metricsfile=$fontname.PFM; fi
+if [ -f $fontname.afm ]; then metricsfile=$fontname.afm; fi
+if [ -f $fontname.AFM ]; then metricsfile=$fontname.AFM; fi
+
+isTTF=`echo $fullfontname|grep -i "ttf"|wc -l`
+isOTF=`echo $fullfontname|grep -i "otf"|wc -l`
+if [ $isTTF == 1 ] || [ $isOTF == 1 ]; then metricsfile=nometrics; fi
+
+if [ "$metricsfile" == "nometrics" ]; then echo "SKIPPING metrics file(s) for $1"; fi
+
+# get timestamp
+export TMPDATE=`date "+%d.%m.%Y"`
+export TMPTIME=`date "+%H:%M"`
+
+if [ $DBG == 1 ]; then 
+DBG_MSG="
+-- debug info
+fontname   : $fontname
+fonttype   : $fonttype
+fullname   : $fullfontname
+-- options passed to script
+destination: $2
+preserveext: $preserveext
+overwrite  : $overwrite
+metricsfile: $metricsfile
+stamp      : $stamp
+"
+echo "$DBG_MSG"
+fi
+
+#$fforge -script $ffscript $@
+callff $1 $2
+##%fforge% -script %script% %1 %2 %metricsfile% %stamp% %preserveext%
+##%fforge% -script %script% %1 %2 %metricsfile% %stamp% %preserveext%
+
+exit
+
+goto end
+
+:parseargs
+if "%DBG%"=="1" echo param: %*
+if /i "%*"=="-k"  set metricsfile=nometrics
+if /i "%*"=="-s"  set stamp=nostamp
+if /i "%*"=="-p"  set preserveext=preserveext
+
+rem Generate(filename[,bitmaptype[,fmflags[,res[,mult-sfd-file]]]])
+
+rem extensions are:
+rem    * pfa
+rem    * pfb
+rem    * bin (a mac postscript (pfb) resource in a mac binary wrapper)
+rem      res (on the Mac itself FontForge will put the result directly into a font suitcase
+rem      file, and the extension should be ".res" rather than ".bin")
+
+rem      Note: you must also create a bitmap font in NFNT format or the mac will not
+rem      recognize your postscript font.
+rem    * %s.pfb/%s.pfa (splits a big font up into multiple pfb fonts each with 256
+rem      characters)
+rem    * mm.pfa (multiple master font in ascii format)
+rem    * mm.pfb (multiple master font in binary format)
+rem    * pt3 (type 3)
+rem    * ps (type 0)
+rem    * cid (non-otf cid font)
+rem    * cff (bare cff font)
+rem    * cid.cff (bare cff cid-keyed font)
+rem    * ttf
+rem    * sym.ttf (a truetype file with a symbol (custom) encoding)
+rem    * ttf.bin (a mac truetype resource in a mac binary wrapper)
+rem      suit (on the Mac itself FontForge will put the result directly into a font suitcase
+rem      file, and the extension should be ".suit" not ".ttf.bin")
+rem    * dfont (a mac truetype resource in a dfont file)
+rem    * otf (either cid or not depending on the font)
+rem    * otf.dfont (a mac opentype resource in a dfont file)
+rem    * svg (an svg font)
+rem    * <null extension> If you don't want to generate an outline font at all (but do want
+rem      to provide a filename for bitmap or metrics files) then provide a null extension
+rem      (ie. "Times." but NOT "Times").
+:eof

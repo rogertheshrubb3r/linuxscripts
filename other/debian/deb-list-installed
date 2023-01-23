@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# grep in package cache
+
+VRB=1
+
+usage() {
+HLP="
+usage: $0 [options] mask
+
+show installed package information
+"; echo "$HLP"; exit $1
+}
+
+
+FILTER=
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -v|--verbose) VRB=1; shift ;;
+#    -f) if [ -z $2 ]; then echo "option requires a parameter"; usage; exit 1; else CONFFILE="$2"; shift 2; fi ;;
+    -d|--debug) DBG=1; shift ;;
+    -h* | --h*  ) usage ; exit 0 ;;
+   * ) [ $FILTER ] && FILTER="$FILTER\|"; FILTER="$FILTER$1"; shift ;;
+  esac
+done
+FILTER="\($FILTER\)"
+[ $DBG ] && echo "FILTER: $FILTER" && read -p "press a key" a
+
+for i in `dpkg --get-selections | awk '{print $1}' | grep -i "$FILTER"`; do
+    mydesc=`apt-cache show -a $i | grep "Description:" | awk '{$1=""; gsub(/^[ \t]+/,"");gsub(/[ \t]+$/,""); print}'|uniq`
+#    mydesc=`apt-cache show -a $i | grep 'Description:'`
+#    echo $i: $mydesc
+
+    printf "%-25s %-40s" "$i" "$mydesc"
+[ $VRB ] && { 
+# print version info
+    verinfo=`apt-cache policy $i`
+    installed=`echo "$verinfo"|grep "Installed:"|awk '{$1=""; gsub(/^[ \t]+/,"");gsub(/[ \t]+$/,""); print}'`
+    candidate=`echo "$verinfo"|grep "Candidate:"|awk '{$1=""; gsub(/^[ \t]+/,"");gsub(/[ \t]+$/,""); print}'`
+
+    echo -n " ($installed"
+    [ "$installed" == "$candidate" ] || echo -n "; $candidate"
+    echo -n ")"
+}
+    echo
+done

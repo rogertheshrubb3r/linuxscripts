@@ -1,0 +1,12 @@
+#!/bin/sh
+
+HLP="usage: $0 <package>
+reinstall package
+"
+
+if [ "" == "-h" ]; then
+    echo "$HLP"; exit 0
+fi
+
+aptitude -y remove $@
+aptitude -y install $@

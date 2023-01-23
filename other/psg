@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+    echo "usage: $0 <process_mask>"
+    exit 1
+fi
+
+echo "USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND"
+ps axuw|grep -v "%CPU %MEM"|grep -v "$0" | grep -i $@|grep -v "grep -i $@"
+

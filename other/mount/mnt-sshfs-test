@@ -1,0 +1,55 @@
+#!/bin/sh
+
+NAME[0]=l
+HOST[0]=localhost
+PORT[0]=22
+UNAME[0]=root
+PASS[0]=
+MNT_POINT[0]=/mnt/sshfs
+MNT_PATH[0]=
+
+NAME[1]=loopy
+HOST[1]=loopy
+PORT[1]=22
+UNAME[1]=kidd
+PASS[1]=
+MNT_POINT[0]=/mnt/sshfs
+MNT_PATH[0]=
+
+NAME[2]=spunge
+HOST[2]=spunge.org
+UNAME[2]=kidd
+MNT_POINT[2]=/mnt/sshfs
+
+element_count=${#HOST[@]}
+
+echo hosts: $element_count
+
+param=$1
+#param=loopy
+
+index=0
+
+while [ "$index" -lt "$element_count" ]
+do    # List all the elements in the array.
+    if [ "${NAME[$index]}" == "$param" ]; then echo "name[$index]=$param"; break; fi
+#  echo "host[$index]: ${HOST[$index]}"
+  let "index = $index + 1"
+done
+
+echo exiting index: $index
+
+SERVER=${HOST[$index]}
+SERVERPORT=${PORT[$index]}
+if [ ! -z $SERVERPORT ]; then SERVERPORT="-p $SERVERPORT"; fi
+USERNAME=${UNAME[$index]}
+PWD=${PASS[$index]}
+MPOINT=${MNT_POINT[$index]}
+MPATH=${MNT_PATH[$index]}
+OPTIONS=${OPTS[$index]}
+
+sshfs "$USERNAME@$SERVER:$MPATH" $MPOINT $SERVERPORT $OPTIONS
+
+#while [ "$index" -lt "$cnt" ]
+
+#echo ${A}

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# kidd -- mod. from http://linux.org.mt/article/selfextract
+
+if [ -z $1 ]; then
+    echo "usage: $0 <archive_file>"
+    echo ""
+    echo "converts .tar.gz archive to (pseudo) self-extracting .sh archive"
+    echo ""
+    exit 1
+fi
+
+ARCHIVEFILE=$1
+SFXFILE=$ARCHIVEFILE.sfx
+ARCHIVENAME=$ARCHIVEFILE
+
+TMPHEADERFILE="/tmp/sfxheader.tmp"
+
+
+
+#Here is the content of the header portion: 
+echo "#!/bin/sh" 						> $TMPHEADERFILE
+echo "" 							>> $TMPHEADERFILE
+echo "# archive: $ARCHIVEFILE" 					>> $TMPHEADERFILE
+echo "echo \"\"" 						>> $TMPHEADERFILE
+echo "echo \"Extracting archive $ARCHIVENAME, please wait...\"" >> $TMPHEADERFILE
+echo "echo \"\"" 						>> $TMPHEADERFILE
+echo "SKIP=\`awk '/^__ARCHIVE_FOLLOWS__/ { print NR + 1; exit 0; }' \$0\`" >> $TMPHEADERFILE
+echo "# take the archive portion of this file and pipe it to tar" >> $TMPHEADERFILE
+echo "# the NUMERIC parameter in this command should be one more" >> $TMPHEADERFILE
+echo "# than the number of lines in this header file" 		>> $TMPHEADERFILE
+echo "tail +\$SKIP \$0 | tar xzv" >> $TMPHEADERFILE
+#echo "tail +\$SKIP \$0 | gzip -dc | tar x -" 			>> $TMPHEADERFILE
+#echo "" >> $TMPHEADERFILE
+echo "exit 0" 							>> $TMPHEADERFILE
+
+echo "__ARCHIVE_FOLLOWS__" >> $TMPHEADERFILE
+
+cat $TMPHEADERFILE $ARCHIVEFILE > $SFXFILE
+chmod +x $SFXFILE
+
+rm -f $TMPHEADERFILE

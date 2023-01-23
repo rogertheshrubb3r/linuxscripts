@@ -1,0 +1,104 @@
+#!/bin/sh
+
+. /root/bin/inc/functions.sh
+
+NUMLINES=25
+USER=""
+#DBG="yes"
+
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log /var/log/mail.log.1.gz /var/log/mail.log.2.gz /var/log/mail.log.3.gz"
+LOGFILES="/var/log/mail.log.6.gz /var/log/mail.log.5.gz /var/log/mail.log.4.gz /var/log/mail.log.3.gz /var/log/mail.log.2.gz /var/log/mail.log.1.gz /var/log/mail.log.0 /var/log/mail.log"
+
+DOMAIN="oopyarhitectura\.ro"
+
+TMPF=/tmp/mail-lastin.tmp
+
+usage () {
+HLP="
+usage: $0 <user> [-x user [-x user]..]
+
+options: 
+  -x user	exclude user
+  -f		<user> is 'from' (sender)
+  -t		<user> is 'to' (recipient)
+  -n <lines>	number of lines to output (default 25)
+  -z		'fuzzy' search (add * before and after)
+  -d		script debug info
+
+prints last mails received by <user>
+"
+echo "$HLP"
+}
+
+# parse parameters
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h* )
+	usage; exit 0 ;;
+    -f) TYPE=from; shift ;;
+    -t) TYPE=to; shift ;;
+    -n) if [ -z $2 ]; then echo "option -n requires a parameter"; exit 1; fi; NUMLINES=$2; shift 2 ;;
+    -x)
+	if [ -z $2 ]; then echo "option -x requires a parameter"; exit 1; fi; EXCLUDED="$EXCLUDED $2"; shift 2 ;;
+    -z) FUZZY=1; shift ;;
+    -d) DBG=yes; shift ;;
+    *)	USER="$USER $1"; shift ;;
+  esac
+done
+
+GFILTER=
+GFILTERX=
+
+for i in $USER; do
+    if ! [ "$GFILTER" == "" ]; then GFILTER="$GFILTER\|"; fi
+    GFILTER="$GFILTER$i"
+done
+for i in $EXCLUDED; do
+    if ! [ "$GFILTERX" == "" ]; then GFILTERX="$GFILTERX\|"; fi
+    GFILTERX="$GFILTERX$i"
+done
+
+if ! [ "$GFILTER" == "" ]; then
+    # add wildcards if fuzzy
+    if [ $FUZZY ]; then GF_FB=".*"; GF_FA=".*"; else GF_FA="@.*"; fi
+    if [ "$TYPE" == "from" ]; then
+	GF_BEFORE="Passed, <"; 	GF_AFTER="$GF_AFTER> \-> <"
+    elif [ "$TYPE" == "to" ]; then
+	GF_BEFORE="\-> <"; 	GF_AFTER=">, Message-ID: <"
+    fi
+    GF="$GF_BEFORE$GF_FB$GFILTER$GF_FA$GF_AFTER"
+else GF=; fi
+
+if ! [ "$GFILTERX" == "" ]; then GFX="\($GFILTERX\)"; else GFX=; fi
+cl="cat $LOGFILES" # | grep Passed " #| grep $GFILTER"
+
+if [ "$DBG" == "yes" ]; then
+    echo "cl: $cl"
+    echo "USER    : $USER"
+    echo "EXCLUDED: $EXCLUDED"
+    echo "GFILTER : $GFILTER"
+    echo "GFILTERX: $GFILTERX"
+    echo "GF      : $GF"
+    echo "GFX     : $GFX"
+    read -p "[Press Enter]" a
+fi
+
+if ! [ "$GFILTER" == "" ]; then
+    if ! [ "$GFILTERX" == "" ]; then
+    catm $LOGFILES|grep Passed|grep ":"|grep "$GF"|grep -v "$GFX">$TMPF
+    else
+    catm $LOGFILES|grep Passed|grep ":"|grep "$GF">$TMPF
+    fi
+elif ! [ "$GFILTERX" == "" ]; then
+    catm $LOGFILES|grep Passed|grep ":"|grep -v "$GFX">$TMPF
+else
+    catm $LOGFILES|grep Passed|grep ":">$TMPF
+fi
+if ! [ -f $TMPF ]; then touch $TMPF; fi
+awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10 }' $TMPF | awk '{gsub (">,$", ">"); print}' | tail -n$NUMLINES 
+
+[ $DBG ] || rm -f $TMPF # remove temp file
+
+#cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10}'| tail -n$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10 " " $12}'| tail -n$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | tail -n$NUMLINES

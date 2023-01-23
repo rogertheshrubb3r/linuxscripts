@@ -1,0 +1,6 @@
+#!/bin/sh
+
+f1=1-2.diff
+f2=1.diff
+diff $f1 $f2 > diffs
+echo "exit code: $?"

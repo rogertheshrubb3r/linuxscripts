@@ -1,0 +1,181 @@
+#!/bin/sh 
+#set -x 
+# 
+################################################################### 
+# smb.sh  Charles Gillanders charles.gillanders@toucan.ie 
+# 
+# A Big Brother External Script 
+# Monitors SMB file share services 
+# 
+# Sections ripped shamelessly from bb-network.sh and other sources 
+# Thanks to Sean et all for making Big Brother the tool it is. 
+# 
+################################################################### 
+# 
+# Requirements: 
+#  
+# A working copy of smbclient from the samba distribution, the 
+# full set of samba does not need to be running on your BBDISPLAY 
+# system but it must have access to the smbclient program and a 
+# suitable smb.conf configuration file. 
+# 
+# Instructions:  
+# 
+# Modify ACCOUNT and PASSWORD below to provide an account and 
+# password that should have access to all the shares you want 
+# to test. 
+# 
+# Mofify SMBCLIENT to point to your copy of the smbclient program 
+# 
+# For each host that has shares you want to monitor modify the 
+# bb-hosts file as appropriate, the correct syntax is smb:sharename 
+# i.e. 
+# 192.186.200.40 Host1 # dns smtp smh:root smb:users smb:data 
+# 
+# Modify $BBHOME/runbb.sh to include smb.sh in the BBEXT variable 
+# stop and restart BB. 
+# 
+# Sit back and watch das blinken lights flashen 
+# 
+################################################################### 
+# 
+# Test that bbhome is set and that the standard definitions are available 
+# 
+if test ! "$BBHOME" 
+then 
+        echo "Error BBHOME is not set" 
+        exit 
+else 
+        if test ! "$BBTMP" 
+        then 
+                . $BBHOME/etc/bbdef.sh 
+        fi 
+fi 
+# 
+# set up parameters 
+# 
+ACCOUNT="setup" 
+PASSWORD="password" 
+SMBCLIENT="/usr/local/samba/bin/smbclient" 
+# 
+# do the tests 
+# 
+$GREP "^[0-9]" $BBHOSTS | 
+while read linein 
+do 
+        set $linein 
+        HOSTIP=$1 
+        FULLNAME=$2 
+        IPADDR=`echo $1 | $SED "s/\.//g"` 
+        set $linein                       # GET ALL THE LINE ARGS 
+        shift; shift;                   # SKIP THE IP-ADDR AND NAME 
+
+        if [ "$#" -ne 0 ] 
+        then 
+                newline="" 
+                smbarg="" 
+                # REWRITE THE ARGUMENTS SUCH THAT smb DIRECTIVES ARE BUNCHED TOGETHER 
+                while [ "$#" -ne 0 ] 
+                do 
+                        case $1 
+                        in 
+                                smb* ) 
+                                        if [ "$smbarg" = "" ] 
+                                        then 
+                                                smbarg="$1" 
+                                        else 
+                                                smbarg="${smbarg}|${1}" 
+                                        fi 
+                                        ;; 
+                                * ) 
+                                        newline="$newline $1" 
+                                        ;; 
+                        esac 
+
+                        shift 
+                done 
+                set $newline $smbarg 
+        fi 
+        # As long as we have args 
+        while test "$1" 
+        do 
+                line="$*"       # Save this 
+                case $1 
+                in 
+                        *!* ) 
+                                arg=`echo $1 | $SED 's/!//g'` 
+                                TESTREVERSED=TRUE 
+                                ;; 
+                        *) 
+                                arg=$1 
+                                TESTREVERSED=FALSE 
+                                ;; 
+                esac 
+                case $arg 
+                in 
+                # 
+                # smb test 
+                # 
+                smb* ) 
+                        OUTFILE="$BBTMP/smb.$FULLNAME" 
+                        OLDIFS=$IFS 
+                        IFS='|' 
+                        set $arg 
+                        IFS=$OLDIFS 
+                        SHARES=$* 
+                        COLOR="green" 
+                        LINE="" 
+                        for SHARE in $SHARES 
+                        do 
+                                SHARENAME=`echo $SHARE | $SED 's/smb://g'` 
+                                $SMBCLIENT \\\\$FULLNAME\\$SHARENAME $PASSWORD -U $ACCOUNT -c exit > $OUTFILE 2>&1 
+                if test "$?" != 0 
+                                then 
+                                        TMPLINE="\\\\$FULLNAME\\$SHARENAME - Connection Fault : 
+`cat $OUTFILE` " 
+                                        echo "$NONETPAGE" | $GREP "smb" > /dev/null 2>&1 
+                                        if test $? = "1"        # NOT FOUND - PAGE 
+                                        then 
+                                                echo "$linein" | $GREP "dialup" > /dev/null 2>&1 
+                                                if test $? = "0" 
+                                                then 
+                                                        if [ "$COLOR" = "green" ] 
+                                                        then 
+                                                                COLOR="yellow" 
+                                                        fi 
+                                                        LINE="${LINE} 
+
+&yellow $TMPLINE 
+
+(no page on dialup)" 
+                                                else 
+                                                        COLOR="red" 
+                                                        LINE="${LINE} 
+
+&red $TMPLINE" 
+                                                fi 
+                                        else 
+                                                if [ "$COLOR" = "green" ] 
+                                                then 
+                                                        COLOR="yellow" 
+                                                fi 
+                                                LINE="${LINE} 
+&yellow $TMPLINE 
+
+(configured not to page)" 
+                                        fi 
+                else 
+                                        LINE="${LINE} 
+&$COLOR \\\\$FULLNAME\\$SHARENAME" 
+                                        $RM -f $OUTFILE 
+                                fi 
+                        done 
+                $BB $BBDISP "status ${FULLNAME}.smb $COLOR  `date` $LINE" 
+                ;; 
+                * ) 
+                ;; 
+                esac 
+                set $line 
+                shift; 
+        done 
+done

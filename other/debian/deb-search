@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# grep in package cache
+
+if [ -z $1 ]; then
+    echo "usage: $0 <expression>"
+    echo
+    echo "search (grep) Debian package cache"
+    echo "search package names and descriptions for <expression>"
+    echo ""
+    exit 1
+fi
+
+apt-cache search $@

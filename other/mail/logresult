@@ -1,0 +1,175 @@
+
+               Local Traffic - received bytes per local account
+===============================================================================
+  nr from local   count from outs.   count to local-account      total  % outs.
+---- ---------- ------- ---------- ------- ---------------- ---------- --------
+---- ++++++++++ +++++++ ++++++++++ +++++++ ---------------- ++++++++++ --------
+              0 (    0)          0 (    0)                           0         
+     ========== ======= ========== =======                  ==========         
+
+
+             Local Traffic Distribution - ratio local to external
+===============================================================================
+  nr from local         to local   count to extern.   count      total   % ext.
+---- ---------------- ---------- ------- ---------- ------- ---------- --------
+---- ---------------- ++++++++++ +++++++ ++++++++++ +++++++ ++++++++++ --------
+                               0 (    0)          0 (    0)          0         
+                      ========== ======= ========== ======= ==========         
+
+
+              To External recipient Traffic - from local accounts
+===============================================================================
+  nr email-address                                             count   received
+---- ------------------------------------------------------- ------- ----------
+   1 octavia@oopyarhitectura.ro                              (   29)   11383473
+   2 radu@oopyarhitectura.ro                                 (  150)   11315963
+   3 313cuong@5pillars.com                                   (  320)    2201280
+   4 dtxegpnvjzo@hotmail.com                                 (  319)    1278552
+   5 eblzvihsoxm@hotmail.com                                 (  320)    1270720
+   6 jagchcuhyka@hotmail.com                                 (  320)    1253440
+   7 ifvmwzeqfkd@hotmail.com                                 (  320)    1252800
+   8 vqgxnowndno@hotmail.com                                 (  320)    1252160
+   9 srensqfkplz@hotmail.com                                 (  320)    1250560
+  10 ekxchjuqmcw@hotmail.com                                 (  320)    1250560
+  11 ttswokrfdhr@hotmail.com                                 (  320)    1235520
+  12 vvtiyorybbz@hotmail.com                                 (  320)    1189440
+  13 ysmrjfooqnf@hotmail.com                                 (  320)    1177280
+  14 teajrummpbk@hotmail.com                                 (  320)    1134080
+  15 contact@axainvest.ro                                    (    1)     964846
+  16 hanu@oopyarhitectura.ro                                 (    1)     257750
+  17 raduz@gmx.net                                           (    2)       2316
+---- ------------------------------------------------------- +++++++ ++++++++++
+                                                             ( 4022)   39670740
+                                                             ======= ==========
+
+
+                     Mailcount To someone - received mails
+===============================================================================
+  nr to local           ext.   int. total to external                     total
+---- ---------------- ------ ------ ----- ------------------------------ ------
+   1                                      ysmrjfooqnf@hotmail.com           320
+   2                                      vvtiyorybbz@hotmail.com           320
+   3                                      vqgxnowndno@hotmail.com           320
+   4                                      ttswokrfdhr@hotmail.com           320
+   5                                      teajrummpbk@hotmail.com           320
+   6                                      srensqfkplz@hotmail.com           320
+   7                                      jagchcuhyka@hotmail.com           320
+   8                                      ifvmwzeqfkd@hotmail.com           320
+   9                                      ekxchjuqmcw@hotmail.com           320
+  10                                      eblzvihsoxm@hotmail.com           320
+  11                                      313cuong@5pillars.com             320
+  12                                      dtxegpnvjzo@hotmail.com           319
+  13                                      radu@oopyarhitectura.ro           150
+  14                                      octavia@oopyarhitectura.ro         29
+  15                                      raduz@gmx.net                       2
+  16                                      hanu@oopyarhitectura.ro             1
+  17                                      contact@axainvest.ro                1
+---- ---------------- ------ ------ +++++ ------------------------------ ++++++
+                                        0                                  4022
+                                    =====                                ======
+
+
+                     Mailcount From someone - sended mails
+===============================================================================
+  nr from local         total from external                               total
+---- ---------------- ------- ----------------------------------------- -------
+   1                     3860 root@oopyarhitectura.ro                        53
+   2                          systraq@oopyarhitectura.ro                     36
+   3                          logcheck@oopyarhitectura.ro                    35
+   4                          oarbuc@rdslink.ro                               7
+   5                          popeeaco@comp.nus.edu.sg                        4
+   6                          urbaplan@zappmobile.ro                          3
+   7                          raduz@gmx.net                                   3
+   8                          radu.zoran@oopyarhitectura.ro                   3
+   9                          fetchyahoo@oopyarhitectura.ro                   2
+  10                          deteco@b.astral.ro                              2
+  11                          amavis-stats@oopyarhitectura.ro                 2
+  12                          silvia@travelclub.ro                            1
+  13                          regecad@yahoo.com                               1
+  14                          octavia.popeea@oopyarhitectura.ro               1
+  15                          moregroupware-user-admin@lists.sourcefor#       1
+  16                          mariakochnosf@kmu-net.de                        1
+  17                          glenn.a.cheek@monsanto.com                      1
+  18                          dan.alecu@graphe.ro                             1
+  19                          bounce1543@ms2.neogen.ro                        1
+  20                          bounce1526@ms2.neogen.ro                        1
+  21                          bounce1524@ms2.neogen.ro                        1
+---- ---------------- +++++++ ----------------------------------------- +++++++
+                         3860                                               160
+                      =======                                           =======
+
+
+                        Mailcount from ip - sent mails
+===============================================================================
+  nr from ip                                                              total
+---- ---------------------------------------------------------------- ---------
+   1 unknown                                                               3839
+   2 127.0.0.1                                                              182
+---- ---------------------------------------------------------------- +++++++++
+                                                                           4021
+                                                                      =========
+
+
+                                 Biggest Mail
+===============================================================================
+  nr from                       size     tsize to                          date
+---- --------------------- --------- --------- --------------------- ----------
+   1 deteco@b.astral.ro      4406162   4406162 many recipients.      28.10.2005
+   2 deteco@b.astral.ro      2516004   2516004 many recipients.      29.10.2005
+   3 urbaplan@zappmobile.#   1690053   1690053 many recipients.      29.10.2005
+   4 octavia.popeea@oopya#    964846    964846 many recipients.      29.10.2005
+   5 popeeaco@comp.nus.ed#    722781    722781 many recipients.      29.10.2005
+   6 urbaplan@zappmobile.#    669631    669631 many recipients.      29.10.2005
+   7 urbaplan@zappmobile.#    404896    404896 many recipients.      29.10.2005
+   8 logcheck@oopyarhitec#    394423    394423 many recipients.      29.10.2005
+   9 logcheck@oopyarhitec#    338527    338527 many recipients.      28.10.2005
+  10 logcheck@oopyarhitec#    333954    333954 many recipients.      28.10.2005
+  11 logcheck@oopyarhitec#    305914    305914 many recipients.      28.10.2005
+  12 logcheck@oopyarhitec#    305494    305494 many recipients.      28.10.2005
+  13 logcheck@oopyarhitec#    299333    299333 many recipients.      28.10.2005
+  14 logcheck@oopyarhitec#    296637    296637 many recipients.      28.10.2005
+  15 logcheck@oopyarhitec#    295802    295802 many recipients.      28.10.2005
+  16 logcheck@oopyarhitec#    292550    292550 many recipients.      29.10.2005
+  17 logcheck@oopyarhitec#    291166    291166 many recipients.      29.10.2005
+  18 logcheck@oopyarhitec#    290741    290741 many recipients.      29.10.2005
+  19 logcheck@oopyarhitec#    289232    289232 many recipients.      29.10.2005
+  20 logcheck@oopyarhitec#    289068    289068 many recipients.      29.10.2005
+  21 logcheck@oopyarhitec#    288059    288059 many recipients.      29.10.2005
+  22 logcheck@oopyarhitec#    287950    287950 many recipients.      28.10.2005
+  23 logcheck@oopyarhitec#    287943    287943 many recipients.      29.10.2005
+  24 logcheck@oopyarhitec#    287509    287509 many recipients.      29.10.2005
+  25 logcheck@oopyarhitec#    286870    286870 many recipients.      28.10.2005
+---- --------------------- --------- --------- --------------------- ----------
+
+
+                                Most Recipients
+===============================================================================
+  nr from                                    size  total   ext   int       date
+---- ---------------------------------- --------- ------ ----- ----- ----------
+   1 glenn.a.cheek@monsanto.com            257750      2 (  2) (  0) 29.10.2005
+   2                                         3908      2 (  2) (  0) 28.10.2005
+   3                                         3679      1 (  1) (  0) 28.10.2005
+   4                                         3908      1 (  1) (  0) 29.10.2005
+   5                                         3908      1 (  1) (  0) 29.10.2005
+   6                                         3917      1 (  1) (  0) 29.10.2005
+   7                                         3717      1 (  1) (  0) 28.10.2005
+   8                                         3679      1 (  1) (  0) 28.10.2005
+   9                                         3971      1 (  1) (  0) 28.10.2005
+  10                                         3908      1 (  1) (  0) 29.10.2005
+  11                                         3913      1 (  1) (  0) 28.10.2005
+  12                                         3717      1 (  1) (  0) 29.10.2005
+  13 root@oopyarhitectura.ro                10194      1 (  1) (  0) 29.10.2005
+  14                                         3861      1 (  1) (  0) 29.10.2005
+  15                                         3544      1 (  1) (  0) 29.10.2005
+  16                                         6879      1 (  1) (  0) 29.10.2005
+  17                                         3908      1 (  1) (  0) 29.10.2005
+  18                                         3971      1 (  1) (  0) 28.10.2005
+  19                                         3679      1 (  1) (  0) 28.10.2005
+  20                                         3908      1 (  1) (  0) 29.10.2005
+  21                                         3861      1 (  1) (  0) 28.10.2005
+  22 logcheck@oopyarhitectura.ro           338527      1 (  1) (  0) 28.10.2005
+  23                                         6879      1 (  1) (  0) 29.10.2005
+  24                                         3717      1 (  1) (  0) 28.10.2005
+  25                                         3971      1 (  1) (  0) 29.10.2005
+---- ---------------------------------- --------- ------ ----- ----- ----------
+

@@ -1,0 +1,125 @@
+#!/bin/bash
+
+#SHELL=/bin/bash
+
+#LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+LOGFILES="/var/log/mail.log.3.gz /var/log/mail.log.2.gz /var/log/mail.log.1.gz /var/log/mail.log.0 /var/log/mail.log"
+SERVICE=imap
+ACTION=login
+USER=""
+NUMLINES=-10
+EXTRAFILTER=""
+
+TMPFILE=/tmp/mail-lastlogin.tmp
+
+debug () {
+    echo EXECCMD: $EXECCMD
+}
+
+usage () {
+    echo "usage: $0 [options] <user> [options] [date*]"
+    echo ""
+    echo "options:"
+    echo "  -i    imap only"
+    echo "  -p    pop3 only"
+    echo "  -<n>  show last 'n' logins (e.g. -10) "
+    echo "  -x    add extra filter (e.g. -xTLS, -xSep) "
+    echo "  -r    raw log output"
+}
+
+parseArgs () { 
+#    echo $#
+    for i in "$@"; do
+	case $i in
+	-h|-H)
+	    usage
+	    exit 1
+	;;
+	-i|-I)
+	    SERVICE=imap
+	;;
+	-p|-P)
+	    SERVICE=pop3
+	;;
+	-r|-R)
+	    RAWOUTPUT=yes
+	;;
+	-x|-X)
+	    EXTRAFILTER="$EXTRAFILTER $i"
+	;;
+	-*)
+	    NUMLINES=$i
+	;;
+	*)
+	    USER="$i"
+	;;
+	esac
+    done;
+#    for i in $*; do
+#        echo "(($i))";
+#    done
+}
+
+catm () {
+# cat/zcat/bzcat multiple files
+    echo>$TMPFILE
+    for i in "$@"; do
+    isGZ=`echo $i | grep '.gz$' | wc -l`
+    if [ "$isGZ" != "0" ]; then
+        zcat $i	>> $TMPFILE
+    else
+        isBZ=`echo $i | grep '.bz2$' | wc -l`	
+        if [ "$isBZ" != "0" ]; then
+	    bzcat $i	>> $TMPFILE
+        else
+	    cat $i	>> $TMPFILE
+	fi
+    fi
+
+    done;
+}
+
+# END FUNCTIONS
+parseArgs "$@"
+
+FILTERCMD=""
+
+if [ ! -z "$USER" ];	then FILTERCMD="$FILTERCMD | grep -i $USER"; fi
+if [ ! -z "$SERVICE" ]; then FILTERCMD="$FILTERCMD | grep -i $SERVICE"; fi
+if [ ! -z "$ACTION" ];	then FILTERCMD="$FILTERCMD | grep -i $ACTION"; fi
+
+#if [ ! -z "$EXTRAFILTER" ] && [ "$EXTRAFILTER" != "" ]; then
+#    for i in $EXTRAFILTER; do
+#    echo extrafilter: $i
+#        FILTERCMD="$FILTERCMD | grep $i";
+#    done;
+#fi
+
+if [ ! -z "$NUMLINES" ]; then FILTERCMD="$FILTERCMD | tail $NUMLINES"; fi
+
+#if [ -z "$FILTERCMD" ]; then usage; exit 1; fi
+
+# user-friendly output ?
+if [ -z $RAWOUTPUT ]; then
+    FILTERCMD="$FILTERCMD | awk '{print \$1\" \"\$2\" \"\$3\" \"\$9\" \"\$5\" \"\$7\" \"\$8\" \"\$10}'"
+fi
+
+EXECCMD="catm $LOGFILES $FILTERCMD"
+#EXECCMD="cat $LOGFILES $FILTERCMD"
+#EXECCMD="ls | grep a"
+echo ""
+
+#$SHELL -c "${EXECCMD}"
+
+catm $LOGFILES
+cl="cat $TMPFILE $FILTERCMD"
+
+#echo "$cl"
+
+"$cl"
+
+#cat $FILES | $FILTERCMD
+
+if [ $DBG ]; then debug; fi
+
+# line with multigrep

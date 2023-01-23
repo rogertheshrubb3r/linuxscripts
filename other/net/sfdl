@@ -1,0 +1,63 @@
+#!/bin/sh
+
+DEFAULT_MIRROR=kent
+DEFAULT_PROXY=
+WGOPTS=-b
+
+MIRRORS_FILE=~/.sf_mirror
+PROXY_FILE=~/.http_proxy
+
+[ -f $PROXY_FILE ] && HTTP_PROXY=`cat $PROXY_FILE | grep -v "#"|tail -n1` || HTTP_PROXY=$DEFAULT_PROXY
+[ -f $MIRRORS_FILE ] && SF_MIRROR=`cat $MIRRORS_FILE | grep -v "#"|tail -n1` || SF_MIRROR=$DEFAULT_MIRROR
+
+usage() {
+HLP="
+sourceforge downloader
+usage: $0 sourceforge_url | -i file
+
+options:
+    -i file	read urls from file
+    -d		enable script debug options
+
+sourceforge_url is something like:
+http://prdownloads.sourceforge.net/xampp/xampp-python-addon-2.3.5.exe?download
+"
+#    echo "http://prdownloads.sourceforge.net/xampp/xampp-win32-1.4.15.zip?download"
+    echo "$HLP"
+}
+
+#echo $DL_URL
+echo "mirror=$SF_MIRROR; proxy=$HTTP_PROXY"
+
+if [ -z $1 ]; then usage; exit 1; fi
+
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -i) INPUTFILE=$2; shift 2 ;;
+    -d) DBG=1; shift ;;
+   -h | --help ) usage; exit 0 ;;
+   * ) args="$args $1"; shift ;;
+  esac
+done
+
+[ "$HTTP_PROXY" ] && WGOPTS="$WGOPTS -e http_proxy=$HTTP_PROXY"
+
+if [ "$INPUTFILE" != "" ]; then
+    OLDFILE=$INPUTFILE.sfdl
+    mv $INPUTFILE $OLDFILE
+    cat $OLDFILE | while read line;
+    do
+        echo $line|sed 's/prdownloads/'$SF_MIRROR'.dl/'|sed 's/?download//'>>$INPUTFILE
+    done
+    wget $WGOPTS -i $INPUTFILE
+else
+    args=`echo $args|sed 's/prdownloads/'$SF_MIRROR'.dl/'|sed 's/?download//'`
+    if  [ $DBG ]; then
+	echo "executing: wget $WGOPTS $args"
+	read -p "[Press Enter]" a
+    fi
+    wget $WGOPTS $args
+fi
+
+# format url properly

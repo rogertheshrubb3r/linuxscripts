@@ -1,0 +1,1500 @@
+--16:54:22--  http://www.home.ro/
+           => `index.html'
+Connecting to 82.76.22.60:3128... failed: Connection timed out.
+Retrying.
+
+--16:57:32--  http://www.home.ro/
+  (try: 2) => `index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ........    119.16 KB/s
+
+16:59:06 (119.16 KB/s) - `index.html' saved [49362]
+
+--16:59:06--  http://www.home.ro/global.css
+           => `global.css'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 12,709 [text/css]
+
+    0K .......... ..                                         100%  216.54 KB/s
+
+16:59:06 (216.54 KB/s) - `global.css' saved [12709/12709]
+
+--16:59:06--  http://www.home.ro/homer/homer.swf
+           => `homer/homer.swf'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 3,021 [application/x-shockwave-flash]
+
+    0K ..                                                    100%    2.90 MB/s
+
+16:59:06 (2.90 MB/s) - `homer/homer.swf' saved [3021/3021]
+
+--16:59:06--  http://www.home.ro/homer/h2.swf
+           => `homer/h2.swf'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 81,343 [application/x-shockwave-flash]
+
+    0K .......... .......... .......... .......... .......... 62%  113.20 KB/s
+   50K .......... .......... .........                       100%   98.76 KB/s
+
+16:59:10 (107.38 KB/s) - `homer/h2.swf' saved [81343/81343]
+
+--16:59:10--  http://www.home.ro/imagini/logos/logo.gif
+           => `imagini/logos/logo.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 1,518 [image/gif]
+
+    0K .                                                     100%  120.64 MB/s
+
+16:59:10 (120.64 MB/s) - `imagini/logos/logo.gif' saved [1518/1518]
+
+--16:59:10--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                     30.35 KB/s
+
+16:59:11 (30.35 KB/s) - `login/index.html' saved [20382]
+
+--16:59:11--  http://www.home.ro/signup/
+           => `signup/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ........                           26.73 KB/s
+
+16:59:12 (26.73 KB/s) - `signup/index.html' saved [29278]
+
+--16:59:12--  http://www.home.ro/toolbar/
+           => `toolbar/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    94.96 KB/s
+
+16:59:13 (94.96 KB/s) - `toolbar/index.html' saved [21234]
+
+--16:59:13--  http://www.home.ro/mail/
+           => `mail/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: /login/ [following]
+--16:59:13--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                     35.73 KB/s
+
+16:59:14 (35.73 KB/s) - `login/index.html' saved [20382]
+
+--16:59:14--  http://www.home.ro/netdrive/
+           => `netdrive/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: /login/ [following]
+--16:59:14--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                    155.72 KB/s
+
+16:59:14 (155.72 KB/s) - `login/index.html' saved [20382]
+
+--16:59:14--  http://www.home.ro/sitebuilder/
+           => `sitebuilder/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .....                             113.91 KB/s
+
+16:59:15 (113.91 KB/s) - `sitebuilder/index.html' saved [25628]
+
+--16:59:15--  http://www.home.ro/forumchat/
+           => `forumchat/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                 99.29 KB/s
+
+16:59:15 (99.29 KB/s) - `forumchat/index.html' saved [22813]
+
+--16:59:15--  http://www.home.ro/cupidon/
+           => `cupidon/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..........                        100.04 KB/s
+
+16:59:16 (100.04 KB/s) - `cupidon/index.html' saved [31290]
+
+--16:59:16--  http://www.home.ro/anunturi/
+           => `anunturi/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ..........             121.55 KB/s
+
+16:59:16 (121.55 KB/s) - `anunturi/index.html' saved [41534]
+
+--16:59:16--  http://www.home.ro/bancuri/
+           => `bancuri/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ......       68.95 KB/s
+
+16:59:17 (68.95 KB/s) - `bancuri/index.html' saved [47614]
+
+--16:59:17--  http://www.home.ro/imagini/spacer.gif
+           => `imagini/spacer.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 43 [image/gif]
+
+    0K                                                       100%  419.92 KB/s
+
+16:59:17 (419.92 KB/s) - `imagini/spacer.gif' saved [43/43]
+
+--16:59:17--  http://www.home.ro/news/2005/11/22/
+           => `news/2005/11/22/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 164.67 KB/s
+
+16:59:18 (164.67 KB/s) - `news/2005/11/22/index.html' saved [21933]
+
+--16:59:18--  http://www.home.ro/news/2005/11/22/3/
+           => `news/2005/11/22/3/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 168.36 KB/s
+
+16:59:18 (168.36 KB/s) - `news/2005/11/22/3/index.html' saved [21907]
+
+--16:59:18--  http://www.home.ro/features/valuta/
+           => `features/valuta/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......                 67.31 KB/s
+
+16:59:22 (67.31 KB/s) - `features/valuta/index.html' saved [38320]
+
+--16:59:22--  http://www.home.ro/features/vremea/?wcity=LRBS
+           => `features/vremea/index.html?wcity=LRBS'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .....                             137.06 KB/s
+
+16:59:22 (137.06 KB/s) - `features/vremea/index.html?wcity=LRBS' saved [26239]
+
+--16:59:22--  http://www.home.ro/myjob/
+           => `myjob/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://myjob.home.ro [following]
+--16:59:23--  http://myjob.home.ro/
+           => `index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ......       76.88 KB/s
+
+16:59:24 (76.88 KB/s) - `index.html' saved [47464]
+
+--16:59:24--  http://www.home.ro/dir/3
+           => `dir/3'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ....                   127.51 KB/s
+
+16:59:24 (127.51 KB/s) - `dir/3' saved [35746]
+
+--16:59:24--  http://www.home.ro/features/dict/dict.phtml
+           => `features/dict/dict.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ..                     136.20 KB/s
+
+16:59:25 (136.20 KB/s) - `features/dict/dict.phtml' saved [32953]
+
+--16:59:25--  http://www.home.ro/features/loto/
+           => `features/loto/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ....                              138.04 KB/s
+
+16:59:26 (138.04 KB/s) - `features/loto/index.html' saved [24804]
+
+--16:59:26--  http://www.home.ro/features/horoscop/
+           => `features/horoscop/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ......                            120.43 KB/s
+
+16:59:26 (120.43 KB/s) - `features/horoscop/index.html' saved [26803]
+
+--16:59:26--  http://www.home.ro/features/tv/
+           => `features/tv/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..........                         71.33 KB/s
+
+16:59:27 (71.33 KB/s) - `features/tv/index.html' saved [31616]
+
+--16:59:27--  http://www.home.ro/features/teatru/
+           => `features/teatru/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ........                          120.75 KB/s
+
+16:59:27 (120.75 KB/s) - `features/teatru/index.html' saved [29576]
+
+--16:59:27--  http://www.home.ro/features/cinema/
+           => `features/cinema/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   98.10 KB/s
+   50K                                                          78.12 KB/s
+
+16:59:35 (98.12 KB/s) - `features/cinema/index.html' saved [51208]
+
+--16:59:35--  http://www.home.ro/features/citate/
+           => `features/citate/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... .....        66.77 KB/s
+
+16:59:36 (66.77 KB/s) - `features/citate/index.html' saved [46240]
+
+--16:59:36--  http://www.home.ro/features/baruri/
+           => `features/baruri/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .........                          79.76 KB/s
+
+16:59:36 (79.76 KB/s) - `features/baruri/index.html' saved [30233]
+
+--16:59:36--  http://www.home.ro/images/spacer.gif
+           => `images/spacer.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 43 [image/gif]
+
+    0K                                                       100%  419.92 KB/s
+
+16:59:36 (419.92 KB/s) - `images/spacer.gif' saved [43/43]
+
+--16:59:36--  http://www.home.ro/common/boom.phtml?s=De+aici+incepe+Internet-ul
+           => `common/boom.phtml?s=De+aici+incepe+Internet-ul'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                        13.15 MB/s
+
+16:59:37 (13.15 MB/s) - `common/boom.phtml?s=De+aici+incepe+Internet-ul' saved [1379]
+
+--16:59:37--  http://www.home.ro/imagini/bara_punctata_verticala.gif
+           => `imagini/bara_punctata_verticala.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 404 Not Found
+16:59:37 ERROR 404: Not Found.
+
+--16:59:37--  http://www.home.ro/imagini/stiri/13965.jpg
+           => `imagini/stiri/13965.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 404 Not Found
+16:59:37 ERROR 404: Not Found.
+
+--16:59:37--  http://www.home.ro/news/2005/11/16/1/13965
+           => `news/2005/11/16/1/13965'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                106.02 KB/s
+
+16:59:37 (106.02 KB/s) - `news/2005/11/16/1/13965' saved [23132]
+
+--16:59:37--  http://www.home.ro/news/2005/11/16/1/13967
+           => `news/2005/11/16/1/13967'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                128.82 KB/s
+
+16:59:38 (128.82 KB/s) - `news/2005/11/16/1/13967' saved [22684]
+
+--16:59:38--  http://www.home.ro/news/2005/11/16/1/13964
+           => `news/2005/11/16/1/13964'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                 68.61 KB/s
+
+16:59:38 (68.61 KB/s) - `news/2005/11/16/1/13964' saved [23037]
+
+--16:59:38--  http://www.home.ro/news/2005/11/15/1/13962
+           => `news/2005/11/15/1/13962'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ...                               146.75 KB/s
+
+16:59:39 (146.75 KB/s) - `news/2005/11/15/1/13962' saved [23612]
+
+--16:59:39--  http://www.home.ro/imagini/homer2.gif
+           => `imagini/homer2.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 969 [image/gif]
+
+    0K                                                       100%    9.24 MB/s
+
+16:59:39 (9.24 MB/s) - `imagini/homer2.gif' saved [969/969]
+
+--16:59:39--  http://www.home.ro/news/
+           => `news/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: /news/2005/11/22 [following]
+--16:59:39--  http://www.home.ro/news/2005/11/22
+           => `news/2005/11/22.1'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 102.60 KB/s
+
+16:59:40 (102.60 KB/s) - `news/2005/11/22.1' saved [21933]
+
+--16:59:40--  http://www.home.ro/cupidon/view/?crysucory@go.ro
+           => `cupidon/view/index.html?crysucory@go.ro'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......                127.75 KB/s
+
+16:59:40 (127.75 KB/s) - `cupidon/view/index.html?crysucory@go.ro' saved [38309]
+
+--16:59:40--  http://www.home.ro/images/front/cupidon_front3.jpg
+           => `images/front/cupidon_front3.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 3,146 [image/jpeg]
+
+    0K ...                                                   100%    5.42 MB/s
+
+16:59:40 (5.42 MB/s) - `images/front/cupidon_front3.jpg' saved [3146/3146]
+
+--16:59:40--  http://www.home.ro/images/chenar.gif
+           => `images/chenar.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 718 [image/gif]
+
+    0K                                                       100%    6.85 MB/s
+
+16:59:41 (6.85 MB/s) - `images/chenar.gif' saved [718/718]
+
+--16:59:41--  http://www.home.ro/anunturi/details.phtml?ID=28936
+           => `anunturi/details.phtml?ID=28936'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ......                 116.45 KB/s
+
+16:59:41 (116.45 KB/s) - `anunturi/details.phtml?ID=28936' saved [37389]
+
+--16:59:41--  http://www.home.ro/images/front/anunturi_front9.jpg
+           => `images/front/anunturi_front9.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 2,492 [image/jpeg]
+
+    0K ..                                                    100%    6.51 MB/s
+
+16:59:41 (6.51 MB/s) - `images/front/anunturi_front9.jpg' saved [2492/2492]
+
+--16:59:41--  http://www.home.ro/images/toolbar/toolbar_front.jpg
+           => `images/toolbar/toolbar_front.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 2,047 [image/jpeg]
+
+    0K .                                                     100%  150.17 MB/s
+
+16:59:42 (150.17 MB/s) - `images/toolbar/toolbar_front.jpg' saved [2047/2047]
+
+--16:59:42--  http://www.home.ro/imagini/pseud2.jpg
+           => `imagini/pseud2.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 9,800 [image/jpeg]
+
+    0K .........                                             100%  153.76 KB/s
+
+16:59:42 (153.76 KB/s) - `imagini/pseud2.jpg' saved [9800/9800]
+
+--16:59:42--  http://www.home.ro/imagini/banner_joc.swf
+           => `imagini/banner_joc.swf'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 404 Not Found
+16:59:42 ERROR 404: Not Found.
+
+--16:59:42--  http://www.home.ro/dialup/
+           => `dialup/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 158.49 KB/s
+
+16:59:42 (158.49 KB/s) - `dialup/index.html' saved [21657]
+
+--16:59:42--  http://www.home.ro/dir/2
+           => `dir/2'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ...                    103.65 KB/s
+
+16:59:46 (103.65 KB/s) - `dir/2' saved [34474]
+
+--16:59:46--  http://www.home.ro/dir/484
+           => `dir/484'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    86.61 KB/s
+
+16:59:46 (86.61 KB/s) - `dir/484' saved [20734]
+
+--16:59:46--  http://www.home.ro/dir/255
+           => `dir/255'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ...                     74.41 KB/s
+
+16:59:47 (74.41 KB/s) - `dir/255' saved [34155]
+
+--16:59:47--  http://www.home.ro/dir/520
+           => `dir/520'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  88.83 KB/s
+
+16:59:48 (88.83 KB/s) - `dir/520' saved [22406]
+
+--16:59:48--  http://www.home.ro/dir/415
+           => `dir/415'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 164.00 KB/s
+
+16:59:48 (164.00 KB/s) - `dir/415' saved [21609]
+
+--16:59:48--  http://www.home.ro/dir/424
+           => `dir/424'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   168.91 KB/s
+
+16:59:48 (168.91 KB/s) - `dir/424' saved [20726]
+
+--16:59:48--  http://www.home.ro/dir/430
+           => `dir/430'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    63.84 KB/s
+
+16:59:49 (63.84 KB/s) - `dir/430' saved [21344]
+
+--16:59:49--  http://www.home.ro/dir/573
+           => `dir/573'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   149.18 KB/s
+
+16:59:49 (149.18 KB/s) - `dir/573' saved [20716]
+
+--16:59:49--  http://www.home.ro/dir/1
+           => `dir/1'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ...                               100.05 KB/s
+
+16:59:53 (100.05 KB/s) - `dir/1' saved [23722]
+
+--16:59:53--  http://www.home.ro/dir/466
+           => `dir/466'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ....                   132.48 KB/s
+
+16:59:53 (132.48 KB/s) - `dir/466' saved [34822]
+
+--16:59:53--  http://www.home.ro/dir/502
+           => `dir/502'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .....                             114.56 KB/s
+
+16:59:53 (114.56 KB/s) - `dir/502' saved [26147]
+
+--16:59:53--  http://www.home.ro/dir/486
+           => `dir/486'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    92.91 KB/s
+
+16:59:54 (92.91 KB/s) - `dir/486' saved [20529]
+
+--16:59:54--  http://www.home.ro/dir/513
+           => `dir/513'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..........                        137.14 KB/s
+
+16:59:54 (137.14 KB/s) - `dir/513' saved [31136]
+
+--16:59:54--  http://www.home.ro/dir/107
+           => `dir/107'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   68.87 KB/s
+   50K .......... .......... .......... .......... ..........  107.08 KB/s
+  100K                                                         320.28 KB/s
+
+16:59:56 (84.24 KB/s) - `dir/107' saved [103092]
+
+--16:59:56--  http://www.home.ro/dir/453
+           => `dir/453'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......                           133.75 KB/s
+
+16:59:56 (133.75 KB/s) - `dir/453' saved [28501]
+
+--16:59:56--  http://www.home.ro/dir/4
+           => `dir/4'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ....                              152.33 KB/s
+
+16:59:57 (152.33 KB/s) - `dir/4' saved [24982]
+
+--16:59:57--  http://www.home.ro/dir/552
+           => `dir/552'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ........                          144.79 KB/s
+
+16:59:57 (144.79 KB/s) - `dir/552' saved [28903]
+
+--16:59:57--  http://www.home.ro/dir/496
+           => `dir/496'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    40.22 KB/s
+
+16:59:58 (40.22 KB/s) - `dir/496' saved [20766]
+
+--16:59:58--  http://www.home.ro/dir/18
+           => `dir/18'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 136.95 KB/s
+
+16:59:58 (136.95 KB/s) - `dir/18' saved [22484]
+
+--16:59:58--  http://www.home.ro/dir/157
+           => `dir/157'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  93.47 KB/s
+
+16:59:59 (93.47 KB/s) - `dir/157' saved [22030]
+
+--16:59:59--  http://www.home.ro/dir/427
+           => `dir/427'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ...                               101.00 KB/s
+
+16:59:59 (101.00 KB/s) - `dir/427' saved [23824]
+
+--16:59:59--  http://www.home.ro/dir/507
+           => `dir/507'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   153.87 KB/s
+
+16:59:59 (153.87 KB/s) - `dir/507' saved [20945]
+
+--16:59:59--  http://www.home.ro/dir/515
+           => `dir/515'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   156.10 KB/s
+
+17:00:00 (156.10 KB/s) - `dir/515' saved [21440]
+
+--17:00:00--  http://www.home.ro/dir/6
+           => `dir/6'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  97.10 KB/s
+
+17:00:00 (97.10 KB/s) - `dir/6' saved [21513]
+
+--17:00:00--  http://www.home.ro/dir/753
+           => `dir/753'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                    89.79 KB/s
+
+17:00:01 (89.79 KB/s) - `dir/753' saved [20531]
+
+--17:00:01--  http://www.home.ro/dir/523
+           => `dir/523'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 100.19 KB/s
+
+17:00:04 (100.19 KB/s) - `dir/523' saved [22392]
+
+--17:00:04--  http://www.home.ro/dir/11
+           => `dir/11'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ......                            112.09 KB/s
+
+17:00:05 (112.09 KB/s) - `dir/11' saved [27571]
+
+--17:00:05--  http://www.home.ro/dir/33
+           => `dir/33'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   91.95 KB/s
+   50K .......                                                   1.15 MB/s
+
+17:00:06 (103.82 KB/s) - `dir/33' saved [58443]
+
+--17:00:06--  http://www.home.ro/dir/34
+           => `dir/34'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .........                         117.61 KB/s
+
+17:00:06 (117.61 KB/s) - `dir/34' saved [30633]
+
+--17:00:06--  http://www.home.ro/dir/32
+           => `dir/32'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   143.71 KB/s
+
+17:00:06 (143.71 KB/s) - `dir/32' saved [21137]
+
+--17:00:06--  http://www.home.ro/dir/7
+           => `dir/7'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .....                             121.14 KB/s
+
+17:00:07 (121.14 KB/s) - `dir/7' saved [26501]
+
+--17:00:07--  http://www.home.ro/dir/23
+           => `dir/23'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ....                   116.81 KB/s
+
+17:00:07 (116.81 KB/s) - `dir/23' saved [35396]
+
+--17:00:07--  http://www.home.ro/dir/25
+           => `dir/25'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......                            66.27 KB/s
+
+17:00:08 (66.27 KB/s) - `dir/25' saved [28657]
+
+--17:00:08--  http://www.home.ro/dir/487
+           => `dir/487'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  81.67 KB/s
+
+17:00:08 (81.67 KB/s) - `dir/487' saved [21800]
+
+--17:00:08--  http://www.home.ro/dir/5
+           => `dir/5'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                164.89 KB/s
+
+17:00:09 (164.89 KB/s) - `dir/5' saved [22841]
+
+--17:00:09--  http://www.home.ro/dir/19
+           => `dir/19'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   136.77 KB/s
+
+17:00:09 (136.77 KB/s) - `dir/19' saved [20982]
+
+--17:00:09--  http://www.home.ro/dir/461
+           => `dir/461'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .........                         121.31 KB/s
+
+17:00:10 (121.31 KB/s) - `dir/461' saved [30272]
+
+--17:00:10--  http://www.home.ro/dir/21
+           => `dir/21'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                 149.18 KB/s
+
+17:00:10 (149.18 KB/s) - `dir/21' saved [21516]
+
+--17:00:10--  http://www.home.ro/dir/10
+           => `dir/10'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .........                         115.65 KB/s
+
+17:00:11 (115.65 KB/s) - `dir/10' saved [30122]
+
+--17:00:11--  http://www.home.ro/dir/457
+           => `dir/457'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ......                 122.59 KB/s
+
+17:00:11 (122.59 KB/s) - `dir/457' saved [37162]
+
+--17:00:11--  http://www.home.ro/dir/30
+           => `dir/30'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..                                 58.98 KB/s
+
+17:00:12 (58.98 KB/s) - `dir/30' saved [23302]
+
+--17:00:12--  http://www.home.ro/dir/479
+           => `dir/479'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ...                                99.99 KB/s
+
+17:00:12 (99.99 KB/s) - `dir/479' saved [23587]
+
+--17:00:12--  http://www.home.ro/dir/9
+           => `dir/9'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  53.82 KB/s
+
+17:00:13 (53.82 KB/s) - `dir/9' saved [21984]
+
+--17:00:13--  http://www.home.ro/dir/243
+           => `dir/243'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  56.82 KB/s
+
+17:00:14 (56.82 KB/s) - `dir/243' saved [21978]
+
+--17:00:14--  http://www.home.ro/dir/452
+           => `dir/452'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   142.87 KB/s
+
+17:00:14 (142.87 KB/s) - `dir/452' saved [20954]
+
+--17:00:14--  http://www.home.ro/dir/660
+           => `dir/660'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   170.61 KB/s
+
+17:00:14 (170.61 KB/s) - `dir/660' saved [20539]
+
+--17:00:14--  http://www.home.ro/dir/8
+           => `dir/8'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .....                             113.87 KB/s
+
+17:00:15 (113.87 KB/s) - `dir/8' saved [25943]
+
+--17:00:15--  http://www.home.ro/dir/197
+           => `dir/197'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..          121.42 KB/s
+
+17:00:15 (121.42 KB/s) - `dir/197' saved [44013]
+
+--17:00:15--  http://www.home.ro/dir/441
+           => `dir/441'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ..                      50.52 KB/s
+
+17:00:16 (50.52 KB/s) - `dir/441' saved [33395]
+
+--17:00:16--  http://www.home.ro/dir/503
+           => `dir/503'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  98.10 KB/s
+
+17:00:17 (98.10 KB/s) - `dir/503' saved [21816]
+
+--17:00:17--  http://www.home.ro/terms/
+           => `terms/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... .......     122.98 KB/s
+
+17:00:17 (122.98 KB/s) - `terms/index.html' saved [48621]
+
+--17:00:17--  http://www.home.ro/common/trafic.phtml
+           => `common/trafic.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K                                                           3.35 MB/s
+
+17:00:18 (3.35 MB/s) - `common/trafic.phtml' saved [351]
+
+--17:00:18--  http://www.home.ro/homer/h1.swf
+           => `homer/h1.swf'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 23,432 [application/x-shockwave-flash]
+
+    0K .......... .......... ..                              100%  146.86 KB/s
+
+17:00:18 (146.86 KB/s) - `homer/h1.swf' saved [23432/23432]
+
+--17:00:18--  http://www.home.ro/common/boom.phtml?s=Autentificare
+           => `common/boom.phtml?s=Autentificare'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                       108.64 MB/s
+
+17:00:18 (108.64 MB/s) - `common/boom.phtml?s=Autentificare' saved [1367]
+
+--17:00:18--  http://www.home.ro/signup
+           => `signup.1'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 301 Moved Permanently
+Location: http://www.home.ro/signup/ [following]
+--17:00:19--  http://www.home.ro/signup/
+           => `signup/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ........                           67.61 KB/s
+
+17:00:19 (67.61 KB/s) - `signup/index.html' saved [29278]
+
+--17:00:19--  http://www.home.ro/members/help/password/passrecovery.phtml
+           => `members/help/password/passrecovery.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... ..........                         58.76 KB/s
+
+17:00:20 (58.76 KB/s) - `members/help/password/passrecovery.phtml' saved [30791]
+
+--17:00:20--  http://www.home.ro/images/login/login.jpg
+           => `images/login/login.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 16,855 [image/jpeg]
+
+    0K .......... ......                                     100%   49.77 KB/s
+
+17:00:21 (49.77 KB/s) - `images/login/login.jpg' saved [16855/16855]
+
+--17:00:21--  http://www.home.ro/homer/h0.swf
+           => `homer/h0.swf'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 51,446 [application/x-shockwave-flash]
+
+    0K .......... .......... .......... .......... .......... 99%  122.76 KB/s
+   50K                                                       100%    2.35 MB/s
+
+17:00:21 (123.35 KB/s) - `homer/h0.swf' saved [51446/51446]
+
+--17:00:21--  http://www.home.ro/common/boom.phtml?s=Cont+nou
+           => `common/boom.phtml?s=Cont+nou'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                         7.01 MB/s
+
+17:00:22 (7.01 MB/s) - `common/boom.phtml?s=Cont+nou' saved [1367]
+
+--17:00:22--  http://www.home.ro/img_secure.phtml?R=164538
+           => `img_secure.phtml?R=164538'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [image/png]
+
+    0K .                                                        88.16 KB/s
+
+17:00:22 (88.16 KB/s) - `img_secure.phtml?R=164538' saved [1677]
+
+--17:00:22--  http://www.home.ro/imagini/logos/logo_toolbar.gif
+           => `imagini/logos/logo_toolbar.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 1,518 [image/gif]
+
+    0K .                                                     100%   14.48 MB/s
+
+17:00:22 (14.48 MB/s) - `imagini/logos/logo_toolbar.gif' saved [1518/1518]
+
+--17:00:22--  http://www.home.ro/common/boom.phtml?s=Toolbar
+           => `common/boom.phtml?s=Toolbar'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                        13.04 MB/s
+
+17:00:22 (13.04 MB/s) - `common/boom.phtml?s=Toolbar' saved [1367]
+
+--17:00:22--  http://www.home.ro/toolbar/install/
+           => `toolbar/install/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... ..........                                   143.72 KB/s
+
+17:00:23 (143.72 KB/s) - `toolbar/install/index.html' saved [21297]
+
+--17:00:23--  http://www.home.ro/toolbar/help/
+           => `toolbar/help/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                    165.41 KB/s
+
+17:00:23 (165.41 KB/s) - `toolbar/help/index.html' saved [20277]
+
+--17:00:23--  http://www.home.ro/toolbar/images/toolbar2.jpg
+           => `toolbar/images/toolbar2.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 29,279 [image/jpeg]
+
+    0K .......... .......... ........                        100%  129.25 KB/s
+
+17:00:23 (129.25 KB/s) - `toolbar/images/toolbar2.jpg' saved [29279/29279]
+
+--17:00:23--  http://www.home.ro/imagini/logos/logo_builder.gif
+           => `imagini/logos/logo_builder.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 1,518 [image/gif]
+
+    0K .                                                     100%  111.36 MB/s
+
+17:00:24 (111.36 MB/s) - `imagini/logos/logo_builder.gif' saved [1518/1518]
+
+--17:00:24--  http://www.home.ro/common/boom.phtml?s=Site+Builder
+           => `common/boom.phtml?s=Site+Builder'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                        23.70 MB/s
+
+17:00:27 (23.70 MB/s) - `common/boom.phtml?s=Site+Builder' saved [1367]
+
+--17:00:27--  http://www.home.ro/imagini/sitebuilder/myweb.gif
+           => `imagini/sitebuilder/myweb.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 751 [image/gif]
+
+    0K                                                       100%    7.16 MB/s
+
+17:00:27 (7.16 MB/s) - `imagini/sitebuilder/myweb.gif' saved [751/751]
+
+--17:00:27--  http://www.home.ro/sitebuilder/activate.phtml
+           => `sitebuilder/activate.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login.phtml [following]
+--17:00:27--  http://www.home.ro/login.phtml
+           => `login.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login/ [following]
+--17:00:27--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                    168.64 KB/s
+
+17:00:28 (168.64 KB/s) - `login/index.html' saved [20382]
+
+--17:00:28--  http://www.home.ro/sitebuilder/deactivate.phtml
+           => `sitebuilder/deactivate.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login.phtml [following]
+--17:00:31--  http://www.home.ro/login.phtml
+           => `login.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login/ [following]
+--17:00:31--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                    140.02 KB/s
+
+17:00:31 (140.02 KB/s) - `login/index.html' saved [20382]
+
+--17:00:31--  http://www.home.ro/sitebuilder/actualizare.phtml
+           => `sitebuilder/actualizare.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login.phtml [following]
+--17:00:32--  http://www.home.ro/login.phtml
+           => `login.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 302 Moved Temporarily
+Location: http://www.home.ro/login/ [following]
+--17:00:32--  http://www.home.ro/login/
+           => `login/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .........                                    112.43 KB/s
+
+17:00:32 (112.43 KB/s) - `login/index.html' saved [20382]
+
+--17:00:32--  http://www.home.ro/sitebuilder/faq.phtml
+           => `sitebuilder/faq.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......                            91.21 KB/s
+
+17:00:33 (91.21 KB/s) - `sitebuilder/faq.phtml' saved [28644]
+
+--17:00:33--  http://www.home.ro/sitebuilder/help.phtml
+           => `sitebuilder/help.phtml'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......                           143.04 KB/s
+
+17:00:33 (143.04 KB/s) - `sitebuilder/help.phtml' saved [28064]
+
+--17:00:33--  http://www.home.ro/imagini/sitebuilder/myweb_img.jpg
+           => `imagini/sitebuilder/myweb_img.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 9,963 [image/jpeg]
+
+    0K .........                                             100%  147.55 KB/s
+
+17:00:33 (147.55 KB/s) - `imagini/sitebuilder/myweb_img.jpg' saved [9963/9963]
+
+--17:00:33--  http://www.home.ro/imagini/logos/logo_forumchat.gif
+           => `imagini/logos/logo_forumchat.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 1,518 [image/gif]
+
+    0K .                                                     100%    3.34 MB/s
+
+17:00:34 (3.34 MB/s) - `imagini/logos/logo_forumchat.gif' saved [1518/1518]
+
+--17:00:34--  http://www.home.ro/common/boom.phtml?s=Forum+%26+Chat
+           => `common/boom.phtml?s=Forum+&+Chat'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .                                                        13.15 MB/s
+
+17:00:34 (13.15 MB/s) - `common/boom.phtml?s=Forum+&+Chat' saved [1379]
+
+--17:00:34--  http://www.home.ro/forum/
+           => `forum/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   23.89 KB/s
+   50K .......... .......... ....                              125.37 KB/s
+
+17:00:37 (32.42 KB/s) - `forum/index.html' saved [75862]
+
+--17:00:37--  http://www.home.ro/chat/
+           => `chat/index.html'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .                                  73.63 KB/s
+
+17:00:38 (73.63 KB/s) - `chat/index.html' saved [22051]
+
+--17:00:38--  http://www.home.ro/forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=3
+           => `forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=3'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........  125.54 KB/s
+   50K                                                         800.78 KB/s
+
+17:00:38 (125.74 KB/s) - `forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=3' saved [51282]
+
+--17:00:38--  http://www.home.ro/forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=4
+           => `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=4'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   53.24 KB/s
+   50K .......                                                 110.30 KB/s
+
+17:00:41 (56.94 KB/s) - `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=4' saved [58575]
+
+--17:00:41--  http://www.home.ro/forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=5
+           => `forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=5'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ....        116.57 KB/s
+
+17:00:42 (116.57 KB/s) - `forum/forumdisplay.php?s=bdc7eb0ab2ef53006fcb39715619cbe1&forumid=5' saved [45774]
+
+--17:00:42--  http://www.home.ro/forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=6
+           => `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=6'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   44.73 KB/s
+   50K .......... .......... ..                                127.37 KB/s
+
+17:00:49 (56.10 KB/s) - `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=6' saved [74459]
+
+--17:00:49--  http://www.home.ro/forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=11
+           => `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=11'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   84.74 KB/s
+   50K .......... .......... .......... .......... ..........  125.06 KB/s
+  100K ....                                                    119.89 KB/s
+
+17:00:54 (101.71 KB/s) - `forum/forumdisplay.php?s=ad6f006f078fc9c23f5729d1e397d853&forumid=11' saved [106995]
+
+--17:00:54--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=12
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=12'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........   26.22 KB/s
+   50K .......... .......... ....                               24.27 KB/s
+
+17:00:58 (25.54 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=12' saved [76680]
+
+--17:00:58--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=31
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=31'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..           78.91 KB/s
+
+17:00:59 (78.91 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=31' saved [43624]
+
+--17:00:59--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=14
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=14'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ..........             127.39 KB/s
+
+17:01:00 (127.39 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=14' saved [41580]
+
+--17:01:00--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=19
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=19'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ......       69.13 KB/s
+
+17:01:03 (69.13 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=19' saved [48087]
+
+--17:01:03--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=20
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=20'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........  109.49 KB/s
+   50K .......                                                 135.87 KB/s
+
+17:01:08 (112.37 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=20' saved [58970]
+
+--17:01:08--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=21
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=21'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......... ..........    6.54 KB/s
+   50K .......... .......... .                                 117.06 KB/s
+
+17:01:19 (9.13 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=21' saved [73261]
+
+--17:01:19--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=32
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=32'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... .......                126.12 KB/s
+
+17:01:22 (126.12 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=32' saved [38172]
+
+--17:01:22--  http://www.home.ro/forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=33
+           => `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=33'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .......... .......... .......... ..........             121.75 KB/s
+
+17:01:23 (121.75 KB/s) - `forum/forumdisplay.php?s=56309b5059a47d9a17c08a6467fde1ae&forumid=33' saved [41466]
+
+--17:01:23--  http://www.home.ro/imagini/forumchat/forum.jpg
+           => `imagini/forumchat/forum.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 3,584 [image/jpeg]
+
+    0K ...                                                   100%   14.12 KB/s
+
+17:01:23 (14.12 KB/s) - `imagini/forumchat/forum.jpg' saved [3584/3584]
+
+--17:01:23--  http://www.home.ro/imagini/forumchat/chat.jpg
+           => `imagini/forumchat/chat.jpg'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 5,408 [image/jpeg]
+
+    0K .....                                                 100%   25.22 KB/s
+
+17:01:24 (25.22 KB/s) - `imagini/forumchat/chat.jpg' saved [5408/5408]
+
+--17:01:24--  http://www.home.ro/imagini/logos/logo_cupidon.gif
+           => `imagini/logos/logo_cupidon.gif'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 1,629 [image/gif]
+
+    0K .                                                     100%   15.54 MB/s
+
+17:01:24 (15.54 MB/s) - `imagini/logos/logo_cupidon.gif' saved [1629/1629]
+
+--17:01:24--  http://www.home.ro/common/boom.phtml?s=Cupidon
+           => `common/boom.phtml?s=Cupidon'
+Connecting to 82.76.22.60:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+
+    0K .

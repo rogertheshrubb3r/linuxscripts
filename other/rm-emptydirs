@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+
+use File::Find;
+
+print "removing empty directories..";
+finddepth(sub{rmdir},'.');
+print "done.\n"

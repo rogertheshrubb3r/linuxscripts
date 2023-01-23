@@ -1,0 +1,2 @@
+switch.dl.sf.net
+ovh.dl.sf.net

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# predefined vars
+SERVICE=imap
+WHAT=login
+USER=""
+CNT=10
+
+DBG=1
+
+usage() {
+HLP="
+usage: $0 <user> [service]
+shows last mail login for user
+"
+echo "$HLP"
+}
+
+if [ "$1" == "-h" ]; then usage; exit 0; fi
+
+if [ -z $1 ]; then
+    usage; exit 1
+    USER=$1
+else 
+    USER=$1
+fi
+
+# get service (imap/pop3)
+if [ -n $2 ]; then
+    SERVICE=$2
+fi
+
+# get user
+
+
+
+# debug
+if [ $DBG ]; then
+echo "USER: $USER; SERVICE: $SERVICE; WHAT: $WHAT"
+fi
+
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+
+if [ "$SERVICE" == "" ]; then 
+    cat $LOGFILES|grep $WHAT |grep $USER | tail -$CNT
+else
+    cat $LOGFILES|grep $WHAT|grep $SERVICE |grep $USER | tail -$CNT
+fi
+

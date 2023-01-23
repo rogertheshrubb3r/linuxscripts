@@ -1,0 +1,104 @@
+#!/bin/sh
+
+# kidd: show open ports
+# uses lsof
+
+#lsof|sort|grep LISTEN|awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$7"\t"$8"\t"$9}'|uniq -f6
+
+SHORTSTATUS=1
+
+usage() {
+HLP="
+usage: $0 <options> [expr]
+show open ports
+options:
+  -n		numeric ports
+  -m		named ports (default)
+
+  -p		sort by port number
+  -pn		sort by process name
+  -u		sort by user
+
+  -tu, -udp	port type=udp
+  -tt, -tcp	port type=tcp
+
+  -a		list ports opened on all interfaces (\"*\")
+
+  -s		short status (command, user, type, interface/port)
+  -l		long status
+
+  -h		this help
+
+[*] = todo/inwork
+
+"
+echo "$HLP"
+}
+
+LSOF=-P
+SORT="-n -t: -k2"
+GREP="\(TCP\|UDP\) "
+AWK='{print $NL}'
+FIND="."
+SORTBY="port"
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a | --all )	FIND="*\:"; shift ;;
+    -d | --deb* )	DBG=1; shift ;;
+    -n | --num* )	NUMERIC=1; shift ;;
+    -m | --nam* )	shift ;; # defaults
+    -s )		SHORTSTATUS=1; shift ;;
+    -l )		SHORTSTATUS=; shift ;;
+    -sp|-p )		SORTBY=port; shift ;;
+    -sn|-pn|-pp|--proc* )	SORTBY=process; shift ;;
+    -su|-u )		SORTBY=user; shift ;;
+    -tu|-udp)		PORTTYPE=udp; shift ;;
+    -tt|-tcp)		PORTTYPE=tcp; shift ;;
+    -h* | --help )	HELP=1 ; shift ;;
+    -* )		echo -e "\nInvalid option: $1" ; HELP=yes; break ;;
+    * )			FIND=$1; shift ;;
+  esac
+done
+
+if [ $HELP ]; then usage; exit 1; fi
+
+# port types
+if [ $NUMERIC ]; then
+# numeric ports
+    LSOF=-P
+    SORT="-n -t: -k2"
+else
+# named ports
+LSOF=
+SORT=-k8
+fi
+
+# sort type
+case "$SORTBY" in
+    user) SORT="-b -k3" ;;
+    port) SORT="-n -t: -k2" ;;
+#    port) SORT=-k1 ;;
+    process) SORT= ;;
+esac
+
+case "$PORTTYPE" in
+    udp) FIND="UDP" ;;
+    tcp) FIND="TCP" ;;
+#    udp) [ $FIND ] && FIND="\($FIND\|udp\)" || FIND= ;;
+esac
+
+if [ $SHORTSTATUS ]; then
+    AWK='{printf"%-9s %-9s %4s %3s %s\n", $1,$3,$5,$7,$8}' 
+    hdr="COMMAND   USER       TYPE INTERFACE/PORT"
+else
+    hdr="COMMAND     PID      USER    FD     TYPE     DEVICE                NODE NAME"
+fi
+
+echo "$hdr"
+#if [ $NUMERIC ]; then
+#    lsof -P|grep LISTEN|sort -k8|uniq -f6|sort -n -t: -k2
+#else
+lsof $LSOF|grep $GREP|grep "$FIND"|sort -k8|uniq -f6|sort $SORT|awk "$AWK"
+#echo $c
+#fi

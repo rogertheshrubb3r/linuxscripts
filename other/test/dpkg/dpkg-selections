@@ -1,0 +1,201 @@
+#!/bin/sh
+
+### WORK IN PROGRESS ###
+
+# maintain a history of packages installed/removed
+
+DBG=yes
+# show verbose information (version, install statue etc.; from dpkg -l)
+VERBOSE=yes 
+# overwrite old diff file
+OVERWRITE=no
+
+# test multiple diff/patch: apply a series of patches to a base file to get last version
+
+FILEDIR=/root/system/packages
+
+
+TODAY=`date +%Y%m%d`
+WRITE=yes
+
+
+# functions
+
+usage() {
+HLP="
+makes an incremental list of installed/removed debian packages
+usage: $0 [options]
+
+options:
+    -l		only list changes since the last update
+*   -m		check and mail changes
+*   -d <date>	list changes for the specified date (like: 20051231)
+*   -t n	list changes for n days ago
+"
+    echo "$HLP";
+}
+
+cleanup() {
+rm -f $tmpfile.removed $tmpfile.installed $tmpfile.old $tmpfile.new $tmpfile.diff >/dev/null
+rm -f $tmpfile.old $tmpfile.new $tmpfile.diff >/dev/null
+}
+
+# **********************************************
+# ****************** MAIN **********************
+# **********************************************
+
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -l ) LIST=yes ; shift ;;
+#   -n ) nflag=1 ; shift ;;
+   -h ) usage; exit 1 ;;
+   -d ) LISTDATE=$2; WRITE=no; shift 2 ;;
+   -t ) if [ "$2" != "" ]; then LISTDATE=`expr $TODAY - $2`; WRITE=no; shift 2; else usage; exit 1; fi ;;
+#   -l | -v ) vlevel=$(( vlevel+1 )) ; shift ;;
+#   -ver* ) echo "Version $version"  ; exit 1 ;;
+   * ) shift;
+#   echo "Saw non flag $arg" ; break ;;
+  esac
+done
+
+
+# 
+
+basefile=`ls -t1 $FILEDIR | tail -n1` # oldest file
+if [ "$DBG" == "yes" ]; then echo "basefile: $basefile"; fi
+
+### WORK ###
+if [ "$DBG" == "yes" ]; then 
+    echo "listdate: $LISTDATE"
+fi
+### END WORK ###
+
+if [ "$basefile" == "" ]; then
+    echo "no basefile found. creating..."
+    dpkg --get-selections |gzip>$FILEDIR/dpkg-installed.gz
+    exit 0
+fi
+
+basefile=$FILEDIR/$basefile
+
+newfile=$FILEDIR/dpkg-changes-$TODAY.diff.gz
+
+umask 177
+
+#############! delme!!!!!!!!!!!!!!!!!!!!!!!!
+######
+#rm $newfile
+
+function dpkg_list_changes() {
+    echo hello
+}
+
+#tmpfile=/tmp/dpkg-installed.tmp
+tmpfile=dpkg-installed.tmp
+
+if [ "$LISTDATE" == "" ] && [ -f $newfile ] && [ "$OVERWRITE" != "yes" ]; then
+    echo "A diff file with current date already exists. try again tomorrow!"
+    exit 1
+fi
+
+if [ "$DBG" == "yes" ]; then echo "basefile: $basefile"; fi
+
+
+# diffs
+zcat $basefile > $tmpfile.old
+
+for i in `ls $FILEDIR/*.diff.gz`; do 
+# IMPORTANT: name order should be the same as date order!! 
+# (dates should be in the format yyyymmdd)
+    if [ "$DBG" == "yes" ]; then echo "applying patch: $i"; fi
+    zcat $i | patch $tmpfile.old >/dev/null
+    D=`echo $i | awk -F- '{print $3}'|awk -F. '{print $1}'`
+    if [ "$D" == "$LISTDATE" ]; then break; fi
+done
+
+dpkg --get-selections >$tmpfile.new
+diff $tmpfile.old $tmpfile.new >$tmpfile.diff
+#echo "exit code: $?"
+# 
+
+if [ "$?" == "0" ]; then
+    echo "No packages installed/upgraded/modified/removed since the last list update."
+    exit 0
+fi
+
+echo ""
+echo "Some packages were installed/upgraded/modified/removed since the last list update."
+if [ "$WRITE" == "yes" ]; then
+    echo -n "writing changes to $newfile..."
+    cat $tmpfile.diff | gzip > $newfile
+    echo "done."
+fi
+
+echo ""
+echo "------------------------------------------------------------------------------"
+echo "List of packages added/removed between "`echo $i|awk -F- '{print $2}'|awk -F. '{print $1}'`" and $TODAY:"
+echo "-----------------------------------------------------------------------------"-
+
+ins=0; rem=0
+installed=
+removed=
+
+exec 3<>$tmpfile.diff
+while read -a line <&3
+do {
+    if [ "${line[0]}" == ">" ]; then # package installed
+	if [ "$VERBOSE" == "yes" ]; then
+        	installed=$installed" ${line[1]}"
+	else
+        	installed=$installed"${line[1]}\n"
+        fi
+	(( ins++ ));
+    elif [ "${line[0]}" == "<" ]; then # package deleted
+	read a
+	if [ "$VERBOSE" == "yes" ]; then
+        	removed=$removed" ${line[1]}"
+	else
+        	removed=$removed"${line[1]}\n"
+        fi
+	(( rem++ ));
+    fi
+}
+done
+exec 3>&-
+
+echo ""
+if [ "$removed" != "" ]; then
+S="REMOVED/PURGED packages:
+------------------------------------------------------------------------------
+"; echo $S
+    if [ $VERBOSE == "yes" ]; then
+        dpkg -l $removed
+    else
+        printf "$removed"
+    fi
+    echo "--- total removed/purged: $rem"
+else
+    echo "REMOVED/PURGED packages: none"
+fi
+echo ""
+
+if [ "$installed" != "" ]; then
+
+S="INSTALLED/UPGRADED packages:
+------------------------------------------------------------------------------
+"; echo $S
+    
+    if [ $VERBOSE == "yes" ]; then
+        dpkg -l $installed
+    else
+        printf "$installed"
+    fi
+    echo "--- total installed/upgraded: $ins"
+else
+    echo "INSTALLED/UPGRADED packages: none"
+fi
+echo ""
+
+
+cleanup

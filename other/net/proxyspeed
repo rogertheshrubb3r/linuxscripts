@@ -1,0 +1,6 @@
+#!/bin/sh
+
+PROXY_LIST=/etc/
+
+HTTP_PROXY=`cat ~/.http_proxy`
+wget -e http_proxy=$HTTP_PROXY 

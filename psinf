@@ -1,0 +1,44 @@
+#!/bin/sh
+
+
+if [ -z $@ ]; then
+
+    echo "usage: $0 <process_mask>"
+    exit 1
+
+else
+
+export LC_ALL=C
+echo "USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND"
+ps axuw|grep -v "grep "|grep -v $0|grep $@
+
+PSINF=`ps axuw|grep -v "grep "|grep -v $0|grep "$@"`
+
+TOTALMEM=`echo "$PSINF"|awk '{ sum += $6 }; END { print sum }'`
+TOTALMEM=`printf "%d" $TOTALMEM`
+TOTALMEMP=`echo "$PSINF"|awk '{ sum += $4 }; END { printf "%4.1f",sum }'`
+TOTALCPUP=`echo "$PSINF"|awk '{ sum += $43}; END { printf "%4.1f",sum }'`
+echo "--- summary for *$@*:"
+echo $TOTALMEM"k ( $TOTALMEMP% mem $TOTALCPUP% cpu )"
+fi
+
+#COL=1
+#if [ -z "$1" ]; then COL=1; else COL=$1; fi
+#echo COL=$COL
+#awkcmd="' { sum += \$$COL }; END { print sum }'"
+#cmdl="awk '{ sum += \$$COL }; END { print sum }'"
+#export TIME="elapsed: %E [h:]m:s (%E real,%U user,%S sys; %P cpu, %Kk avg.mem, %Mk max.mem, %I/%O In/Out)\n%C"
+#/usr/bin/time $cmdl
+
+#awk ' { sum += $COL }; END { print sum }'
+#/usr/bin/time awk $awkcmd
+
+#awkcmd="'{ print \"This is a test: \" $1 \" / parm2 = " f  }' f=$2"
+#awkcmd="awk '{ sum += \$1 }; END { print sum }'"
+#/usr/bin/time $awkcmd
+
+
+#awkcmd='awk '{ print $1 }''
+#$awkcmd
+
+#awk '{ print "This is a test: " $1 " / parm2 = " f  }' f=$2 #< $1

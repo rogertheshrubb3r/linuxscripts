@@ -1,0 +1,141 @@
+#!/bin/sh
+
+DBG=yes
+
+ALLSHARES="
+PC1=D
+PC2=D
+PC3=E
+PC4=D
+PC5=D
+PC6=D
+"
+SMBUSER=Guest
+SMBPASS=
+
+FMASK=0644
+
+
+function usage {
+HLP="
+usage: $0 <pc_name> [share_name|-v] [-u|<mode>]
+
+options:
+  -v  view shares
+  -u  unmount share
+modes:
+  ro  mount readonly
+  rw  mount read/write
+  rwx mount read/write/exec
+default mode is 0640
+"
+    echo "$HLP"
+}
+
+function unmountall {
+MOUNTED=`mount|grep smbfs|awk '{print $1}'`
+SMBMOUNTS=`mount|grep smbfs|awk '{ print $1 }'|wc -l`
+
+if [ "$SMBMOUNTS" != "0" ]; then
+    echo "Mounted SMB drives: $SMBMOUNTS; unmounting..."
+    mount|grep smbfs|awk '{print $1}'
+umount $MOUNTED
+else
+    echo "No SMB drives are currently mounted."
+fi
+}
+
+if [ -z $1 ]; then
+    echo "run $0 -h for help."
+#    echo ""
+    echo "mounted smb filesystems:"
+    mount|grep smbfs
+    echo ""
+    exit 0
+fi
+
+CMD=mount
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -u ) CMD=unmount; shift ;;
+    
+    -v|-V|--view ) CMD=listshares; shift ;;
+
+    -h | --help ) usage; exit 1 ;;
+#    -m|--mode|--mask)
+#	case $2 in
+#	    rw)  FMASK=0666 ;;
+#	    ro)  FMASK=0444 ;;
+#	    rwx) FMASK=0777 ;;
+#	esac
+#	shift 2 ;;
+   * )
+    if [ -z $CPUNAME ]; then
+	CPUNAME=$1
+	CPUIP=`host $CPUNAME|awk '{print $4}'`
+    elif [ -z $SMBSHARE ]; then
+	SMBSHARE=$1
+    elif [ -z $SMBUSER ]; then
+	SMBUSER=$1
+    elif [ -z $SMBPASS ]; then
+	SMBPASS=$1
+    else 
+	case $1 in
+	    rw)  FMASK=0666 ;;
+	    ro)  FMASK=0444 ;;
+	    rwx) FMASK=0777 ;;
+	esac
+    fi
+    shift ;;
+
+  esac
+done
+
+SMBPATH="//$CPUNAME/$SMBSHARE"
+#SMBPATH="//$CPUIP/$SMBSHARE"
+MNTPATH="/mnt/smb/"$CPUNAME"-"$SMBSHARE
+
+if [ "$DBG" == "yes" ]; then 
+    echo CPUIP  : $CPUIP
+    echo SMBPATH: $SMBPATH
+    echo MNTPATH: $MNTPATH
+    echo SMBUSER: $SMBUSER
+    echo SMBPASS: $SMBPASS
+    echo FMASK  : $FMASK
+fi
+
+case $CMD in
+    listshares)
+        smbclient -NL $CPUIP | grep -v "Called name not present" | grep -v "Remote IPC"
+        exit 0 ;;
+    unmount)
+	if [ -z $CPUNAME ]; then unmountall; exit 0; fi
+        umount $MNTPATH
+	if [ -d $MNTPATH ]; then rmdir $MNTPATH; fi
+	exit 0 ;;
+    *) 
+        ISMOUNTED=`mount|grep "$MNTPATH"`
+	if [ "$ISMOUNTED" != "" ]; then
+	    echo "Can't mount $SMBPATH: $MNTPATH is already in use."
+	exit 1
+	fi
+esac
+
+if [ ! -d $MNTPATH ]; then
+    echo making $MNTPATH
+    mkdir "$MNTPATH"
+fi
+
+
+MNTCMD="mount -t smbfs -o username=$SMBUSER,password=$SMBPASS,fmask=$FMASK $SMBPATH $MNTPATH"
+echo "running: $MNTCMD"
+$MNTCMD
+
+EXITCODE=$?
+if [ "$DBG" == "yes" ]; then echo exitcode: $EXITCODE; fi
+
+if [ "$EXITCODE" != "0" ]; then
+    rmdir $MNTPATH
+fi
+

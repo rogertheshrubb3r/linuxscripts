@@ -1,0 +1,113 @@
+#!/bin/sh 
+##!/bin/sh -e
+
+PROXY_FILE=~/.http_proxy
+
+# kidd: NOT working -- cannot export to parent environment
+
+#SYSCONFDIR='/etc/apache2'
+PROXY_LIST='/etc/local/proxy_list'
+
+list() {
+    if [ $name ]; then SEARCHFOR=$name; fi
+    if [ $SEARCHFOR ]; then grepfor="^$name"
+    else grepfor=""
+    fi
+    sort $CDDFILE | grep -i "$grepfor" | while read line;
+	do {
+#	    name=`echo $line|awk "{print $1}"`
+#	    patn=`echo $line|awk "{print $2}"`
+#	    if [ "$line" != "" ]; then 
+#		printf "%-25s %s\n" $name $path; 
+		printf "%-25s %s\n" `echo $line|awk '{print $1" "$2}'`; 
+#	    fi
+#	    echo $line
+	}
+    done
+}
+
+delete() {
+    found=`cat $CDDFILE | grep "^$name\>" | wc -l`
+
+    if [ "$found" != "0" ]; then
+	echo found:	
+	cat $CDDFILE | grep "^$name\>"
+
+	cat $CDDFILE|grep -v "^$name\>">$CDDFILE
+	echo "deleted shortcut <$name> from database."
+    else
+	echo "<$name> not found in database."
+    fi
+}
+
+usage () {
+HLP="
+cddadd -- add a quick change directory to ~/.cdd
+usage: $0 <shortname> <fullpath> [options]
+
+options:
+  -h     this help
+  -d     delete alias
+  -l     list aliases
+  -r     replace alias
+"
+    echo "$HLP"
+}
+
+for i in "$@"; do
+    case $i in
+    -h) usage; exit 0 ;;
+    -g) CDDFILE=/etc/.cdd ;;
+    -d) DELETE=yes ;;
+    -l) LIST=yes ;;
+    -r) REPLACE=yes ;;
+#    -f)
+#	ADDFIRST=yes
+#    ;;
+    *)
+	if [ -z $name ]; then
+	    name=$i
+	else
+	    path=$i
+	fi
+    ;;
+    esac
+done;
+
+
+
+if [ -z $name ] && [ -z $path ]; then LIST=yes; fi
+# also call list if called as "cdl" from command line
+if [ `echo $0|grep "/cdl\$"|wc -l` == "1" ]; then LIST=yes; fi
+# list shortcut[s]
+if [ "$LIST" == "yes" ]; then
+    echo listing shortcuts from $CDDFILE:
+    list
+    exit 0
+fi
+if [ $name ] && [ "$DELETE" == "yes" ]; then
+    delete $name
+    exit 0
+fi
+if [ -z $path ]; then
+     path=`pwd`
+fi
+if [ -z $name ]; then
+    usage; exit 1
+fi
+
+EXISTS=`cat $CDDFILE|grep "^$name\>"|wc -l`
+if [ "$EXISTS" != "0" ] && [ "$REPLACE" != "yes" ] ; then
+    echo shortcut already in the database:
+    cat $CDDFILE|grep "^$name\>"
+    exit 1
+fi
+if [ $REPLACE ]; then
+    cat $CDDFILE|grep -v "^$name\>">$CDDFILE
+fi
+printf "%-25s %s\n" $name $path>>$CDDFILE
+echo "added shortcut: <$name> -> $path"
+
+#if [ $ADDFIRST ]; then
+#    echo "$name\t$path">>$CDDFILE
+#fi

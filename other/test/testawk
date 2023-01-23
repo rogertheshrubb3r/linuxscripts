@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export LC_NUMERIC=C
+awk '{x=$1; printf ("%.2f",x)} {printf ("|%s",$1)}'
+#awk '{ sum += $1 }; END { printf "%f", sum }'
+

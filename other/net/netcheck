@@ -1,0 +1,112 @@
+#!/bin/bash
+
+DBG=
+
+#[ $DBG ] && echo "hello world!"
+
+SHORT=1
+
+# response timeout (default 500 ?)
+#TIMEOUT=50	
+TIMEOUT=60
+# # of retries (default 3)
+RETRIES=1	
+DEF_INTERVAL=300
+
+DEFCMD=""
+
+# directories to check for config file -- in order
+HOSTSFILE=checkhosts
+DIRSTOCHECK="~ /etc/local /etc"
+
+#SINGLELINE=yes
+
+for i in $DIRSTOCHECK; do
+    if [ -f $i/$HOSTSFILE ]; then CONFFILE=$i/$HOSTSFILE; break
+    fi
+done
+
+[ $DBG ] && echo "using config: $CONFFILE"
+
+INTERVAL=$DEF_INTERVAL
+#if [ -z "$1" ]; then INTERVAL=$DEF_INTERVAL; else INTERVAL=$1; fi
+
+#echo "Network status (fping)"
+
+function shortstatus() {
+	[ $DBG ] && echo "printing short stats"
+
+	stat=`$EXECCMD | grep -v "Host Unreachable"`
+	alive=`echo "$stat" | grep "is alive" | awk '{print $1}'|sort`
+	unreachable=`echo "$stat"| grep "is unreachable" | awk '{print $1}'|sort`
+	if [ "$WHAT" != "down" ]; then
+	    echo "alive:"
+	    [ $SINGLELINE ] && echo $alive || echo "$alive"
+	[ $SINGLELINE ] || echo ""
+	fi
+	if [ "$WHAT" != "alive" ]; then
+	    echo "unreachable:"
+	    [ $SINGLELINE ] && echo $unreachable || echo "$unreachable"
+	fi
+}
+
+function usage() {
+HLP="
+usage: $0 [options]
+
+options:
+  -h		this help
+  -a		show hosts that are alive
+  -d		show hosts that are down
+  -f file	load config from file
+  -s		short [default]
+  -sl		short status, single line
+  -l		long status
+  -v		verbose
+  -vv		extra verbose
+  --debug	debug info
+"
+echo "$HLP"
+}
+
+#[ $2 ] && CONFFILE=$2
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a) WHAT=alive; shift ;;
+    -d|-u) WHAT=down; shift ;;
+    -f) if [ -z $2 ]; then echo "option requires a parameter"; usage; exit 1; else CONFFILE="$2"; shift 2; fi ;;
+    -l) SHORT=; shift ;;
+    -s) SHORT=1; shift ;;
+    -sl) SHORT=1; SINGLELINE=yes; shift ;;
+    -v) VRB=1; OPTS=-e; shift ;;
+    --debug) DBG=1; shift ;;
+    -h* | --h*  ) usage ; exit 0 ;;
+   * ) echo "Unknown option: $1"; usage; exit 1; shift ;;
+  esac
+done
+
+if [ -f $CONFFILE ]; then
+    DESTS=`cat $CONFFILE | grep -v "^#"`
+else
+    echo "can't load hosts from file: $CONFFILE"
+    exit 1
+fi
+
+[ $DBG ] && echo CONFFILE: $CONFFILE
+[ $DBG ] && echo DESTS   : $DESTS
+
+
+EXECCMD="fping $OPTS -r $RETRIES -t $TIMEOUT $DESTS"
+[ $DBG ] && echo "EXECCMD=$EXECCMD"
+
+if [ $SHORT ]; then 
+
+    shortstatus
+    exit 0
+fi
+
+[ "$WHAT" == "alive" ] && OPTS="$OPTS -a"
+[ "$WHAT" == "down" ] && OPTS="$OPTS -u"
+
+$EXECCMD 2>&1 | grep -v "Host Unreachable"

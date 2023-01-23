@@ -1,0 +1,139 @@
+#!/bin/sh
+
+DBG=1
+
+ALLSHARES="
+PC1=D
+PC2=D
+PC3=D
+PC4=D
+PC5=D
+PC6=D
+"
+
+function usage {
+    echo "usage: $0 <pc_name> [share_name|-v] [-u|<mode>]"
+    echo ""
+    echo "options:"
+    echo "  -v  view shares"
+    echo "  -u  unmount share"
+    echo ""
+    echo "modes:"
+    echo "  ro  mount readonly"
+    echo "  rw  mount read/write"
+    echo "  rwx mount read/write/exec"
+    echo "default mode is 0640"
+    echo ""
+    exit 1
+}
+
+function unmountall {
+MOUNTED=`mount|grep smbfs|awk '{ print $1 }'`
+SMBMOUNTS=`mount|grep smbfs|wc -l`
+MNTDIRS=`mount|grep smbfs|awk '{print $3}'`
+if [ "$SMBMOUNTS" != "0" ]; then
+    echo "Mounted SMB drives: $SMBMOUNTS; unmounting..."
+    mount|grep smbfs|awk '{print $1}'
+    umount `echo $MOUNTED`
+    for i in "$MNTDIRS"; do
+    [ $DBG ] && echo "removing dir: $i"
+    [ -d $i ] && rmdir $i
+    done
+else
+    echo "No SMB drives are currently mounted."
+fi
+}
+
+if [ -z $1 ]; then
+    echo "run $0 -h for help."
+#    echo ""
+    echo "mounted smb filesystems:"
+    mount|grep smbfs
+    echo ""
+    exit 0
+fi
+
+
+if [ $1 ]; then
+    case $1 in
+    -u)
+	unmountall
+	exit 0
+    ;;
+    esac
+fi
+
+if [ -z $2 ] || [ "$1" == "-h" ]; then
+    usage
+#elif [ -z $2 ]; then 
+#    usage
+fi
+
+CPUNAME=$1
+SMBSHARE=$2
+
+SMBUSER=Guest
+SMBPASS=
+
+FMASK=0644
+
+SMBPATH="//$CPUNAME/$SMBSHARE"
+MNTPATH="/mnt/smb/"$CPUNAME"-"$SMBSHARE
+
+if [ $1 ]; then
+    case $2 in
+    -v|-V|view)
+	smbclient -NL $SMBPATH
+	exit 0
+    ;;
+#    *)
+#	usage
+#    ;;
+    esac
+fi
+
+
+if [ $3 ]; then
+    case $3 in
+    -u)
+	umount $MNTPATH
+	if [ -d $MNTPATH ]; then rmdir $MNTPATH; fi
+	exit 0
+    ;;
+    rw)
+	FMASK=0666
+    ;;
+    ro)
+	FMASK=0444
+    ;;
+    rwx)
+	FMASK=0777
+    ;;
+    esac
+fi
+
+
+
+
+if [ $3 ]; then SMBUSER=$3; echo using user: $SMBUSER; fi
+if [ $4 ]; then SMBPASS=$4; fi
+
+if [ ! -d $MNTPATH ]; then
+    echo making $MNTPATH
+    mkdir "$MNTPATH"
+fi
+
+ISMOUNTED=`mount|grep "$MNTPATH"`
+if [ "$ISMOUNTED" ]; then
+    echo "Can't mount $SMBPATH: $MNTPATH is already in use."
+    exit 1
+fi
+
+MNTCMD="mount -t smbfs -o username=$SMBUSER,password=$SMBPASS,fmask=$FMASK $SMBPATH $MNTPATH"
+echo "running: $MNTCMD"
+$MNTCMD
+
+EXITCODE=$?
+#echo exitcode: $EXITCODE
+
+[ "$EXITCODE" != "0" ] && rmdir $MNTPATH

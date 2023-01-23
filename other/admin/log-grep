@@ -1,0 +1,21 @@
+#!/bin/sh
+
+. /root/bin/inc/functions.sh
+
+usage() {
+HLP="
+usage: $0 <log name> <expr>
+ex.: $0 mail login
+"
+echo "$HLP"
+}
+
+if [ -z $2 ]; then usage; exit 1; fi
+
+logname=$1
+logfiles=`ls -1 /var/log/$logname.*`
+
+grepm -e $2 $logfiles
+#catm $logfiles | grep $2
+
+

@@ -1,0 +1,7 @@
+#!//bin/sh
+
+pear config-set http_proxy `cat ~/.http_proxy`
+
+pear $@
+
+pear config-set http_proxy ''

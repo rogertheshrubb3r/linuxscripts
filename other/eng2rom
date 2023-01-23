@@ -1,0 +1,5 @@
+#!/bin/sh
+
+PAGER_PROG=/bin/cat
+
+dict -P$PAGER_PROG -d eng-rom $@

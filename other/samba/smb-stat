@@ -1,0 +1,111 @@
+#!/bin/sh
+
+SHORTSTAT=1
+SEP=" *** "
+
+usage() {
+HLP="
+show fileserver status
+usage: $0 [options]
+options:
+  -l		long status
+  -s		short status [default]
+  -h,--help	this help
+  -d,--debug	debug info
+"; echo "$HLP"
+[ $1 ] && exit $1
+}
+
+case "$1" in
+    -s) SHORTSTAT=1 ;;
+    -l) SHORTSTAT= ;;
+    -h|--help) usage 0 ;;
+    -d|--debug) DBG=1 ;;
+    *) SHORTSTAT=1 ;;
+esac
+
+if [ "$1" == "-s" ]; then SHORTSTAT=1; fi
+
+
+TMPFILE=`mktemp -t smb-stat.XXXXXX`  || TMPFILE=/tmp/smb-stat.tmp
+TMPFILE2=`mktemp -t smb-stat2.XXXXXX` || TMPFILE2=/tmp/smb-stat2.tmp
+
+#if [ -f $TMPFILE2 ]; then rm -f $TMPFILE2>/dev/null; fi
+
+# get PIDs
+smbstatus -S>$TMPFILE
+
+l=`cat $TMPFILE|wc -l`
+[ $DBG ] && echo "l=$l"
+[ $DBG ] && echo "SHORTSTAT=$SHORTSTAT"
+
+[ "$l" == "4" ] && echo "No files in use." && exit 0
+
+[ $DBG ] && echo "-- TMPFILE output --"
+[ $DBG ] && cat $TMPFILE
+
+while read LINE; do
+    MACHINE=`echo $LINE|awk '{print $3}'`
+    case $MACHINE in
+    "192.168.1.10" ) MACHINE="SERVER  ($MACHINE)" ;;
+    "192.168.1.21" | pc1 ) MACHINE="pc1-ALEXANDRU? 	($MACHINE)" ;;
+    "192.168.1.22" | pc2 ) MACHINE="pc2-EMIL   		($MACHINE)" ;;
+    "192.168.1.23" | pc3 ) MACHINE="pc3-MIHAELA 	($MACHINE)" ;;
+    "192.168.1.24" | pc4 ) MACHINE="pc4-BOGDAN		($MACHINE)" ;;
+    "192.168.1.25" | pc5 ) MACHINE="pc5-VALI		($MACHINE)" ;;
+    "192.168.1.26" | pc6 ) MACHINE="pc6-CATALIN		($MACHINE)" ;;
+    "192.168.1.27" | pc7 ) MACHINE="pc7-IUSTIN		($MACHINE)" ;;
+    "192.168.1.28" | pc8 ) MACHINE="pc8-MIRELA		($MACHINE)" ;;
+    esac
+    
+    PID=`echo $LINE|awk '{print $2}'`
+    if [ "$PID" != "" ]; then
+	printf "%-5s $SEP %s\n" $PID $MACHINE >>$TMPFILE2
+    fi
+done < $TMPFILE
+
+# translate PIDs
+smbstatus -L | awk '{
+gsub ("/home/fserver", ""); 
+gsub ("/proiecte", "");
+gsub("RDWR", "RW"); gsub("WRONLY", "W"); gsub("RDONLY", "R");
+gsub("DENY_WRITE","DENY_W"); gsub("DENY_READ","DENY_R"); gsub("DENY_NONE","DENY_N");
+gsub("EXCLUSIVE", "EX"); gsub("BATCH", "BA"); gsub("LEVEL_", "L_");
+
+gsub("NONE","NO"); gsub("DENY_W","DW"); gsub("DENY_R","DR"); gsub("DENY_N","DN");
+
+gsub("Mon "," [Lu ");
+gsub("Tue "," [Ma ");
+gsub("Wed "," [Mi ");
+gsub("Thu "," [Jo ");
+gsub("Fri "," [Vi ");
+gsub("Sat "," [Sa ");
+gsub("Sun "," [Du ");
+gsub(" 200.", "]");
+
+gsub(/^[ \t]+/,"");
+gsub(/[ \t]+$/,"");
+
+print $1" "$2" "$4" "$5" "$6" "$7" "$8" "$9" "$10" "$11" "$12" "$13" "$14" "$15}
+'>>$TMPFILE2
+#smbstatus -L >>$TMPFILE2
+#sort $TMPFILE2 | grep -v "DenyMode"|grep -v "$SEP machine"|grep -v "Locked files"|grep -v "files:">$TMPFILE
+#E="^\ *$"
+#[ $DBG ] && echo "E=$E"
+#sort $TMPFILE2 | grep -v "DenyMode"|grep -v "$SEP machine"|grep -v "Locked files"|grep -v "files:"|grep -v "$E">$TMPFILE
+sort $TMPFILE2 | grep -v "\(DenyMode\|$SEP machine\|Locked files\|files:\)"  >$TMPFILE 
+if [ $SHORTSTAT ]; then
+    [ $DBG ] && echo "Printing short status:"
+    cat $TMPFILE | uniq | awk '
+    gsub("/[*]/", "");
+    {printf "%-2s %-5s %-2s %s %s %s %s %s %s %s %s %s %s %s\n", $2,$4,$3,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15}
+    ' | grep -v "^\(\*\*\*\)\?\ *\$"
+else
+    [ $DBG ] && echo "Printing status:"
+    cat $TMPFILE | awk '
+    gsub("/[*]/", "");
+    {printf "%-5s %-5s %-2s %s %s %s %s %s %s %s %s %s %s %s\n", $2,$4,$3,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15}
+    ' | grep -v "^\(\*\*\*\)\?\ *\$"
+fi
+
+rm -f $TMPFILE $TMPFILE2>/dev/null

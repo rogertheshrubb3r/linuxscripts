@@ -1,0 +1,52 @@
+#!/bin/sh
+
+DBG=
+
+catm () {
+# cat/zcat/bzcat multiple files
+#local TMPFILE=/tmp/catm.tmp
+local TMPFILE=`mktemp -t catm.XXXXXX`  || local TMPFILE=/tmp/catm.tmp
+
+#sortby=n # default is unsorted -- see "man ls"
+
+# parse options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -d | --debug ) DBG=1; shift ;; # enable debug
+    -t | --time | --time-asc ) sortby="tr"; shift ;; # by time
+    -tr | --time-desc ) sortby="t"; shift ;; # by time, newest first
+    -n | --name ) sortby=""; shift ;; # by name -- should be default
+    -s | --size ) sortby="S"; shift ;; # by size
+    -x | --extension ) sortby="X"; shift ;; # by ext
+   * ) 
+    args="$args $1"; shift ;;
+#   * ) echo "Invalid option: $1" ; HELP=yes; break ;;
+  esac
+done
+
+  echo>$TMPFILE
+  for f in "$args"; do allfiles="$allfiles $f"; done
+  filelist=`ls -1 -$sortby $allfiles` # list of files
+
+  for i in $filelist; do
+    [ $DBG ] && echo "processing: $i"
+    isGZ=`echo $i | grep '.gz$' | wc -l`
+    [ $DBG ] && echo "i=$i; isGZ: $isGZ"
+    if [ "$isGZ" != "0" ]; then
+        zcat $i	>> $TMPFILE
+    else
+        isBZ=`echo $i | grep '.bz2$' | wc -l`	
+        if [ "$isBZ" != "0" ]; then
+	    bzcat $i	>> $TMPFILE
+        else
+	    cat $i	>> $TMPFILE
+	fi
+    fi
+  done;
+  cat $TMPFILE
+  rm $TMPFILE
+}
+
+#catm -s b.gz a b.gz
+catm -n "$@"
+

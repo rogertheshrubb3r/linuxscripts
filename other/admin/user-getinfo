@@ -1,0 +1,29 @@
+#!/bin/sh
+
+PASSWD_FILE=/etc/passwd
+
+usage() {
+HLP="
+usage: $0 [-s] <user>
+gets user info (gid, etc) from $PASSWD_FILE
+
+options:
+  -s <match>	list users matching <match>
+
+"
+echo "$HLP"
+}
+
+if [ -z $1 ]; then usage; exit 1; fi
+
+if [ "$1" == "-s" ]; then
+# search user
+    u=$2
+    grep ".*$u.*:.*:" "$PASSWD_FILE"|awk -F: '{print "user  : "$1}'
+    exit 0
+fi
+
+
+
+u=$1
+grep "^$u:" "$PASSWD_FILE"|awk -F: '{print "user  : "$1"\nuid   : "$3"\ngid   : "$4"\nhome  : "$6"\nshell : "$7}'

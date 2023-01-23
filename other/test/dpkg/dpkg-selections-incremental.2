@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# test multiple diff/patch: apply a series of patches to a base file to get last version
+
+FILEDIR=/root/installed-packages
+
+basefile=$FILEDIR/`ls -t1 $FILEDIR | tail -n1` # oldest file
+newfile=$FILEDIR/packages-`date +%Y%m%d`.diff.gz
+
+tmpfile=/tmp/debian-selections.tmp
+
+if [ -f $newfile ]; then
+    echo "A diff file with current date already exists. try again tomorrow!"
+    exit 1
+fi
+
+echo "basefile: $basefile"
+
+zcat $basefile > $tmpfile.old
+
+for i in `ls $FILEDIR/*.diff.gz`; do 
+# IMPORTANT: name order should be the same as date order!! 
+# (dates should be in the format yyyy-mm-dd)
+    echo "applying patch: $i"
+    zcat $i | patch $tmpfile.old
+done
+
+dpkg --get-selections >$tmpfile.new
+diff $tmpfile.old $tmpfile.new >$tmpfile.diff
+#echo "exit code: $?"
+if [ "$?" == "0" ]; then
+    echo "No packages installed/upgraded/modified/removed since the last list update."
+    exit 0
+fi
+echo "some packages were installed/upgraded/modified/removed since the last list update."
+echo -n "writing changes to $newfile..."
+cat $tmpfile.diff | gzip > $newfile
+# remove temporary files
+rm $tmpfile.old $tmpfile.new $tmpfile.diff
+echo "done."
+echo ""
+
+echo "listing changes:"
+
+zcat $newfile | while read line; do
+    type=`echo $line | awk '{print $1}'`; package=`echo $line | awk '{print $2}'`; status=`echo $line | awk '{print $3}'`
+    if [ "$type" == ">" ]; then # package installed
+	echo "  $package (previous status: $status)" >> $tmpfile.installed
+    elif [ "$type" == "<" ]; then # package deleted
+	echo "  $package (previous status: $status)" >> $tmpfile.removed
+    fi
+done
+
+echo "Removed packages: "`wc -l $tmpfile.removed`
+cat $tmpfile.removed
+
+echo "Installed packages: "`wc -l $tmpfile.installed`
+cat $tmpfile.installed
+echo ""
+
+rm $tmpfile.removed $tmpfile.installed

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+locations="bitnami boot etc home opt root usr var"
+excludes="/var/cache/apt/archives *.iso"
+
+for l in $locations; do
+
+tar czvf `hostname`-`date +%Y-%m-%d`-$l.tgz /$l --exclude="$excludes"
+
+done
+
+sudo apt list --installed>installed-packages.txt
+sudo dpkg-query -f '${binary:Package}\n' -W > packages_list.txt
+sudo dpkg-query -l>installed-packages-dpkg-query.txt
+sudo ls -lAR /|gzip>lslAR.gz
+

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+
+#anteater --filter-file=/var/log/mail.log --analyse-all --domain=oopyarhitectura.ro --filter-postfix
+cat $LOGFILES | anteater --analyse-all --domain=oopyarhitectura.ro --filter-postfix

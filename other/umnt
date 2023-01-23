@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# quick unmount
+umount /mnt/$@

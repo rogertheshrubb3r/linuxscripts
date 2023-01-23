@@ -1,0 +1,35 @@
+#!/bin/sh
+
+
+SEP=" *** "
+
+TMPFILE=/tmp/smb-stat.tmp
+TMPFILE2=/tmp/smb-stat2.tmp
+rm -f $TMPFILE2>/dev/null
+
+# get PIDs
+smbstatus -S>$TMPFILE
+
+while read LINE; do
+    MACHINE=`echo $LINE|awk '{print $3}'`
+    case $MACHINE in
+    "192.168.1.10" ) MACHINE="SERVER  ($MACHINE)" ;;
+    "192.168.1.21" | pc1 ) MACHINE="OCTAVIA ($MACHINE)" ;;
+    "192.168.1.22" | pc2 ) MACHINE="VALI    ($MACHINE)" ;;
+    "192.168.1.23" | pc3 ) MACHINE="BOGDAN  ($MACHINE)" ;;
+    "192.168.1.24" | pc4 ) MACHINE="MIRELA  ($MACHINE)" ;;
+    "192.168.1.25" | pc5 ) MACHINE="CATALIN ($MACHINE)" ;;
+    "192.168.1.26" | pc6 ) MACHINE="GABI    ($MACHINE)" ;;
+    esac
+    
+    PID=`echo $LINE|awk '{print $2}'`
+    if [ "$PID" != "" ]; then
+	printf "%-5s $SEP %s\n" $PID $MACHINE >>$TMPFILE2
+    fi
+done < $TMPFILE
+
+# translate PIDs
+smbstatus -L | awk '{gsub ("/home/fserver/", ""); print $1" "$2" "$4" "$5" "$6" "$7" "$8" "$9" "$10" "$11" "$12" "$13" "$14" "$15}'>>$TMPFILE2
+#smbstatus -L >>$TMPFILE2
+sort $TMPFILE2|grep -v "DenyMode"|grep -v "$SEP machine"|grep -v "Locked files"|grep -v "files:"
+rm -f $TMPFILE $TMPFILE2>/dev/null

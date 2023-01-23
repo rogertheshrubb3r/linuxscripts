@@ -1,0 +1,200 @@
+
+----< NDN ERROR LOG START >-----------------------------------------------------
+DATE:  1/20/2023 11:06:18a
+EXE : /usr/local/bin/NDN-L64/ndn
+VER : Necromancer's Dos Navigator LINUX64 mode
+ADD : v3.00.0008f 2022/12/26
+ERR : 01h (1)
+ADDR: 0000000000632BF7
+MSG : Operating system error
+OSD : 32 (189x53)
+FILE: $0000000000632BF7  EDITORSTOREUNDOINFO,  line 169 of MICROED/MICROED4.PAS
+MEM : 83 38 13 75 18 48 83 7D D0 00 74 11 48 8B 45 D0 (at CS:IP)
+MEMm: 000000007FFFFFFF
+MEMa: 000000007FFFFFFF
+
+$000000000052AACC  STOREUNDOINFO,  line 705 of MICROED/MICROED.PAS
+$000000000052AA70  ENDOPERATION,  line 700 of MICROED/MICROED.PAS
+$0000000000638A4E  EDITORHANDLEEVENT,  line 1381 of MICROED/MICROED6.PAS
+$000000000052B25D  HANDLEEVENT,  line 832 of MICROED/MICROED.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$00000000004335E5  HANDLEEVENT,  line 8782 of VIEWS.PAS
+$00000000005A34AA  HANDLEEVENT,  line 60 of HIDEVIEW.PAS
+$000000000043406C  MESSAGE,  line 9031 of VIEWS.PAS
+$0000000000638E59  CONVERTKEYCODETOCOMMAND,  line 359 of MICROED/MICROED6.PAS
+$0000000000635D22  EDITORHANDLEEVENT,  line 511 of MICROED/MICROED6.PAS
+$000000000052B25D  HANDLEEVENT,  line 832 of MICROED/MICROED.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$00000000004335E5  HANDLEEVENT,  line 8782 of VIEWS.PAS
+$00000000005A34AA  HANDLEEVENT,  line 60 of HIDEVIEW.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$000000000044F2D1  HANDLEEVENT,  line 784 of DNAPP.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$0000000000450E0D  HANDLEEVENT,  line 1316 of DNAPP.PAS
+$0000000000451DDA  HANDLEEVENT,  line 1957 of DNAPP.PAS
+$00000000005C46F2  HANDLEEVENT,  line 355 of MAIN3.PAS
+$00000000004315D7  EXECUTE,  line 7548 of VIEWS.PAS
+$0000000000451603  RUN,  line 1551 of DNAPP.PAS
+$0000000000484DE0  RUNMAINPROGRAM,  line 577 of MAIN.PAS
+$00000000004010F3  main,  line 30 of NDN.pas
+$00000000004019C2  _FPC_MAINCRTSTARTUP
+$0000000000000001 line 185 of RTL/OBJPAS/objpas.pp
+  =  File  Disk  Utilities  History  Panel  Manager  Options  Window  Import                                                                                                         11 06am 
+ษอ[2]อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ Edit - /usr/local/bin/currency อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ[][]อป
+บ  File  Edit  Search  Paragraph  Block  Misc  Options                                                                                                                                      
+บ#!/usr/bin/env bash                                                                                                                                                                        ฒ
+บ# Author: Alexander Epstein https://github.com/alexanderepstein                                                                                                                            ฒ
+บ# Expanded: Rohit Goswami https://github.com/HaoZeke                                                                                                                                       ฒ
+บ                                                                                                                                                                                           ฒ
+บunset base                                                                                                                                                                                 ฒ
+บunset exchangeTo                                                                                                                                                                           ฒ
+บcurrentVersion="1.23.0"                                                                                                                                                                    ฒ
+บunset configuredClient                                                                                                                                                                     ฒ
+บcurrencyCodes=(AUD BAM BGN BMD BND BRL CAD CHF CNY CZK DJF DKK                                                                                                                             ฒ
+บ  EUR GBP HKD HRK HUF IDR ISK ILS INR                                                                                                                                                      ฒ
+บ  JPY KRW MXN MYR NOK NZD PAB PHP PLN                                                                                                                                                      ฐ
+บ  RON RUB SEK SGD THB TRY USD ZAR)                                                                                                                                                         ฐ
+บ                                                                                                                                                                                           ฐ
+บ  ## This function determines which http get tool the system has installed and returns an error if there isnt one                                                                          ฐ
+บ  getConfiguredClient()                                                                                                                                                                    ฐ
+บ  {                                                                                                                                                                                        ฐ
+บ    if command -v curl &>/dev/null; then                                                                                                                                                   ฐ
+บ      configuredClient="curl"                                                                                                                                                              ฐ
+บ    elif command -v wget &>/dev/null; then                                                                                                                                                 ฐ
+บ      configuredClient="wget"                                                                                                                                                              ฐ
+บ    elif command -v http &>/dev/null; then                                                                                                                                                 ฐ
+บ      configuredClient="httpie"                                                                                                                                                            ฐ
+บ    elif command -v fetch &>/dev/null; then                                                                                                                                                ฐ
+บ      configuredClient="fetch"                                                                                                                                                             ฐ
+บ    else                                                                                                                                                                                   ฐ
+บ      echo "Error: This tool requires either curl, wget, httpie or fetch to be installed." >&2                                                                                             ฐ
+บ      return 1                                                                                                                                                                             ฐ
+บ    fi                                                                                                                                                                                     ฐ
+บ  }                                                                                                                                                                                        ฐ
+บ                                                                                                                                                                                           ฐ
+บ  peggedTo()                                                                                                                                                                               ฐ
+บ  {                                                                                                                                                                                        ฐ
+บ    case "$@" in                                                                                                                                                                           ฐ
+บ      BAM)  echo "EUR:1.95583" ;;                                                                                                                                                          ฐ
+บ      BMD)  echo "USD:1.0" ;;                                                                                                                                                              ฐ
+บ      BND)  echo "SGD:1.0" ;;                                                                                                                                                              ฐ
+บ      DJF)  echo "USD:177.721" ;;                                                                                                                                                          ฐ
+บ      PAB)  echo "USD:1.0" ;;                                                                                                                                                              ฐ
+บ      *)    echo "1" ;;                                                                                                                                                                    ฐ
+บ    esac                                                                                                                                                                                   ฐ
+บ  }                                                                                                                                                                                        ฐ
+บ                                                                                                                                                                                           ฐ
+บ  ## Allows to call the users configured client without if statements everywhere                                                                                                           ฐ
+บ  httpGet()                                                                                                                                                                                ฐ
+บ  {                                                                                                                                                                                        ฐ
+บ    case "$configuredClient" in                                                                                                                                                            ฐ
+บ      curl)  curl -A curl -s "$@" ;;                                                                                                                                                       
+ศอออ<--------->อออDOSออออ[032-20]ออLfออPH)อ2:2/321อฒฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฤู
+*1Help   2Save   3Open   4DrwLin 5Block  6Dupe   7Search 8Encode 9NexWin10Menu  11View  12ScrSav                                                                                             
+ NDN ณ                                                                                                                                                                                       
+
+----< NDN ERROR LOG END >-------------------------------------------------------
+
+----< NDN ERROR LOG START >-----------------------------------------------------
+DATE:  1/20/2023 11:40:10a
+EXE : /usr/local/bin/NDN-L64/ndn
+VER : Necromancer's Dos Navigator LINUX64 mode
+ADD : v3.00.0008f 2022/12/26
+ERR : 01h (1)
+ADDR: 0000000000632BF7
+MSG : Operating system error
+OSD : 32 (189x53)
+FILE: $0000000000632BF7  EDITORSTOREUNDOINFO,  line 169 of MICROED/MICROED4.PAS
+MEM : 83 38 13 75 18 48 83 7D D0 00 74 11 48 8B 45 D0 (at CS:IP)
+MEMm: 000000007FFFFFFF
+MEMa: 000000007FFFFFFF
+
+$000000000052AACC  STOREUNDOINFO,  line 705 of MICROED/MICROED.PAS
+$000000000052AA70  ENDOPERATION,  line 700 of MICROED/MICROED.PAS
+$0000000000638A4E  EDITORHANDLEEVENT,  line 1381 of MICROED/MICROED6.PAS
+$000000000052B25D  HANDLEEVENT,  line 832 of MICROED/MICROED.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$00000000004335E5  HANDLEEVENT,  line 8782 of VIEWS.PAS
+$00000000005A34AA  HANDLEEVENT,  line 60 of HIDEVIEW.PAS
+$000000000043406C  MESSAGE,  line 9031 of VIEWS.PAS
+$0000000000638E59  CONVERTKEYCODETOCOMMAND,  line 359 of MICROED/MICROED6.PAS
+$0000000000635D22  EDITORHANDLEEVENT,  line 511 of MICROED/MICROED6.PAS
+$000000000052B25D  HANDLEEVENT,  line 832 of MICROED/MICROED.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$00000000004335E5  HANDLEEVENT,  line 8782 of VIEWS.PAS
+$00000000005A34AA  HANDLEEVENT,  line 60 of HIDEVIEW.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$000000000044F2D1  HANDLEEVENT,  line 784 of DNAPP.PAS
+$0000000000432069  DOHANDLEEVENT,  line 8117 of VIEWS.PAS
+$0000000000431ECE  HANDLEEVENT,  line 8161 of VIEWS.PAS
+$0000000000450E0D  HANDLEEVENT,  line 1316 of DNAPP.PAS
+$0000000000451DDA  HANDLEEVENT,  line 1957 of DNAPP.PAS
+$00000000005C46F2  HANDLEEVENT,  line 355 of MAIN3.PAS
+$00000000004315D7  EXECUTE,  line 7548 of VIEWS.PAS
+$0000000000451603  RUN,  line 1551 of DNAPP.PAS
+$0000000000484DE0  RUNMAINPROGRAM,  line 577 of MAIN.PAS
+$00000000004010F3  main,  line 30 of NDN.pas
+$00000000004019C2  _FPC_MAINCRTSTARTUP
+$0000000000000001 line 185 of RTL/OBJPAS/objpas.pp
+  =  File  Disk  Utilities  History  Panel  Manager  Options  Window  Import                                                                                                         11 40am 
+ษอ[3]ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ Edit - /usr/local/bin/NDN-L64/ndn.hgl อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ[][]อป
+บ  File  Edit  Search  Paragraph  Block  Misc  Options                                                                                                                                      
+บEND                                                                                                                                                                                        ฐ
+บ                                                                                                                                                                                           ฐ
+บ;ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ                                                                                                              ฐ
+บ; FORTRAN !does not support tabs in files -> fixed format!                                                                                                                                 ฐ
+บ;ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ                                                                                                              ฐ
+บFILES *.F;*.FPP;*.FTN;*.FOR;*.I;*.F90;*.I90;*.F66;*.F77                                                                                                                                    ฐ
+บ  GeneralFLAGS 80                                                                                                                                                                          ฐ
+บ  StringFlags 192                                                                                                                                                                          ฐ
+บ  CommentStart c,C,*                                                                                                                                                                       ฐ
+บ  KeyWords1 function,parameter,data,program                                                                                                                                                ฐ
+บ  KeyWords2 true,false,not,and,or,eqv,neqv,lt,le,eq,ge,gt,ne                                                                                                                               ฐ
+บ  KeyWords2 if,goto,then,endif,elseif,else,do,continue,dowhile,enddo,cycle                                                                                                                 ฐ
+บ  KeyWords2 exit,return,end,mod,pause,print,read,stop                                                                                                                                      ฐ
+บ  KeyWords3 integer,real,double precision,complex,logical,character,record                                                                                                                 ฐ
+บ  KeyWords3 structure,dimension,                                                                                                                                                           ฐ
+บEND                                                                                                                                                                                        ฐ
+บ                                                                                                                                                                                           ฐ
+บ;ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ                                                                                                              ฐ
+บ; LISP (AutoCAD AutoLisp)                                                                                                                                                                  ฐ
+บ;ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ                                                                                                              ฐ
+บFILES *.LSP;*.MNL                                                                                                                                                                          ฐ
+บ  GeneralFlags 64                                                                                                                                                                          ฐ
+บ  StringFlags 33                                                                                                                                                                           ฐ
+บ  Comment ;| |;                                                                                                                                                                            ฐ
+บ  CommentString ;                                                                                                                                                                          ฐ
+บ  MultiLineComment 1                                                                                                                                                                       ฐ
+บ  RegKeyWords Color LightRed '                                                                                                                                                             ฐ
+บ  RegKeyWords Color LightCyan \(,\)                                                                                                                                                        ฐ
+บ  RegKeyWords Color LightMagenta \*[^\x20]*?[^\x20]\*                                                                                                                                      ฐ
+บ  RegKeyWords Color LightBlue vla-[^\x20\)]*                                                                                                                                               ฒ
+บ  KeyWords1 +,-,*,/,=,/=,<,<=,>,>=,~,1+,1-                                                                                                                                                 ฒ
+บ  KeyWords1 abs,acad_colordlg,acad_helpdlg,acad_strlsort,action_tile                                                                                                                       ฒ
+บ  KeyWords1 add_list,alert,alloc,and,angle,angtof,angtos,append,apply                                                                                                                      ฒ
+บ  KeyWords1 arx,arxload,arxunload,ascii,assoc,atan,atof,atoi,atom                                                                                                                          ฒ
+บ  KeyWords1 atoms-family,autoarxload,autoload,Boole,boundp,caddr,cadr                                                                                                                      ฒ
+บ  KeyWords1 car,cdr,chr,client_data_tile,close,command,cond,cons,cos                                                                                                                       ฐ
+บ  KeyWords1 cvunit,defun,defun-q,defun-q-list-ref,defun-q-list-set                                                                                                                         ฐ
+บ  KeyWords1 dictadd,dictnext,dictremove,dictrename,dictsearch                                                                                                                              ฐ
+บ  KeyWords1 dimx_tile,dimy_tile,distance,distof,done_dialog,end_image                                                                                                                      ฐ
+บ  KeyWords1 end_list,entdel,entget,entlast,entmake,entmakex,entmod                                                                                                                         ฐ
+บ  KeyWords1 entnext,entsel,entupd,eq,equal,*error*,eval,exit,exp,expand                                                                                                                    ฐ
+บ  KeyWords1 expt,fill_image,findfile,fix,float,foreach,function,gc,gcd                                                                                                                     ฐ
+บ  KeyWords1 get_attr,get_tile,getangle,getcfg,getcname,getcorner,getdist                                                                                                                   ฐ
+บ  KeyWords1 getenv,getfiled,getint,getkword,getorient,getpoint,getreal                                                                                                                     ฐ
+บ  KeyWords1 getstring,getvar,graphscr,grclear,grdraw,grread,grtext,grvecs                                                                                                                  ฐ
+บ  KeyWords1 handent,help,if,initdia,initget,inters,itoa,lambda,last                                                                                                                        ฐ
+บ  KeyWords1 layoutlist,length,list,listp,load,load_dialog,log,logand                                                                                                                       
+ศอออ<--------->อออDOSออออ[032-20]อCrLfอPH)อ1:1468/2009อฒฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฤู
+*1Help   2Save   3Open   4DrwLin 5Block  6Dupe   7Search 8Encode 9NexWin10Menu  11View  12ScrSav                                                                                             
+ NDN ณ                                                                                                                                                                                       
+
+----< NDN ERROR LOG END >-------------------------------------------------------

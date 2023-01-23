@@ -1,0 +1,12 @@
+#!/bin/sh
+
+MOUNTED=`mount|grep smbfs|awk '{ print $1 }'`
+SMBMOUNTS=`mount|grep smbfs|awk '{ print $1 }'|wc -l`
+
+if [ "$SMBMOUNTS" != "0" ]; then
+    echo "Mounted SMB drives: $SMBMOUNTS; unmounting..."
+    echo $MOUNTED
+umount `echo $MOUNTED`
+else
+    echo "No SMB drives are currently mounted."
+fi

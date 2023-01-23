@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#kidd
+# NOT very tested
+# NOT very secure
+
+#listformat="%p %c %a"
+
+HLP="
+usage: $0 <process_mask> [..]
+
+kills all processes with name matching <process_mask>
+Can be dangerous. Use with care.
+"
+
+if [ -z $@ ]; then
+    echo "$HLP"
+    exit 1
+else
+    echo ""
+    echo "matching process(es): *$@*"
+    echo ""
+    matches=`ps ax -o "%u %p %a" |grep -i "$@" | grep -v "ps ax -o " | grep -v "$0" | grep -v "grep -i $@"`
+    cnt=`echo "$matches" | wc -l`
+    echo "$matches"
+    if [ $cnt == "0" ]; then
+	echo "no matching process(es)."
+	exit 1
+    else
+	echo ""	
+	echo "found $cnt process(es)."
+	echo ""
+    fi
+    echo "WARNING: killing ALL processes named *$@*!!!"
+    echo "THIS CAN BE VERY DANGEROUS!"
+    echo ""
+    echo -n "Do you REALLY want to delete $cnt process(es) (yes/[no])?"
+    read answer; if [ -z $answer ]; then answer="no"; fi
+    if [ $answer == "yes" ]; then 
+        kill -9 `ps ax --no-headers -o "%p %c" | grep -i "$@" |  awk '{print $1}'`
+    else
+	echo "Aborted."
+	exit 2
+    fi
+fi

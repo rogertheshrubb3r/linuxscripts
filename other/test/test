@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "\$0: $0"| grep "/test$"|wc -l
+
+echo \#a>a
+
+#echo a >& a
+
+#cat $1|read abc
+#echo $abc

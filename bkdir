@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mkdir .bak; cp -prv * .bak

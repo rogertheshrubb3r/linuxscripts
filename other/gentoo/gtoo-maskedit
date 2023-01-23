@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ED=mcedit
+FILE=/etc/portage/package.mask
+
+$ED $FILE
+

@@ -1,0 +1,326 @@
+
+Some packages were installed/upgraded/modified/removed since the last list update.
+writing changes to /root/installed-packages/packages-20051101.diff.gz...done.
+
+------------------------------------------------------------
+List of hanges from 20050923 to 20051101:
+------------------------------------------------------------
+Removed/purged packages: 3
+pn  libmysqlclient <none>         (no description available)
+rc  telnet         0.17-29        The telnet client
+pn  zlib1g-dev     <none>         (no description available)
+---
+
+Installed/upgraded packages: 310
+ii  alien          8.52           install non-native packages with dpkg
+ii  anteater       0.4.5-2        MTA log analyser written 100 0n C++
+ii  apt-show-versi 0.08           lists available package versions with distri
+ii  apt-spy        3.1-13         writes a sources.list file based on bandwidt
+ii  apt-src        0.25.1         manage Debian source packages
+ii  aptconf        0.8-0.1        Debconf infrastructure for setting up apt so
+ii  ara-byte       1.0.9          CLI utility for searching the Debian package
+ii  autolog        0.40-6         Terminates connections for idle users
+ii  awstats        6.4-1          powerful and featureful web server log analy
+ii  bcrypt         1.1-2          Cross platform file encryption utility
+ii  bozohttpd      20030313-1     Bozotic HTTP server
+ii  ccrypt         1.7-7          secure encryption and decryption of files an
+ii  centericq      4.20.0-1sarge2 A text-mode multi-protocol instant messenger
+ii  centericq-comm 4.20.0-1sarge2 A text-mode multi-protocol instant messenger
+ii  checksecurity  2.0.7-6        basic system security checks
+ii  chmlib         0.35-6         library for dealing with Microsoft CHM forma
+ii  crack-common   5.0a-7         Password guessing program
+ii  crack-md5      5.0a-7         Password guessing program
+ii  curl           7.13.2-2       Get a file from an HTTP, HTTPS, FTP or GOPHE
+ii  debfoster      2.5-4          Install only wanted Debian packages
+ii  debian-goodies 0.23           Small toolbox-style utilities for Debian sys
+ii  debian-referen 1.08-3         Debian system administration guide, common e
+ii  debian-referen 1.08-3         Debian system administration guide, English 
+ii  deborphan      1.7.15         Find orphaned libraries
+ii  debsums        2.0.16         Verify installed package files against MD5 c
+ii  desktop-file-u 0.10-1         Utilities for .desktop files
+ii  dialog         1.0-20050306-1 Displays user-friendly dialog boxes from she
+ii  diffstat       1.39-1         produces graph of changes introduced by a di
+ii  doc-central    1.8.1          web-based documentation browser
+ii  dpsyco         1.0.29         Debian packages of system configurations
+ii  dpsyco-base    1.0.29         Base package for the debian packages of syst
+ii  dpsyco-lib     1.0.29         Libraries for the debian packages of system 
+ii  dpsyco-patch   1.0.29         Automatically patch the debian file-system
+ii  dpsyco-skel    1.0.29         Automatically install a add-on skeleton
+ii  dpsyco-sudo    1.0.29         Automate administration of sudo privileges
+ii  eruby          1.0.5-1        Embedded Ruby Language
+ii  fcrackzip      0.3-2          password cracker for zip archives
+ii  filetraq       0.2-11         Small utility to keep track of changes in co
+ii  fileutils      5.2.1-2        The GNU file management utilities (transitio
+ii  fnord          1.9-1          yet another small httpd
+ii  fontforge      0.0.20041218-0 Font Editor for PS, TrueType and OpenType fo
+ii  fontforge-doc  0.0.20041218-0 Font Editor for PS, TrueType and OpenType fo
+ii  fortune-mod    1.99.1-2       provides fortune cookies on demand
+ii  fortunes-debia 1.7            Debian Hints for fortune
+ii  gconf2         2.8.1-6        GNOME configuration database system. (daemon
+ii  glibc-doc      2.3.2.ds1-22   GNU C Library: Documentation
+ii  gnome-mime-dat 2.4.2-1        base MIME and Application database for GNOME
+ii  gnome-vfs-extf 1.0.5-5.2      The GNOME virtual file-system extra fs scrip
+ii  gotmail        0.8.2-3        utility to download email from a Hotmail or 
+ii  gpart          0.1h-4         Guess PC disk partition table, find lost par
+ii  gtodo          0.14-3         GNOME to-do list manager
+ii  harden         0.1.17         Makes your system hardened
+ii  harden-clients 0.1.17         Avoid clients that are known to be insecure
+ii  harden-doc     3.2.4          Useful documentation to secure a Debian syst
+ii  harden-environ 0.1.17         Hardened system environment
+ii  harden-nids    0.1.17         Harden a system by using a network intrusion
+ii  harden-servers 0.1.17         Avoid servers that are known to be insecure
+ii  harden-tools   0.1.17         Tools to enhance or analyze the security of 
+ii  hwinfo         8.38-3         Hardware identification system
+ii  ibackup        2.27-4         Automated backups (even remote) of machine c
+ii  ipsvd          0.11.0-2       Internet protocol service daemons
+ii  irb1.8         1.8.2-7sarge2  Interactive Ruby (for Ruby 1.8)
+ii  isoqlog        2.2-0.3        Mail Transport Agent log analysis program
+ii  jabber         1.4.3-3        Daemon for the jabber.org Open Source Instan
+ii  jabber-common  0.4            Jabber server and transport (common files)
+ii  jabber-jit     1.1.6-9        Jabber ICQ Transport
+ii  jabber-jud     0.5-3          Provides User Directory support for the Jabb
+ii  jabber-msn     1.2.1-1.3cvs4- Provides the MSN transport for the Jabber IM
+ii  jabber-muc     0.6.0-2        Multi User Chat module for the Jabber IM Ser
+ii  jabber-yahoo   2.3.2-1        Provides Yahoo messenger transport for Jabbe
+ii  java-common    0.22           Base of all Java packages
+ii  john           1.6-33         An active password cracking tool
+ii  lg-all         113            Install all Linux Gazette-issues at once
+ii  lg-base        113-1          Shared files for the Linux Gazette.
+ii  lg-issue01to08 6-1            Issues 1 to 8 of the Linux Gazette.
+ii  lg-issue09     5-1            Issue 9 of the Linux Gazette.
+ii  lg-issue10     7-1            Issue 10 of the Linux Gazette.
+ii  lg-issue100    1-1            Issue 100 of the Linux Gazette.
+ii  lg-issue101    1-1            Issue 101 of the Linux Gazette.
+ii  lg-issue102    1-1            Issue 102 of the Linux Gazette.
+ii  lg-issue103    1-1            Issue 103 of the Linux Gazette.
+ii  lg-issue104    1-1            Issue 104 of the Linux Gazette.
+ii  lg-issue105    1-1            Issue 105 of the Linux Gazette.
+ii  lg-issue106    1-1            Issue 106 of the Linux Gazette.
+ii  lg-issue107    1-1            Issue 107 of the Linux Gazette.
+ii  lg-issue108    1-1            Issue 108 of the Linux Gazette.
+ii  lg-issue109    1-1            Issue 109 of the Linux Gazette.
+ii  lg-issue11     6-1            Issue 11 of the Linux Gazette.
+ii  lg-issue110    1-1            Issue 110 of the Linux Gazette.
+ii  lg-issue111    1-1            Issue 111 of the Linux Gazette.
+ii  lg-issue112    1-1            Issue 112 of the Linux Gazette.
+ii  lg-issue113    1-1            Issue 113 of the Linux Gazette.
+ii  lg-issue12     5-1            Issue 12 of the Linux Gazette.
+ii  lg-issue13     5-1            Issue 13 of the Linux Gazette.
+ii  lg-issue14     5-1            Issue 14 of the Linux Gazette.
+ii  lg-issue15     5-1            Issue 15 of the Linux Gazette.
+ii  lg-issue16     5-1            Issue 16 of the Linux Gazette.
+ii  lg-issue17     6-1            Issue 17 of the Linux Gazette.
+ii  lg-issue18     6-1            Issue 18 of the Linux Gazette.
+ii  lg-issue19     5-1            Issue 19 of the Linux Gazette.
+ii  lg-issue20     5-1            Issue 20 of the Linux Gazette.
+ii  lg-issue21     6-1            Issue 21 of the Linux Gazette.
+ii  lg-issue22     7-1            Issue 22 of the Linux Gazette.
+ii  lg-issue23     6-1            Issue 23 of the Linux Gazette.
+ii  lg-issue24     5-1            Issue 24 of the Linux Gazette.
+ii  lg-issue25     6-1            Issue 25 of the Linux Gazette.
+ii  lg-issue26     7-1            Issue 26 of the Linux Gazette.
+ii  lg-issue27     6-1            Issue 27 of the Linux Gazette.
+ii  lg-issue28     5-1            Issue 28 of the Linux Gazette.
+ii  lg-issue29     4-1            Issue 29 of the Linux Gazette.
+ii  lg-issue30     5-1            Issue 30 of the Linux Gazette.
+ii  lg-issue31     5-1            Issue 31 of the Linux Gazette.
+ii  lg-issue32     4-1            Issue 32 of the Linux Gazette.
+ii  lg-issue33     4-1            Issue 33 of the Linux Gazette.
+ii  lg-issue34     3-1            Issue 34 of the Linux Gazette.
+ii  lg-issue35     3-1            Issue 35 of the Linux Gazette.
+ii  lg-issue36     3-1            Issue 36 of the Linux Gazette.
+ii  lg-issue37     3-1            Issue 37 of the Linux Gazette.
+ii  lg-issue38     2-1            Issue 38 of the Linux Gazette.
+ii  lg-issue39     3-1            Issue 39 of the Linux Gazette.
+ii  lg-issue40     2-1            Issue 40 of the Linux Gazette.
+ii  lg-issue41     3-1            Issue 41 of the Linux Gazette.
+ii  lg-issue42     3-1            Issue 42 of the Linux Gazette.
+ii  lg-issue43     3-1            Issue 43 of the Linux Gazette.
+ii  lg-issue44     3-1            Issue 44 of the Linux Gazette.
+ii  lg-issue45     3-1            Issue 45 of the Linux Gazette.
+ii  lg-issue46     4-1            Issue 46 of the Linux Gazette.
+ii  lg-issue47     3-1            Issue 47 of the Linux Gazette.
+ii  lg-issue48     2-1            Issue 48 of the Linux Gazette.
+ii  lg-issue49     2-1            Issue 49 of the Linux Gazette.
+ii  lg-issue50     2-1            Issue 50 of the Linux Gazette.
+ii  lg-issue51     2-1            Issue 51 of the Linux Gazette.
+ii  lg-issue52     2-1            Issue 52 of the Linux Gazette.
+ii  lg-issue53     2-1            Issue 53 of the Linux Gazette.
+ii  lg-issue54     2-1            Issue 54 of the Linux Gazette.
+ii  lg-issue55     2-1            Issue 55 of the Linux Gazette.
+ii  lg-issue56     2-1            Issue 56 of the Linux Gazette.
+ii  lg-issue57     2-1            Issue 57 of the Linux Gazette.
+ii  lg-issue58     2-1            Issue 58 of the Linux Gazette.
+ii  lg-issue59     2-1            Issue 59 of the Linux Gazette.
+ii  lg-issue60     2-1            Issue 60 of the Linux Gazette.
+ii  lg-issue61     2-1            Issue 61 of the Linux Gazette.
+ii  lg-issue62     2-1            Issue 62 of the Linux Gazette.
+ii  lg-issue63     2-1            Issue 63 of the Linux Gazette.
+ii  lg-issue64     3-1            Issue 64 of the Linux Gazette.
+ii  lg-issue65     2-1            Issue 65 of the Linux Gazette.
+ii  lg-issue66     3-1            Issue 66 of the Linux Gazette.
+ii  lg-issue67     4-1            Issue 67 of the Linux Gazette.
+ii  lg-issue68     2-1            Issue 68 of the Linux Gazette.
+ii  lg-issue69     2-1            Issue 69 of the Linux Gazette.
+ii  lg-issue70     2-1            Issue 70 of the Linux Gazette.
+ii  lg-issue71     2-1            Issue 71 of the Linux Gazette.
+ii  lg-issue72     2-1            Issue 72 of the Linux Gazette.
+ii  lg-issue73     2-1            Issue 73 of the Linux Gazette.
+ii  lg-issue74     2-1            Issue 74 of the Linux Gazette.
+ii  lg-issue75     2-1            Issue 75 of the Linux Gazette.
+ii  lg-issue76     2-1            Issue 76 of the Linux Gazette.
+ii  lg-issue77     2-1            Issue 77 of the Linux Gazette.
+ii  lg-issue78     2-1            Issue 78 of the Linux Gazette.
+ii  lg-issue79     2-1            Issue 79 of the Linux Gazette.
+ii  lg-issue80     2-1            Issue 80 of the Linux Gazette.
+ii  lg-issue81     2-1            Issue 81 of the Linux Gazette.
+ii  lg-issue82     2-1            Issue 82 of the Linux Gazette.
+ii  lg-issue83     2-1            Issue 83 of the Linux Gazette.
+ii  lg-issue84     2-1            Issue 84 of the Linux Gazette.
+ii  lg-issue85     1-1            Issue 85 of the Linux Gazette.
+ii  lg-issue86     1-1            Issue 86 of the Linux Gazette.
+ii  lg-issue87     1-2            Issue 87 of the Linux Gazette.
+ii  lg-issue88     1-1            Issue 88 of the Linux Gazette.
+ii  lg-issue89     1-1            Issue 89 of the Linux Gazette.
+ii  lg-issue90     1-1            Issue 90 of the Linux Gazette.
+ii  lg-issue91     1-2            Issue 91 of the Linux Gazette.
+ii  lg-issue92     1-1            Issue 92 of the Linux Gazette.
+ii  lg-issue93     1-1            Issue 93 of the Linux Gazette.
+ii  lg-issue94     1-1            Issue 94 of the Linux Gazette.
+ii  lg-issue95     1-1            Issue 95 of the Linux Gazette.
+ii  lg-issue96     2-1            Issue 96 of the Linux Gazette.
+ii  lg-issue97     2-1            Issue 97 of the Linux Gazette.
+ii  lg-issue98     1-1            Issue 98 of the Linux Gazette.
+ii  lg-issue99     1-1            Issue 99 of the Linux Gazette.
+ii  libatk1.0-0    1.8.0-4        The ATK accessibility toolkit
+ii  libaudio2      1.7-2          The Network Audio System (NAS). (shared libr
+ii  libbonobo2-0   2.8.1-2        Bonobo CORBA interfaces library
+ii  libbonobo2-com 2.8.1-2        Bonobo CORBA interfaces library -- support f
+ii  liberuby       1.0.5-1        Library for eruby
+ii  libfam0c102    2.7.0-6        client library to control the FAM daemon
+ii  libgconf2-4    2.8.1-6        GNOME configuration database system librarie
+ii  libglib1.2     1.2.10-9       The GLib library of C routines
+ii  libgnomevfs2-0 2.8.4-4        The GNOME virtual file-system library (runti
+ii  libgnomevfs2-c 2.8.4-4        The GNOME virtual file-system library (commo
+ii  libgpgme11     1.0.2-1        GPGME - GnuPG Made Easy
+ii  libgtk1.2      1.2.10-17      The GIMP Toolkit set of widgets for X
+ii  libgtk1.2-comm 1.2.10-17      Common files for the GTK+ library
+ii  libgtk2.0-0    2.6.4-3        The GTK+ graphical user interface library
+ii  libgtk2.0-bin  2.6.4-3        The programs for the GTK+ graphical user int
+ii  libgtk2.0-comm 2.6.4-3        Common files for the GTK+ graphical user int
+ii  libidl0        0.8.5-1        library for parsing CORBA IDL files
+ii  libio-socket-i 2.51-1         Object interface for AF_INET6 domain sockets
+ii  libltdl3-dev   1.5.6-6        A system independent dlopen wrapper for GNU 
+ii  libmad0        0.15.1b-1.1    MPEG audio decoder library
+ii  libmatrixssl1. 1.2.5-1        small SSL library optimized for embedded sys
+ii  libmng1        1.0.8-1        Multiple-image Network Graphics library
+ii  libmysqlclient 5.0.15-0.dotde mysql database client library
+ii  libnet-xwhois- 0.90-1         Whois Client Interface for Perl5
+ii  libnet1        1.1.2.1-2      library for the construction and handling of
+ii  libogg0        1.1.2-1        Ogg Bitstream Library
+ii  liborbit2      2.12.2-1       libraries for ORBit2 - a CORBA ORB
+ii  libpango1.0-0  1.8.1-1        Layout and rendering of internationalized te
+ii  libpango1.0-co 1.8.1-1        Modules and configuration files for the Pang
+ii  libpcap0.8     0.8.3-5        System interface for user-level packet captu
+ii  libphp-adodb   4.52-1         The 'adodb' database abstraction layer for p
+ii  libpng10-0     1.0.18-1       PNG library, older version - runtime
+ii  libpth2        2.0.1-2        The GNU Portable Threads
+ii  libqt3c102-mt  3.3.4-3        Qt GUI Library (Threaded runtime version), V
+ii  libreadline-ru 1.8.2-7sarge2  Readline interface for Ruby 1.8
+ii  libruby1.8     1.8.2-7sarge2  Libraries necessary to run Ruby 1.8
+ii  libsensors3    2.9.1-1sarge2  library to read temperature/voltage/fan sens
+ii  libsmbclient   3.0.14a-3      shared library that allows applications to t
+ii  libsnmp-sessio 1.07-1         Perl support for accessing SNMP-aware device
+ii  libsnmp5       5.1.2-6.2      NET SNMP (Simple Network Management Protocol
+ii  libsocket6-per 0.17-1         Perl extensions for IPv6
+ii  libtool        1.5.6-6        Generic library support script
+ii  libungif4g     4.1.3-2        shared library for GIF images (runtime lib)
+ii  libvorbis0a    1.1.0-1        The Vorbis General Audio Compression Codec
+ii  libvorbisenc2  1.1.0-1        The Vorbis General Audio Compression Codec
+ii  libvorbisfile3 1.1.0-1        The Vorbis General Audio Compression Codec
+ii  libwxgtk2.4    2.4.3.1        wxWindows Cross-platform C++ GUI toolkit (GT
+ii  libxaw7        4.3.0.dfsg.1-1 X Athena widget set library
+ii  libxcursor1    1.1.3-1        X cursor management library
+ii  libxml-grove-p 0.46alpha-11   Perl module for accessing parsed *ML instanc
+ii  libxml-perl    0.08-1         Perl modules for working with XML
+ii  libxv1         4.3.0.dfsg.1-1 X Window System video extension library
+ii  lintian        1.23.8         Debian package checker
+ii  lockfile-progs 0.1.10         Programs for locking and unlocking files and
+ii  logcheck       1.2.39         Mails anomalies in the system logfiles to th
+ii  logcheck-datab 1.2.39         A database of system log rules for the use o
+ii  logtail        1.2.39         Print log file lines that have not been read
+ii  lsb-base       2.0-7          Linux Standard Base 2.0 init script function
+ii  madison-lite   0.3            display versions of Debian packages in an ar
+ii  maint-guide    1.2.6          Debian New Maintainers' Guide
+ii  mcrypt         2.6.4-3        Replacement for old unix crypt(1)
+ii  mrtg           2.10.13-1.2    multi router traffic grapher
+ii  mrtg-contrib   2.10.13-1.2    multi router traffic grapher (contributed fi
+ii  mrtg-ping-prob 2.1.0-1        Ping module for Multi Router Traffic Grapher
+ii  mrtgutils      0.5            Utilities to generate statistics for mrtg
+ii  mrxvt          0.4.0-3        lightweight multi-tabbed X terminal emulator
+ii  mrxvt-common   0.4.0-3        lightweight multi-tabbed X terminal emulator
+ii  nail           11.22-1        feature-rich BSD mail(1)
+ii  netsaint-plugi 1.2.9.4-18.1   check_fping plugin for NetSaint
+ii  netsaint-plugi 1.2.9.4-18.1   check_mysql plugin for NetSaint
+ii  netsaint-plugi 1.2.9.4-18.1   check_smb plugin for NetSaint
+ii  netselect      0.3.ds1-4      Choose the fastest server automatically
+ii  netselect-apt  0.3.ds1-4      Choose the fastest Debian mirror with netsel
+ii  netstat-nat    1.4.5-2        A tool that display NAT connections
+ii  netwox         5.30.0-2       networking utilities
+ii  nload          0.6.0-2        A realtime console network usage monitor
+ii  ntop           3.0-5          display network usage in top-like format
+ii  ocaml-base-nox 3.08.3-3       Runtime system for ocaml bytecode executable
+ii  oinkmaster     1.2-1          Snort rules manager
+ii  php4-pgsql     4.3.10-4       PostgreSQL module for php4
+ii  polipo         0.9.8-1        caching web proxy
+ii  pterm          0.58-1         PuTTY terminal emulator
+ii  quota          3.12-6         implementation of the disk quota system
+ii  quotatool      1.4.7-1        tool to edit disk quotas from the command li
+ii  rcconf         1.12           Debian Runlevel configuration tool
+ii  rdesktop       1.4.0-2        RDP client for Windows NT/2000 Terminal Serv
+ii  rdoc1.8        1.8.2-7sarge2  Generate documentation from Ruby source file
+ii  regexplorer    0.1.6-12       A visual regular expression explorer
+ii  ri1.8          1.8.2-7sarge2  Ruby Interactive reference (for Ruby 1.8)
+ii  ruby           1.8.2-1        An interpreter of object-oriented scripting 
+ii  ruby-manual    1.4.6-2        Manual for the scripting language Ruby.
+ii  ruby1.8        1.8.2-7sarge2  Interpreter of object-oriented scripting lan
+ii  ruby1.8-exampl 1.8.2-7sarge2  Examples for Ruby 1.8
+ii  rxvt           2.6.4-6.2      VT102 terminal emulator for the X Window Sys
+ii  sash           3.7-5          Stand-alone shell
+ii  shared-mime-in 0.16-3         FreeDesktop.org shared MIME database and spe
+ii  shfs-module-2. 0.35-2+2.6.8-1 (secure) SHell File System mount programs
+ii  shfs-source    0.35-2         (secure) SHell File System module source
+ii  shfs-utils     0.35-2         (secure) SHell File System mount programs
+ii  snmpd          5.1.2-6.2      NET SNMP (Simple Network Management Protocol
+ii  snort          2.3.2-3        Flexible Network Intrusion Detection System
+ii  snort-common   2.3.2-3        Flexible Network Intrusion Detection System 
+ii  snort-doc      2.3.2-3        Documentation for the Snort IDS [documentati
+ii  snort-rules-de 2.3.2-3        Flexible Network Intrusion Detection System 
+ii  sox            12.17.7-2      A universal sound sample translator
+ii  ssh-askpass    1.2.4.1-3      under X, asks user for a passphrase for ssh-
+ii  sudo           1.6.8p7-1.2    Provide limited super user privileges to spe
+ii  swish++        5.15.3-3       Simple Document Indexing System for Humans: 
+ii  sysstat        5.0.6-5        sar, iostat and mpstat - system performance 
+ii  systraq        0.0.20050213-4 monitor your system and warn when system fil
+ii  sysv-rc-conf   0.98-3         SysV init runlevel configuration tool for th
+ii  sysvconfig     0.10           A text menu based utility for configuring in
+rc  telnet         0.17-29        The telnet client
+ii  telnet-ssl     0.17.24+0.1-7. The telnet client with SSL encryption suppor
+ii  thttpd         2.23beta1-3    tiny/turbo/throttling HTTP server
+ii  thttpd-util    2.23beta1-3    Support utilities for thttpd
+ii  thy            0.9.4-1        A tiny and fast http daemon
+ii  thy-auth       0.3.0-1        Authenticators for the Thy http daemon
+ii  tiger          3.2.1-24       Report system security vulnerabilities
+ii  time           1.7-21         The GNU time program for measuring cpu resou
+ii  timeout        1.11-6.1       Run a command with a time limit.
+ii  xbase-clients  4.3.0.dfsg.1-1 miscellaneous X clients
+ii  xchm           0.9.7-2        Compiled HTML Help (CHM) file viewer for X
+ii  xlibmesa-gl    4.3.0.dfsg.1-1 Mesa 3D graphics library [XFree86]
+ii  xlibmesa-glu   4.3.0.dfsg.1-1 Mesa OpenGL utility library [XFree86]
+ii  xrsh           5.92-4         remote execution of XWindow programs
+ii  xvt            2.1-18         X terminal-emulator similar to xterm, but sm
+ii  xzoom          0.3-16         magnify part of X display, with real-time up
+ii  yada           0.34           Yet Another Debianisation Aid
+ii  yada-doc       0.34           Yet Another Debianisation Aid - documentatio
+---
+

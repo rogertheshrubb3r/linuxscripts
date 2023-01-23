@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "cpu: "`ps -eao "pcpu" | awk '{a+=$1} END {print a}'`% 
+echo "mem: "`ps -eao "pmem" | awk '{a+=$1} END {print a}'`%
+
+if [ ]; then
+pslist=`ps axuw`
+ps axuw|sort -r -k3|head -n6
+
+fi

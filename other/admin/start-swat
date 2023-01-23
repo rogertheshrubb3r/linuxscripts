@@ -1,0 +1,3 @@
+#!/bin/sh
+
+stunnel -p /usr/local/ssl/intern.pem -d 901 -l /usr/sbin/swat swat

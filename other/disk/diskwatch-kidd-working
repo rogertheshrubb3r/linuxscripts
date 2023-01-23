@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#kidd -- adapted from http://www.debian-administration.org/articles/143
+
+mailfrom=root
+mailto=root
+
+noticelimit=80
+warnlimit=90
+fulllimit=100
+
+toskip="none"
+
+systemname=`hostname --fqdn`
+
+msg_notice="NOTICE"
+msg_warning="WARNING"
+msg_diskfull="DISK FULL"
+
+warn=""
+
+#for line in `df -aPh | grep "^/" | sort | awk '{print $6":"$5":"$4}'`; do
+for line in `df -aPh | grep "^/" | sort`; do
+    echo "hello world - $line";
+    partition=`echo "$line" | awk '{print1}' | cut -d % -f 1`
+    spacetotal=`echo "$line" | awk '{print$2}' | cut -d % -f 1`    
+    spaceused=`echo "$line" | awk '{print$3}' | cut -d % -f 1`
+    spaceleft=`echo "$line" | awk '{print$4}' | cut -d % -f 1`
+    percent=`echo "$line" | awk '{print$5}' | cut -d % -f 1`
+    echo "$partition $spacetotal $spaceused $spaceleft $percent"
+
+# skip selected partitions
+    for part in $toskip; do
+	if [ "$partition" == "$part" ]; then
+#	    echo "skipping $partition"
+	    limit=101
+	    break
+	else limit=$noticelimit
+	fi
+#	echo $partition: $limit $cnt
+    done
+
+    if [ $percent -ge $fulllimit ]; then # disk full
+	warn="$msg_warning: $msg_diskfull"
+    elif [ $percent -ge $warnlimit ]; then # disk nearly full
+	warn="$msg_warning:"
+    elif [ $percent -ge $noticelimit ]; then # send mail notice
+	warn="$msg_notice:"
+    else
+	warn=""
+    fi
+    
+    if [ "$warn" != "" ]; then
+        mailsubj="$warn [$systemname] $partition at $percent% ($spaceleft left)"
+        mailbody="$warn [$systemname] $partition is $percent% full ($spaceleft left)"
+        echo "$mailbody" | mail -a "From: $mailfrom" -s "$mailsubj" $mailto    
+    fi
+done

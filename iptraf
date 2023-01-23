@@ -1,0 +1,8 @@
+#!/bin/sh
+
+IFACE=eth0
+
+echo starting iptraf for $IFACE ...
+[ $@ ] && echo additional options: $@
+#sleep 10
+/usr/sbin/iptraf -i $IFACE $@

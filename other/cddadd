@@ -1,0 +1,212 @@
+#!/bin/sh
+
+## TODO: make use of functions
+# kidd, Wed Nov 23 08:21:03 2005
+
+CDDFILE=~/.cdd
+CDDFILE_GLOBAL=/etc/cdd
+# debug output
+DBG=
+# verbose output
+VRB=
+SORTBY=name
+# pretty output (equal spaces)
+PRETTY=
+
+TMPFILE=`mktemp -t cda.XXXXXX` || TMPFILE=/tmp/cdd.tmp
+
+function basename() {
+  local name="${1##*/}"
+  echo "${name%$2}"
+}
+
+cdd_list() {
+### usage: cdd_list [GREPFOR] [GREPWHERE**
+#    local sname spath GREPWHERE
+    if [ $sname ]; then
+    case $GREPWHERE in
+        path) GREPFOR=".*$sname.*" ;;
+        line) GREPFOR="$sname" ;;
+#       *) GREPFOR="^$sname"; GREPWHERE=name ;;
+        *) GREPFOR="$sname"; GREPWHERE=name ;;
+    esac
+    else GREPFOR=""
+    fi
+#    if [ $SEARCHFOR ]; then GREPFOR="^$sname"
+#    fi
+#    sort $CDDFILE | grep -i "$GREPFOR" | while read line;
+    [ $DBG ] && echo -e "GREPFOR: $GREPFOR; GREPWHERE: $GREPWHERE"
+
+    if [ $VRB ]; then
+        echo -n "[$CDDFILE] listing directory shortcuts"
+        if [ "$GREPFOR" != "" ]; then echo " matching \"$GREPFOR\" in $GREPWHERE:"; 
+        else echo ":"
+        fi
+    fi
+    sort $SORTOPT $CDDFILE | while read line; 
+#    sort $CDDFILE | awk 'NF{print|"sort"}' | while read line; 
+#    awk 'NF{print|"sort"}' $CDFILE | while read line;
+    do
+    unset spath sname
+        for i in $line; do
+        if [ -z $sname ]; then sname=$i; elif [ -z $spath ]; then spath=$i; fi
+        done
+        [ $DBG ] && echo -e "line: $line\nsname: $sname; spath: $spath"
+    case $GREPWHERE in
+        path) found=`echo $spath|grep -i "$GREPFOR"|wc -l`;;
+        name) found=`echo $sname|grep -i "$GREPFOR"|wc -l`;;
+        *) found=`echo $line |grep -i "$GREPFOR"|wc -l`;;
+    esac
+    [ $DBG ] && echo -e "found: $found\n"
+    if [ $found -ge 1 ] && [ "$sname" != "" ]; then
+        [ "$line" ] && printf "%-20s %s\n" $sname $spath
+#    printf "%-20s %s\n" `echo $line|awk '{print $1" "$2}'`; 
+    fi
+    done
+}
+
+cdd_add() {
+# usage: cdd_add <shortcut_name> <shortcut_path> [comment]
+    local sname spath
+    if [ -z $1 ]; then usage; exit 1; else sname=$1; fi
+    if [ -z $2 ]; then spath=`pwd`; else spath=$2; fi
+    if [ ! -f $CDDFILE ]; then EXISTS=
+        else EXISTS=`grep "^$sname\>" $CDDFILE|wc -l`
+    fi
+    if [ "$EXISTS" != "0" ] && [ "$REPLACE" != "yes" ] ; then
+        echo shortcut already in $CDDFILE:
+        cat $CDDFILE|grep "^$sname\>"
+    [ $DBG ] && echo "EXISTS: $EXISTS"
+    [ $DBG ] && echo "REPLACE: $REPLACE"
+        exit 1
+    fi
+    if [ "$REPLACE" == "yes" ]; then
+        cat $CDDFILE|grep -v "^$sname\>">$CDDFILE
+    fi
+    if [ $PRETTY ]; then printf "%-20s %s\n" $sname $spath>>$CDDFILE
+    else echo $sname $spath>>$CDDFILE
+    fi
+    echo "[$CDDFILE] added shortcut: <$sname> -> $spath "
+}
+
+cdd_del() {
+### usage: cdd_del <full_shortcut_name> [CDDFILE]
+    found=`cat $CDDFILE | grep "^$1\>" | wc -l`
+    if [ "$found" != "0" ]; then
+#   echo -n "[$CDDFILE] found: "
+    cat $CDDFILE | grep "^$1\>"|awk '{printf "<%s> -> %s\n", $1, $2}'
+    cat $CDDFILE|grep -v "^$1\>">$CDDFILE
+    echo "[$CDDFILE] deleted shortcut <$1>"
+    else
+    echo "[$CDDFILE] <$1> not found."
+    fi
+}
+
+clean_exit() {
+    rm -f $TMPFILE>/dev/null
+    exit 0
+}
+
+usage() {
+HLP="
+cddadd -- add a quick change directory to ~/.cdd
+usage: $0 <shortname> <fullpath> [options]
+
+options:
+  -h, --help    this help
+  -g        use global (system-wide) file ($CDDFILE_GLOBAL)
+  -d        delete alias
+  -l, -n    list aliases (matching name)
+  -p        list aliases (matching path)
+  -a        list aliases (matching name or path)
+  -sp       sort list by path
+  -sn       sort list by name (default)
+  -r        replace alias
+
+  --pretty  pretty format (default)
+  --ugly    ugly format
+
+  --debug   debugging output
+"
+    echo "$HLP"
+}
+
+
+### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###
+### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###
+### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###### MAIN ###
+
+ACTION=add
+
+for i in "$@"; do
+    case $i in
+    -h|--h*) usage; exit 0 ;;
+    -g) CDDFILE=$CDDFILE_GLOBAL ;;
+    -d) ACTION=del ;;
+    -l|-n) ACTION=list; GREPWHERE=name ;;
+    -p) ACTION=list; GREPWHERE=path ;;
+    -a) ACTION=list; GREPWHERE=line ;;
+    -sp) SORTBY=path; SORTOPT="-b -k2" ;;
+    -sn) SORTBY=name ;;
+    -s) ACTION=sort ;;
+    -r) REPLACE=yes ;;
+    --pretty) PRETTY=1;;
+    --ugly) PRETTY=;;
+    --debug) DBG=1 ;;
+#    -f)
+#   ADDFIRST=yes
+#    ;;
+    *)
+    if [ -z $sname ]; then sname=$i
+
+    elif [ -z $spath ]; then spath=$i
+    else echo "$0: invalid argument"; usage; exit 1
+    fi
+    ;;
+    esac
+done;
+
+if [ -z $sname ] && [ -z $spath ]; then LIST=yes; fi
+
+MYNAME=`basename $0`
+[ $DBG ] && echo "called as: $MYNAME [press Enter]" && read a
+# also call list if called as "cdl" from command line
+case "$MYNAME" in
+    cdl) ACTION=list ;;
+    cddel|cdddel) ACTION=del ;;
+esac
+
+# list shortcut[s]
+case $ACTION in
+    add)
+    cdd_add $sname $spath; clean_exit ;;
+    del)
+        if [ -z $sname ]; then echo "this command needs an argument"; usage; exit 1; fi
+        cdd_del $sname; clean_exit ;;
+    sort)
+    echo -n "[$CDDFILE] sorting by $SORTBY ... "
+    rm -f $TMPFILE>/dev/null
+    sort $SORTOPT $CDDFILE|while read line;
+    do
+        unset sname spath
+            for i in $line; do
+        if [ -z $sname ]; then sname=$i; elif [ -z $spath ]; then spath=$i; fi
+            done
+        if [ "$sname" != "" ]; then 
+        if [ $PRETTY ]; then printf "%-20s %s\n" $sname $spath>>$TMPFILE
+        else echo $sname $spath>>$TMPFILE
+            fi
+        fi
+        done
+    mv -f $TMPFILE $CDDFILE
+    [ $? == 0 ] && echo done || echo ERROR
+    ;;
+    list)
+    cdd_list; clean_exit ;;
+    *)
+    cdd_list; clean_exit ;;
+esac
+
+#if [ $ADDFIRST ]; then
+#    echo "$sname\t$spath">>$CDDFILE
+#fi

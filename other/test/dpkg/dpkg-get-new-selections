@@ -1,0 +1,15 @@
+#!/bin/sh
+
+FILEDIR=/root/installed-packages
+
+iidx=0; ridx=0
+
+OLDFILE=`ls -t1 $FILEDIR | head -n2 | tail -n1`
+NEWFILE=`ls -t1 $FILEDIR | head -n1`
+
+echo "old file: $OLDFILE"
+echo "new file: $NEWFILE"
+
+zdiff $FILEDIR/$OLDFILE $FILEDIR/$NEWFILE | gzip
+
+

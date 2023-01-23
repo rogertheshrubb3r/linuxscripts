@@ -1,0 +1,84 @@
+#!/bin/sh
+
+NUMLINES=25
+USER=""
+DBG="yes"
+
+LOGFILES="/var/log/mail.log.0 /var/log/mail.log"
+
+TMPF=/tmp/mail-lastin.tmp
+
+usage () {
+HLP="
+usage: $0 <user> [-x user [-x user]..]
+
+options: 
+  -x user	exclude user
+
+prints last mails received by <user>
+"
+echo "$HLP"
+
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h* )
+	usage; exit 0 ;;
+    -x ) 
+	EXCLUDED="$EXCLUDED $2"; shift 2 ;;
+   * ) 
+	USER="$USER $1"; shift ;;
+  esac
+done
+
+echo "USER: $USER"
+echo "EXCLUDED: $EXCLUDED"
+
+GFILTER=
+GFILTERX=
+
+
+for i in $USER; do
+    if ! [ "$GFILTER" == "" ]; then GFILTER="$GFILTER\|"; fi
+    GFILTER="$GFILTER$i"
+done
+for i in $EXCLUDED; do
+    if ! [ "$GFILTERX" == "" ]; then GFILTERX="$GFILTERX\|"; fi
+    GFILTERX="$GFILTERX$i"
+done
+
+if ! [ "$GFILTER" == "" ]; then GF="\($GFILTER\)"; else GF=; fi
+if ! [ "$GFILTERX" == "" ]; then GFX="\($GFILTERX\)"; else GFX=; fi
+
+if [ "$DBG" == "yes" ]; then
+    echo "filter: $GF"
+    echo "filterx: $GFX"
+fi
+
+cl="cat $LOGFILES" # | grep Passed " #| grep $GFILTER"
+
+
+if [ "$DBG" == "yes" ]; then
+    echo "cl: $cl"
+    read -p "Press Enter" a
+fi
+
+if ! [ "$GFILTER" == "" ]; then
+    if ! [ "$GFILTERX" == "" ]; then
+    cat $LOGFILES|grep Passed|grep ":"|grep "$GF"|grep -v "$GFX">$TMPF
+    else
+    cat $LOGFILES|grep Passed|grep ":"|grep "$GF">$TMPF
+    fi
+elif ! [ "$GFILTERX" == "" ]; then
+    cat $LOGFILES|grep Passed|grep ":"|grep -v "$GFX">$TMPF
+fi
+
+awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10 }' $TMPF | tail -$NUMLINES
+
+if ! [ "$DBG" == "yes" ]; then rm -f $TMPF; fi
+
+
+#cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10}'| tail -$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | awk '{ print $1 " " $2 " " $3 " " $8 " " $9 " " $10 " " $12}'| tail -$NUMLINES
+#cat $LOGFILES | grep Passed | grep $USER | tail -$NUMLINES

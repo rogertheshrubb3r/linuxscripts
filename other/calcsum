@@ -1,0 +1,24 @@
+#!/bin/sh
+
+awk '{ sum += $1 }; END { print sum }'
+
+#COL=1
+#if [ -z "$1" ]; then COL=1; else COL=$1; fi
+#echo COL=$COL
+#awkcmd="' { sum += \$$COL }; END { print sum }'"
+#cmdl="awk '{ sum += \$$COL }; END { print sum }'"
+#export TIME="elapsed: %E [h:]m:s (%E real,%U user,%S sys; %P cpu, %Kk avg.mem, %Mk max.mem, %I/%O In/Out)\n%C"
+#/usr/bin/time $cmdl
+
+#awk ' { sum += $COL }; END { print sum }'
+#/usr/bin/time awk $awkcmd
+
+#awkcmd="'{ print \"This is a test: \" $1 \" / parm2 = " f  }' f=$2"
+#awkcmd="awk '{ sum += \$1 }; END { print sum }'"
+#/usr/bin/time $awkcmd
+
+
+#awkcmd='awk '{ print $1 }''
+#$awkcmd
+
+#awk '{ print "This is a test: " $1 " / parm2 = " f  }' f=$2 #< $1

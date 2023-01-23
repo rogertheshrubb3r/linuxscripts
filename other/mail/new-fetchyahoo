@@ -1,0 +1,227 @@
+#!/bin/bash
+
+SPOOLROOT=/var/spool/fetchyahoo
+FW_SERVER=oopyarhitectura.ro
+
+MAILHOST=oopyarhitectura.ro
+SENDFROM=fetchyahoo@$MAILHOST
+
+YAHOO_USER=
+YAHOO_PASS=
+LOCAL_USER=
+
+RUNTEST=
+OVERWRITE=
+
+# hide or show typed password
+HIDEPW=no
+
+# file/run permissions of the scripts
+
+FUSER=fetchmail
+FGROUP=mail
+FMASK=0700
+
+## MAIN
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+   -u | --user ) YAHOO_USER=$2 ; shift 2 ;;
+   -p | --pass ) YAHOO_PASS=$2 ; shift 2 ;;
+   -l | --local-user ) LOCAL_USER=$2; shift 2 ;;
+   -o | --overwrite ) OVERWRITE=YES ; shift ;;
+   -t | --test ) RUNTEST=YES ; shift ;;
+   -nt | --no-test ) RUNTEST=NO ; shift ;;
+   -h* | --h*  ) HELP=yes ; shift ;;
+   * ) echo "Invalid option: $1" ; HELP=yes; break ;;
+  esac
+done
+
+
+if [ ! -z $HELP ]; then
+    echo "usage: $0 [options]"
+    echo ""
+    echo "options:"
+    echo "  -u <yahoo_user>     set yahoo username to yahoo_user"
+    echo "  -p <yahoo_pass>     set yahoo password to yahoo_pass"
+    echo "  -l <local_user>     forward mail to local_user@$MAILHOST"
+    echo "  -o                  overwrite config file(s)"
+    echo "  -t                  run test when done"
+    echo "  -nt                 don't run test"
+    echo "  -h                  show this help"
+
+    echo ""
+    exit 0
+fi
+
+if [ "$YAHOO_USER" == "" ]; then
+    echo -n "Yahoo username: "
+    read YAHOO_USER
+
+fi
+
+
+SPOOLDIR="/var/spool/fetchyahoo/$YAHOO_USER"
+CONFIGFILE="$SPOOLDIR/fetchyahoo.rc"
+
+
+if [ ! -d /var/spool/fetchyahoo ]; then
+mkdir /var/spool/fetchyahoo
+fi
+
+if [ -d "$SPOOLDIR" ]; then
+    echo "Looks like user $YAHOO_USER already exists!"
+    if [ ! -f "$CONFIGFILE" ]; then
+	echo "(NO config file found for user $YAHOO_USER)"
+    elif [ "$OVERWRITE" == "" ]; then
+	    OVR=n; OVERWRITE=NO
+        	read -p "Overwrite config file? [y/N] " OVR; echo ""
+	    if [ "$OVR" == "y" ] || [ "$OVR" == "Y" ]; then OVERWRITE=yes; fi
+	    if [ "$OVERWRITE" == "NO" ]; then 
+	    	    echo "Aborting."
+	    exit 1
+	fi
+    fi
+fi
+
+if [ "$YAHOO_PASS" == "" ]; then
+    if [ "$HIDEPW" == "yes" ]; then 
+	read -p "Yahoo password: " -s PW1
+	echo ""
+        read -p "confirm password: " -s PW2
+        echo ""
+
+        if [ $PW1 != $PW2 ]; then
+            echo "Passwords do not match!"
+	    echo "Aborting"
+            exit 1
+    fi
+    YAHOO_PASS=$PW1
+    else
+        echo -n "Yahoo password: "; read YAHOO_PASS
+    fi
+fi
+
+
+if [ "$LOCAL_USER" == "" ]; then
+    echo -n "Local user [@$FW_SERVER]: "; read LOCAL_USER
+
+
+fi
+    #echo -n "Forward address (e.g. user@$FW_SERVER) : "; read FW_ADDR
+    FW_ADDR=$LOCAL_USER@$FW_SERVER
+
+echo adding user: $YAHOO_USER
+echo ""
+echo "$YAHOO_USER@yahoo.com -> $FW_ADDR"
+echo ""
+
+## CREATE DIRECTORIES
+if [ ! -d "$SPOOLDIR" ]; then
+
+    echo -n "creating directories: $SPOOLDIR ... "
+    mkdir "$SPOOLDIR"
+    #mkdir /var/spool/fetchyahoo/$YAHOO_USER/tmp
+    #mkdir /var/spool/fetchyahoo/$YAHOO_USER/new
+    chown -R $FUSER:$FGROUP "$SPOOLDIR"
+    chmod -R $FMASK "$SPOOLDIR"
+    echo "done."
+fi
+
+
+## CREATE CONFIG FILE
+echo -n "Creating config file: $CONFIGFILE ... "
+
+
+#echo username=$YAHOO_USER	>  "$CONFIGFILE"
+#echo password=$YAHOO_PASS	>> "$CONFIGFILE"
+
+#echo mail-host=$MAILHOST	>> "$CONFIGFILE"
+#echo send-to=$FW_ADDR		>> "$CONFIGFILE"
+#echo send-from=$SENDFROM	>> "$CONFIGFILE"
+#echo spool=$SPOOLDIR		>> "$CONFIGFILE"
+
+
+
+echo msg-id-archive-file=$SPOOLDIR/msgid-archive	>> "$CONFIGFILE"
+
+cat <<EOF>>"$CONFIGFILE"
+
+username=$YAHOO_USER
+password=$YAHOO_PASS
+
+mail-host=$MAILHOST
+send-to=$FW_ADDR
+send-from=$SENDFROM
+spool=$SPOOLDIR
+
+#use-https = 1
+use-forward = 1
+
+## to check!!
+use-spool = 0 
+#spool-mode = append
+
+# set the below to 1 to remember which messages were downloaded and not
+# download them again - especially useful with the leaveUnread option
+use-msg-id-archive = 1
+
+#use-proxy = 0
+#proxy-host = proxy.example.com
+#proxy-port = 80
+#proxy-username = proxyAuthenicationUserName
+#proxy-password = proxyAuthenicationPassword
+###### IMAP configuration ######
+# set use-imap to 1 to enable output to an IMAP mailbox
+#use-imap = 0
+#imap-host = oopyarhitectura.ro
+#imap-port = 143
+#imap-username = radu
+#imap-password = 1234
+#imap-mailbox = INBOX
+
+no-download = 0
+new-messages-only = 0
+max-size = 0
+no-delete = 1
+leave-unread = 1
+
+folder = Inbox
+
+quiet = 1
+repeat-interval = 0
+
+no-from-line = 0
+logout = 1
+
+#status-only = 0
+#warning-level = 0
+EOF
+
+echo done.
+
+# MAKE CRON SCRIPT
+CRONFILE=/etc/cron.hourly/fetchyahoo-$YAHOO_USER
+echo -n "creating cron script: $CRONFILE ... "
+
+echo "#!/bin/sh"	> "$CRONFILE"
+echo fetchyahoo --configfile=\"$CONFIGFILE\"	>> "$CRONFILE"
+
+chown -R $FUSER:$FGROUP "$CRONFILE"
+chmod -R $FMASK "$CRONFILE"
+
+echo done.
+
+## RUN TEST
+if [ "$RUNTEST" == "" ]; then
+    RUNTEST=NO
+    read -p "run a test? [y/N] " RT
+    if [ "$RT" == "y" ] || [ "$RT" == "Y" ]; then RUNTEST=YES; fi
+
+fi
+
+if [ "$RUNTEST" == "YES" ]; then
+    fetchyahoo --statusonly --noquiet --configfile=$CONFIGFILE
+fi
+

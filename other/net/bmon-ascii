@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bmon -p eth0 -o 'ascii:diagram=graph;fgchar=#;bgcar=_;xunit=sec'

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+
+F=~/.ssh/known_hosts
+G=woopy
+
+TF=/tmp/tmp.tmp
+
+cat $F|grep -v $G>$TF
+cat $TF>$F
+rm $TF

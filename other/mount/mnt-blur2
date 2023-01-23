@@ -1,0 +1,13 @@
+#!/bin/sh
+
+usage() {
+    echo "usage: $0 <share name>"
+    
+    exit 1
+    
+}
+
+if [ -z $1 ]; then usage; fi
+
+mount -t gmailfs none /mnt/gmailfs -o username=ktmpgfs@gmail.com,password=gfsktmp/,fsname=zOlRRa
+#mount.gmailfs none /mnt -o username=ktmpgfs@gmail.com,password=gfsktmp/,fsname=zOlRRa

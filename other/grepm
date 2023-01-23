@@ -1,0 +1,46 @@
+#!/bin/sh
+
+. /root/bin/inc/functions.sh
+
+usage() {
+HLP="
+usage: $0 [options] [-e expr] <fmask>
+options:
+  -i		case insensitive*
+  -d		debug info
+(see script)
+
+TODO: grep in subdirs.
+"
+echo "$HLP"
+}
+
+# parse parameters
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -h* | --h* )
+	usage; exit 0 ;;
+    -e) expr="$expr $2"; shift 2;;
+    -i) icase=-i; shift ;;
+    -f) fmask="$fmask $2"; shift 2 ;;
+    -v) VRB=1; shift ;;
+    *)	fmask="$fmask $1"; shift ;;
+  esac
+done
+
+if [ "$1" == "-h" ]; then usage; exit 0; fi
+
+if ! [ "$fmask" ]; then 
+    echo "no files."
+    exit 1
+fi
+    
+for i in `ls -1 -tr $fmask`; do # sort by time, oldest first
+[ -f "$i" ] && { # only if regular file...
+    [ $VRB ] && echo "grepping in $i:"
+#    result=grep $icase $expr $i
+#    result=`grepm $icase -e $expr $i`
+#    [ "$result" ] && echo -e "$i:\n$result"
+    grepm $icase -e $expr $i
+}
+done

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# grep in installed package list
+
+FILTER=
+if [ -z $1 ]; then
+    FILTER=
+#    echo "usage: $0 <expression>"
+#    echo
+#    echo "search (grep) installed debian packages"
+#    exit 1
+else
+    FILTER=$@
+fi
+
+dpkg -l | grep -i "$FILTER"

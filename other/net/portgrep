@@ -1,0 +1,52 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 [options] <port>
+list processes listening on <port>
+
+options:
+  -a		list all
+  -u user       show listening ports run in processes owned by <user>
+  -c process    show ports owned by <process>
+  -h            this help
+"
+echo "$HLP"
+[ $1 ] && exit $1
+}
+
+header() {
+echo "COMMAND     PID      USER    FD     TYPE     DEVICE                NODE NAME"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -a | --all ) FIND=.; shift ;;
+    -u | --user ) [ $2 ] && FIND=$2 || usage 1; shift 2 ;;
+    -c | -p | --command | --process ) FIND=$2 ; shift 2 ;;
+    -h* | --h*  ) HELP=1 ; shift ;;
+    -d | --debug ) DBG=1; shift ;;
+#   * ) FIND=":.*$1"; shift ;; # "fuzzy"
+   * ) FIND=":$1 ("; shift ;;
+#   * ) echo "Invalid option: $1" ; HELP=yes; break ;;
+  esac
+done
+
+if [ -z "$FIND" ] || [ $HELP ]; then usage; exit 1; fi
+
+if [ $DBG ]; then
+    echo "FIND=$FIND"
+fi
+
+#if ! [ -z $FIND ]; then 
+header
+lsof -P|sort|grep "(LISTEN)" | grep -i "$FIND"|sort -n -t: -k2|uniq -f6
+#    lsof -P|sort|grep "(LISTEN)" | grep -i "$FIND"
+#    exit 0
+#fi
+
+#if [ -z $port ] || [ "$HELP" == "yes" ]; then usage; exit 1; fi
+
+#header
+#grepstr=":$port (LISTEN)"
+#lsof -P|sort|grep -i "$grepstr"

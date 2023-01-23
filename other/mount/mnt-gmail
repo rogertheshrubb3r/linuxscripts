@@ -1,0 +1,10 @@
+#!/bin/sh
+
+U="ktmpgfs@gmail.com"
+P=""
+
+U="typeonegfs@gmail.com"
+P=""
+
+#mount -t gmailfs none /mnt/gmailfs -o username=$U,password=$P,fsname=zOlRRa
+mount.gmailfs none /mnt/tmp -o username=$U,password=$P,fsname=zOlRRa

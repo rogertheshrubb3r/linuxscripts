@@ -1,0 +1,30 @@
+#!/bin/sh
+#HTTP_PROXY=193.230.219.12:80
+
+VRB=yes # verbose
+DBG=yes # debug
+
+HTTP_PROXY=`cat ~/.http_proxy|grep -v "#"|tail -n1`
+
+MYNAME=`echo $0|awk -F/ '{print $NF}'`
+
+OPTS_RECURSIVE="-e robots=off -UMozilla/5.0 --proxy=on -b -r -l 999 -np -k -R \"*=[DMNS]*\""
+#OPTS_RECURSIVE="-e robots=off -UMozilla/5.0 --proxy=on -b -r -l 999 -np -k "
+
+case $MYNAME in
+    wgpr)
+	OPTS=$OPTS_RECURSIVE ;;
+    wgprnh)
+	OPTS="$OPTS_RECURSIVE -nH" ;;
+esac
+
+cl="wget -e http_proxy=$HTTP_PROXY $OPTS $@"
+
+if [ "$VRB" == "yes" ]; then 
+    echo "using proxy: $HTTP_PROXY"
+    echo "cmdline: $cl"
+fi
+
+$cl
+
+#wget -e http_proxy=$HTTP_PROXY $OPTS $@

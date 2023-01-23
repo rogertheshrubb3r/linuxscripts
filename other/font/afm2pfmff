@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# kidd -- convert afm to pfm via fontforge
+@echo off
+ffdir=/root/bin/font
+fforge=/root/bin/font/fontforge
+ffscript=$ffdir/scripts/afm2pfm.pe
+
+usage () {
+HLP="
+usage: $0 <source_afm>
+
+converts afm to pfm with fontforge
+needs pfb file in the same directory
+
+example: $0 font.afm
+"
+echo "$HLP"
+}
+
+if [ -z $@ ]; then
+    usage; exit 1
+fi
+
+$fforge -script $ffscript $@

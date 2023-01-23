@@ -1,0 +1,14 @@
+#!/bin/sh
+
+usage() {
+HLP="
+usage: $0 <cert_file>
+views certificate details
+
+"; echo "$HLP"
+}
+if [ -z $@ ]; then usage; exit 1; fi
+
+
+openssl rsa -noout -text -in  $@
+ 

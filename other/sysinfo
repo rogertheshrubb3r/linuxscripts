@@ -1,0 +1,60 @@
+#!/bin/sh
+
+#simple script to give a summary of a system
+#Unless you run as root, disk info can't be shown
+
+find_sbin_cmd() {
+    for base in / /usr/ /usr/local; do
+        if [ -e $base/sbin/$1 ]; then
+            echo $base/sbin/$1
+            exit
+        fi
+    done
+}
+FDISK=`which fdisk 2>/dev/null`
+LSUSB=`which lsusb 2>/dev/null`
+LSPCI=`which lspci 2>/dev/null`
+[ -z "$FDISK" ] && FDISK=`find_sbin_cmd fdisk`
+[ -z "$LSUSB" ] && LSUSB=`find_sbin_cmd lsusb`
+[ -z "$LSPCI" ] && LSPCI=`find_sbin_cmd lspci`
+
+echo "============= Disks ============="
+(
+#fdisk -l only looks at /proc/partitions which excludes CDs for e.g.
+find /proc/ide -type l -printf "%P\n"
+#TODO parse /proc/scsi/scsi
+) |
+while read disk; do
+    echo -n "/dev/$disk: "
+    if [ ! -r /dev/$disk ]; then
+        echo "permission denied" #could parse /proc for all but
+    else
+        size=`$FDISK -l /dev/$disk | grep Disk | cut -d' ' -f3-4 | tr -d ,`
+        rest=`/sbin/hdparm -i /dev/$disk | grep Model`
+        rest=`echo $rest` #strip spaces
+        echo -n "$rest"
+        if [ ! -z "$size" ]; then
+            echo ", Size=$size"
+        else
+            echo
+        fi
+    fi
+done
+
+echo "========== Partitions =========="
+$FDISK -l
+
+echo "============= CPUs ============="
+grep "model name" /proc/cpuinfo #show CPU(s) info
+
+echo "============= MEM ============="
+KiB=`grep MemTotal /proc/meminfo | tr -s ' ' | cut -d' ' -f2`
+MiB=`expr $KiB / 1024`
+#note various mem not accounted for, so round to appropriate size
+round=16 #on my 384MiB system over 8MiB was unaccounted for so round to next highest power of 2
+echo "`expr \( \( $MiB / $round \) + 1 \) \* $round` MiB"
+
+echo "============= PCI ============="
+$LSPCI -tv
+
+

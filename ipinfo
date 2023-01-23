@@ -1,0 +1,69 @@
+#!/bin/bash
+
+IP=$@
+
+IPv4=1
+IPv6=1
+
+
+usage() {
+    echo<<<EOT
+usage: $0 [options]
+options:
+    -4		test IPv4
+    -6		test IPv6
+
+EOT;
+
+}
+
+while getopts 46f:hd:s:qx: option
+do
+        case "${option}"
+        in
+                4) IPv4=1 ;;
+                6) IPv6=1 ;;
+                d) DOMAIN=${OPTARG};;
+                f) SERVERFILE=$OPTARG;;
+                s) WHOIS_SERVER=$OPTARG;;
+                q) QUIET="TRUE";;
+                x) WARNDAYS=$OPTARG;;
+                \?) usage
+                    exit 1;;
+        esac
+done
+
+shift $((OPTIND-1))
+IP=$@
+
+#[ -z $IP ] && { echo "bad ip: $IP"; exit 1; }
+#echo "Resolving $IP:"
+
+curl -sL ipinfo.io/$IP
+echo
+echo "resolving via icanhazip:"
+[ $IPv4 ] && curl ipv4.icanhazip.com
+[ $IPv6 ] && curl ipv6.icanhazip.com
+
+
+
+# al
+
+
+#<<<EOT
+#
+#  "ip": "96.57.174.178",
+#  "hostname": "ool-6039aeb2.static.optonline.net",
+#  "city": "Sayreville",
+#  "region": "New Jersey",
+#  "country": "US",
+#  "loc": "40.4593,-74.3610",
+#  "org": "AS6128 Cablevision Systems Corp.",
+#  "postal": "08872",
+#  "timezone": "America/New_York",
+#  "readme": "https://ipinfo.io/missingauth"
+
+#EOT;
+
+#curl -s 'https://api.github.com/users/lambda' | \
+#    python3 -c "import sys, json; print(json.load(sys.stdin)['name'])"

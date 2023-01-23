@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+[ "$1" == "-a" ] && LISTALL=1
+
+[ $LISTALL ] && {
+    grep -i failed /var/log/auth.log | awk -F " " '{ print $(NF-3)}' | sort -u
+    exit 0
+}
+
+    grep -i failed /var/log/auth.log | awk -F " " '{ print $(NF-3)}' | sort -u | tail

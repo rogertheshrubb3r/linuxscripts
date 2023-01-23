@@ -1,0 +1,9 @@
+#!/bin/bash
+
+arr=(elem1 elem2 elem3)
+elem=elem1
+
+if [ $elem in $arr ]; then
+    echo $elem
+
+fi

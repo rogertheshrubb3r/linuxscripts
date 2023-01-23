@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+HLP="
+usage: $0 <user_name>
+prints user id from /etc/passwd
+"
+echo "$HLP"; exit 1
+fi
+
+cat /etc/passwd|grep ^$1|awk -F: '{print "user:"$1" uid:"$3" gid:"$4}'

@@ -1,0 +1,50 @@
+#!/bin/bash
+# edit executable script
+# usage: edx <script-name>
+
+DBG=
+
+E=$EDITOR
+CMD=$@
+
+[ -z "$CMD" ] && { echo "edx: Edit executable scripts found in PATH"; echo "Usage: $0 <script_command>"; exit 1; }
+
+FULLNAME=`which $CMD`
+
+[ $E ] || {
+    E=mcedit
+#    E=nano
+#    local E=`which nano`
+}
+
+
+# BUG: symlink detection: not working for local links
+
+[ -z $FULLNAME ] && { echo "file $CMD doesn't exist or not in PATH!"; exit 1; }
+
+FTYPE=`file -L $FULLNAME | cut -d ":" -f2 | sed -r 's/^\s+//g'`
+#IS_SYMLINK=`file $FULLNAME|grep "symbolic link to" | awk -F " " '{ print $NF }'`
+
+#[ $DBG ] && echo "running 'while'..."
+
+#while [ "$IS_SYMLINK" != "" ]
+#do
+
+#    echo "$FULLNAME is a symlink to $IS_SYMLINK"
+
+#    [ $DBG ] && read -p "[DBG] Press any key..."
+#    FULLNAME=$IS_SYMLINK
+#    IS_SYMLINK=`file $FULLNAME|grep "symbolic link to" | awk -F " " '{ print $NF }'`
+#done
+
+ISTEXTFILE=`echo "$FTYPE" | grep -i text`
+
+#echo $FTYPE
+#read -p "Press any key to continue..."
+
+[ "$ISTEXTFILE" != "" ] || { echo "$FULLNAME doesn't seem to be a text file!"; exit 1; }
+
+[ $DBG ] && { echo "executing: $E $FULLNAME"; read -p "Press any key..."; }
+
+$E $FULLNAME
+

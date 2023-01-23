@@ -1,0 +1,239 @@
+#!/usr/local/bin/pike
+/* This is not really -*-c++-*-, but trick Emacs into believing it anyway. */
+
+// This program may be freely copied under the terms of the
+// GNU General Public Licence (GPL).
+
+
+#include <process.h>
+#include <stdio.h>
+
+int ignore_hardlinks;
+int make_hardlinks;
+
+mapping sizes=([]);
+
+#define MIN_SIZE 1000
+
+string quote(string file)
+{
+  return "\\"+(file/"")*"\\";
+}
+
+int my_fsize(string file)
+{
+  mixed s;
+  if(!(s=file_stat(file,1))) return 0;
+//  if(s[1]>0 && reverse(file)[..2]=="zg.")
+//    s[1]=(int)popen("zcat 2>/dev/null "+quote(file)+"|wc -c");
+  return s[1];
+}
+
+string my_read_file(string file)
+{
+//  if(reverse(file)[..2]=="zg.")
+//    return popen("zcat 2>/dev/null "+quote(file));
+  return read_bytes(file);
+}
+
+string hash_file(string file, int level)
+{
+  Stdio.File f=Stdio.File(file,"r");
+  switch(level)
+  {
+    case 0:
+      return f->read(1024);
+
+    case 1:
+      f->seek(-1024);
+      return f->read(1024);
+
+    case 2:
+      f->seek(f->stat()->size / 2);
+      return f->read(1024);
+
+    case 3:
+      int size=f->stat()[1];
+      string ret="";
+      for(int e=0;e<size;e+=max(e/2,128))
+      {
+	f->seek(e);
+	ret+=f->read(16);
+      }
+      return ret;
+  }
+}
+
+int cmp_files(string a, string b)
+{
+//  werror("Comparing %O and %O\n",a,b);
+#if constant(Stdio.Stat)
+  {
+    Stdio.Stat as=file_stat(a);
+    Stdio.Stat bs=file_stat(b);
+    if( (!as) != (!bs) ) return 0;
+    if(as && bs &&
+       as->dev == bs->dev &&
+       as->ino == bs->ino)
+      return !ignore_hardlinks;
+    if(as->size != bs->size) return 0;
+//    werror("Size=%d\n",as->size);
+  }
+#endif
+
+  Stdio.File af=Stdio.File(a,"r");
+  Stdio.File bf=Stdio.File(b,"r");
+  
+  string as,bs;
+  do
+  {
+    as=af->read(16384);
+    bs=bf->read(16384);
+    if(as!=bs) return 0;
+  }while(strlen(as));
+  return 1;
+}
+
+string check_dir(string dir)
+{
+  string file;
+  array(string) _files;
+
+  if(!(_files=get_dir(dir))) return 0;
+
+  foreach(_files,file)
+  {
+    int size;
+#ifdef DEBUG
+    perror(file+"\n");
+#endif
+
+    switch(size=my_fsize(file=dir+file))
+    {
+    case -2: /* directory */
+      werror(".");
+      check_dir(file+"/");
+
+    case 0..MIN_SIZE: /* Empty file */
+    case -3: /* Link, ignore -BOG- */
+      break;
+
+    default:
+      if(sizes[size])
+	sizes[size]+=({file});
+      else
+	sizes[size]=({file});
+    }
+  }
+}
+
+void pass2(mapping sizes, int rehash)
+{
+  array b;
+  int e;
+
+  foreach(values(sizes),b)
+  {
+    int e,d;
+    switch(sizeof(b))
+    {
+    case 0:
+    case 1:
+      continue;
+
+    default:
+      if(rehash < 4)
+      {
+	mapping tmp=([]);
+	for(e=0;e<sizeof(b);e++)
+	{
+//	  werror("Hashing %s\n",b[e]);
+	  string foo=hash_file(b[e], rehash);
+	  if(tmp[foo])
+	    tmp[foo]+=({b[e]});
+	  else
+	    tmp[foo]=({b[e]});
+	}
+	pass2(tmp, rehash+1);
+	break;
+      }
+
+    case 2:
+      mapping tmp=([]);
+      for(int x=0;x<sizeof(b);x++)
+      {
+	if(b[x])
+	{
+	  array ret=({b[x]});
+	  for(int y=x+1;y<sizeof(b);y++)
+	  {
+	    if(b[y])
+	    {
+	      if(cmp_files(b[x],b[y]))
+	      {
+		ret+=({b[y]});
+		b[y]=0;
+	      }
+	    }
+	  }
+	  if(sizeof(ret)>1)
+	  {
+	    if(make_hardlinks)
+	    {
+	      for(int f=1;f<sizeof(ret);f++)
+	      {
+		hardlink(ret[0],ret[f]+"......tmp");
+		mv(ret[f]+"......tmp",ret[f]);
+	      }
+	    }
+	    write("%{%O %}\n",sort(ret));
+	  }
+	}
+      }
+    }
+  }
+}
+
+int main(int argc, array(string) argv)
+{
+  string dir;
+
+  foreach(Getopt.find_all_options( argv, aggregate(
+    ({"ignore-hardlinks",Getopt.NO_ARG, ({"-l","--ignore-hardlinks"})}),
+    ({"hardlink",Getopt.NO_ARG, ({"--hardlink"})}),
+    )), array opt )
+    {
+      switch(opt[0])
+      {
+	case "ignore-hardlinks":
+	  ignore_hardlinks++;
+	  break;
+
+	case "hardlink":
+	  make_hardlinks++;
+      }
+    }
+
+  argv=Getopt.get_args(argv);
+
+
+  werror("Pass 1 ");
+  if(sizeof(argv) < 2)
+  {
+    check_dir("./");
+  } else {
+    for(int e=1;e<sizeof(argv);e++)
+    {
+      dir=argv[e];
+      if(dir[-1] != '/') dir+="/";
+      check_dir(dir);
+    }
+  }
+
+  werror("\n");
+  werror("Pass 2\n");
+  pass2(sizes,0);
+  return 0;
+}
+
+

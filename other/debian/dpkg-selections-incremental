@@ -1,0 +1,147 @@
+#!/bin/sh
+
+# maintain a history of packages installed/removed
+
+DBG=yes
+# show verbose information (version, install statue etc.; from dpkg -l)
+VERBOSE=yes 
+# overwrite old diff file
+OVERWRITE=no
+
+# test multiple diff/patch: apply a series of patches to a base file to get last version
+
+FILEDIR=/root/system/packages
+
+basefile=`ls -t1 $FILEDIR | tail -n1` # oldest file
+if [ "$DBG" == "yes" ]; then echo "basefile: $basefile"; fi
+
+if [ "$basefile" == "" ]; then
+    echo "no basefile found. creating..."
+    dpkg --get-selections |gzip>$FILEDIR/dpkg-installed.gz
+    exit 0
+fi
+
+basefile=$FILEDIR/$basefile
+
+newfile=$FILEDIR/dpkg-changes-`date +%Y%m%d`.diff.gz
+
+umask 177
+
+#############! delme!!!!!!!!!!!!!!!!!!!!!!!!
+######
+#rm $newfile
+
+function dpkg_list_changes() {
+    echo hello
+}
+
+#tmpfile=/tmp/dpkg-installed.tmp
+tmpfile=dpkg-installed.tmp
+
+if [ -f $newfile ] && [ ! "$OVERWRITE" == "yes" ]; then
+    echo "A diff file with current date already exists. try again tomorrow!"
+    exit 1
+fi
+
+if [ "$DBG" == "yes" ]; then echo "basefile: $basefile"; fi
+
+zcat $basefile > $tmpfile.old
+
+for i in `ls $FILEDIR/*.diff.gz`; do 
+# IMPORTANT: name order should be the same as date order!! 
+# (dates should be in the format yyyymmdd)
+    if [ "$DBG" == "yes" ]; then echo "applying patch: $i"; fi
+    zcat $i | patch $tmpfile.old >/dev/null
+done
+
+dpkg --get-selections >$tmpfile.new
+diff $tmpfile.old $tmpfile.new >$tmpfile.diff
+#echo "exit code: $?"
+if [ "$?" == "0" ]; then
+    echo "No packages installed/upgraded/modified/removed since the last list update."
+    exit 0
+fi
+
+echo ""
+echo "Some packages were installed/upgraded/modified/removed since the last list update."
+echo -n "writing changes to $newfile..."
+
+cat $tmpfile.diff | gzip > $newfile
+# remove temporary files
+#rm $tmpfile.old $tmpfile.new $tmpfile.diff
+echo "done."
+
+echo ""
+echo "------------------------------------------------------------------------------"
+echo "List of packages added/removed between "`echo $i|awk -F- '{print $2}'|awk -F. '{print $1}'`" and "`echo $newfile | awk -F- '{print $2}'|awk -F. '{print $1}'`":"
+echo "-----------------------------------------------------------------------------"-
+
+ins=0; rem=0
+installed=
+removed=
+
+exec 3<> $tmpfile.diff
+while read -a line <&3
+do {
+    if [ "${line[0]}" == ">" ]; then # package installed
+#	echo "  ${line[1]}" >> $tmpfile.installed
+	if [ "$VERBOSE" == "yes" ]; then
+#		installed=$installed`dpkg -l ${line[1]}|tail -n1`"\n"
+        	installed=$installed" ${line[1]}"
+	else
+        	installed=$installed"${line[1]}\n"
+        fi
+#	echo instld: $installed
+#	let "ins = $ins + 1"
+	(( ins++ ));
+    elif [ "${line[0]}" == "<" ]; then # package deleted
+#	echo "  ${line[1]}" >> $tmpfile.removed
+	read a
+	if [ "$VERBOSE" == "yes" ]; then
+#		removed=$removed`dpkg -l ${line[1]}|tail -n1`"\n"
+        	removed=$removed" ${line[1]}"
+	else
+        	removed=$removed"${line[1]}\n"
+        fi
+#	let "rem = $rem + 1"
+	(( rem++ ));
+#    	echo rem: ${rem}
+#	rmv=${rem}
+    fi
+}
+done
+exec 3>&-
+
+echo ""
+if [ "$removed" != "" ]; then
+    echo "REMOVED/PURGED packages:"
+    echo "------------------------------------------------------------------------------"
+    #cat $tmpfile.removed
+    if [ $VERBOSE == "yes" ]; then
+        dpkg -l $removed
+    else
+        printf "$removed"
+    fi
+    echo "--- total removed/purged: $rem"
+else
+    echo "REMOVED/PURGED packages: none"
+fi
+echo ""
+
+if [ "$installed" != "" ]; then
+    echo "INSTALLED/UPGRADED packages:"
+    echo "------------------------------------------------------------------------------"
+    #cat $tmpfile.installed
+    if [ $VERBOSE == "yes" ]; then
+        dpkg -l $installed
+    else
+        printf "$installed"
+    fi
+    echo "--- total installed/upgraded: $ins"
+else
+    echo "INSTALLED/UPGRADED packages: none"
+fi
+echo ""
+
+#rm -f $tmpfile.removed $tmpfile.installed $tmpfile.old $tmpfile.new $tmpfile.diff >/dev/null
+#rm -f $tmpfile.old $tmpfile.new $tmpfile.diff >/dev/null
